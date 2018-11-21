@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+    <!-- datasource -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <!-- 数据库基本信息配置 -->
+        <property name="url" value="${env.mysql.write.url}"/>
+        <property name="username" value="${env.mysql.write.username}"/>
+        <property name="password" value="${env.mysql.write.password}"/>
+        <property name="driverClassName" value="${env.mysql.driverClassName}"/>
+        <property name="filters" value="${env.mysql.filters}"/>
+        <!-- 最大并发连接数 -->
+        <property name="maxActive" value="${env.mysql.maxActive}"/>
+        <!-- 初始化连接数量 -->
+        <property name="initialSize" value="${env.mysql.initialSize}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${env.mysql.maxWait}"/>
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="${env.mysql.minIdle}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${env.mysql.timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${env.mysql.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${env.mysql.validationQuery}"/>
+        <property name="testWhileIdle" value="${env.mysql.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${env.mysql.testOnBorrow}"/>
+        <property name="testOnReturn" value="${env.mysql.testOnReturn}"/>
+        <property name="maxOpenPreparedStatements" value="${env.mysql.maxOpenPreparedStatements}"/>
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="${env.mysql.removeAbandoned}"/>
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="${env.mysql.removeAbandonedTimeout}"/>
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="${env.mysql.logAbandoned}"/>
+    </bean>
+
+    <!-- transaction manager -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- mybatis factory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:configLocation.xml"/>
+        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
+    </bean>
+
+    <!-- scan mappers under the dao dir -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.borrow.manage.dao.mapper"/>
+    </bean>
+
+</beans>

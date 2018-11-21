@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>弹出层</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+</head>
+<body>
+    <div class="layui-page">
+        <blockquote class="layui-elem-quote layui-elem-quote-orange">
+            <p>本实例有些无法关闭的弹出层设置了3秒后自动关闭，使用提示框替代alert</p>
+            <p>我们对layui的表现形式进行了修改，请使用示例中的代码书写方式，否则您的弹框会有些不一样</p>
+        </blockquote>
+        <blockquote class="layui-elem-quote layui-elem-quote-red">
+            <p>我们对confirm进行了改造 请使用对象作为参数 </p>
+        </blockquote>
+        <button class="layui-btn" id="btn1" type="button">成功提示框</button>
+        <br/>
+        <br/>
+        <button class="layui-btn" id="btn2" type="button">失败提示框</button>
+        <br/>
+        <br/>
+        <button class="layui-btn" id="btn3" type="button">警告提示框</button>（多用于表单验证）
+        <br/>
+        <br/>
+        <button class="layui-btn" id="btn4" type="button">confirm</button>
+        <br/>
+        <br/>
+        <button class="layui-btn" id="btn5" type="button">打开子页面</button>（注意：我们更推荐使用弹出层的按钮来提交页面信息）
+        <br/>
+        <br/>
+        <button class="layui-btn" id="btn6" type="button">loading</button>
+        <br/>
+        <br/>
+        <button class="layui-btn" id="btn7" type="button">自定义</button>
+
+    </div>
+    <div id="dialog" class="hide">
+        <blockquote class="layui-elem-quote">
+            <strong>注意!</strong> 这是一段html
+        </blockquote>
+        <button class="layui-btn" id="btn12" type="button">失败提示框</button>
+    </div>
+    <script>
+        layui.use(["layer"], function() {
+            $("#btn1").click(function() {
+                layer.success("数据添加成功!")
+            })
+
+            $("#btn2").click(function() {
+                layer.error({
+                    content: "数据添加失败!",
+                    end: function() {
+                        console.error("这里可以写回掉函数")
+                    }
+                })
+            })
+
+            $("#btn3").click(function() {
+                layer.warning({
+                    content: "请填写必要字段!",
+                    end: function() {
+                        console.error("如果不需要回掉函数，请按照 success 的方式书写")
+                    }
+                })
+            })
+
+            $("#btn4").click(function() {
+                layer.confirm({
+                    content: "确定要删除吗？",
+                    yes: function() {
+                        layer.success("你想删除!")
+                    },
+                    no: function() {
+                        layer.error("你不想删除!")
+                    }
+                })
+            })
+
+            $("#btn5").click(function() {
+                layer.iframe({
+                    content: 'form.html',
+                    btn: ['确认', '取消'],
+                    yes: function(index, page) {
+                        page.find("iframe").contents().find("#btnSubmit").click()
+                    }
+                })
+            })
+
+            $("#btn6").click(function() {
+                layer.showLoad()
+                    //只为演示 正常不需要添加如下代码
+                setTimeout(function() {
+                    layer.hideLoad()
+                }, 3000)
+            })
+
+            $("#btn7").click(function() {
+                layer.dialog({
+                    content: $("#dialog")
+                })
+            })
+
+            $("#btn12").click(function() {
+                layer.error("弹出层里面的提示框!")
+            })
+
+        });
+    </script>
+</body>
+
+</html>

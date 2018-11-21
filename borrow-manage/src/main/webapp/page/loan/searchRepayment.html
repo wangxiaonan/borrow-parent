@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>还款综合查询</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+    <script src="../../js/local/common.js"></script>
+    <style type="text/css">
+        .submit-btn{
+            width: 40%;
+            background-color: #009688;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top:100px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .checkboxSpan span{
+            padding: 0 20px;
+        }
+        .repayNum{
+            height: 38px;
+            line-height: 38px;
+            line-height: 36px\9;
+            border: 1px solid #e6e6e6;
+            background-color: #fff;
+            border-radius: 2px;
+            padding-left:20px;
+        }
+        #dialog{
+            width: 600px;
+            text-align: center;
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 30px;
+        }
+        .inputBox{
+            margin-left:20px;
+        }
+        .inputBox p{
+            text-align:left;
+        }
+        .inputBox p:nth-child(2){
+            margin-top:10px;
+            padding-left:20px;
+        }
+        .inputBox p:nth-child(3){
+            margin-top:60px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-page">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="userName"  placeholder="请输入客户姓名" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">客户手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" placeholder="请输入客户手机号" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">车牌号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="plateNumber"  placeholder="请输入车牌号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">借款产品</label>
+            <div class="layui-input-inline">
+                <select name="pCode">
+                    <option value=""></option>
+                    <option value="0001">车满金1号</option>
+                    <option value="0002">车满金2号</option>
+
+                </select>
+            </div>
+            <!--<label class="layui-form-label">当前还款状态</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<select name="boPayState" >-->
+                    <!--<option value=""></option>-->
+                    <!--<option value="1">正常</option>-->
+                    <!--<option value="2">逾期</option>-->
+
+                <!--</select>-->
+            <!--</div>-->
+            <div class="layui-inline">
+                <button uitype="reset" class="layui-btn lay-btn-normal" lay-submit lay-filter="searchCredit"  id="searchCreditSubmit">查询</button>
+                <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="searchRepayCreditExport" id="searchRepayCreditSubmit">导出</button>
+            </div>
+        </div>
+    </form>
+    <!-- 表格dom结构 -->
+    <script id="view" type="text/html">
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>借款ID</th>
+                <th>客户姓名</th>
+                <th>车牌号</th>
+                <th>借款金额</th>
+                <th>借款产品名称</th>
+                <th>期数</th>
+                <th>已还期数</th>
+                <th>首次还款日</th>
+                <!--<th>当前还款状态</th>-->
+                <th>总还款状态</th>
+                <th>还款结清时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# layui.each(d.rows,function(index,item){ }}
+            <tr>
+                <td class="text-center">{{item.orderId}}</td>
+                <td><a class="link">{{item.userName}}</a></td>
+                <td>{{item.plateNumber}}</td>
+                <td>{{item.boPrice}}</td>
+                <td><a class="link">{{item.productName}}</a></td>
+                <td>{{item.boExpect}}</td>
+                <td>{{item.boPayExpect}}</td>
+                <td><a class="link">{{item.firstExpectTime}}</a></td>
+                <!--<td>-->
+                    <!--{{#if(item.boPayState==1){ }}-->
+                    <!--<span style="color:#FF5722">正常</span>-->
+                    <!--{{#}else if(item.boPayState==2){}}-->
+                    <!--<span>逾期</span>-->
+                    <!--{{#};}}-->
+                <!--</td>-->
+                <td>
+                    {{#if(item.boIsState==4){ }}
+                    <span style="color:#FF5722">待还款</span>
+                    {{#}else if(item.boIsState==5){}}
+                    <span>还款中</span>
+                    {{#}else if(item.boIsState==6){}}
+                    <span>已还款</span>
+                    {{#}else{}}
+                    {{#};}}
+                </td>
+                <td><a class="link">{{item.lastPayTime?ma.format(item.lastPayTime,'yyyy-MM-dd HH:mm:ss'):''}}</a></td>
+                <td>
+                    {{# if(item.boIsState==6){}}
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
+                    {{#}else{}}
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
+                    <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.AdvanceRepatment()">提前还款</a>
+                    {{#};}}
+                </td>
+            </tr>
+            {{# }); }}
+            </tbody>
+        </table>
+    </script>
+    <div id="creditTable" style="width:100%;"></div>
+    <div id='laypage'></div>
+</div>
+<!-- 弹框提前还款dom结构 -->
+<div id='dialog' class="hide">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-input-block inputBox" id="inputBox">
+                    <p><input type="radio" name="upPayType" title="自动计算提前还款额" value="1" checked/><span id="payTotalAmount"></span></p>
+                    <p><span id="repatDetail" style="color:red;"></span></p>
+                    <p><input type="radio" name="upPayType" title="手工填写提前还款额" value="2"/>：<input id="payAmount" class="repayNum" type="text" /></p>
+                </div>
+            </div>
+        </form>
+        <p class="submit-btn" id="submitBtn">提交</p>
+</div>
+<!--详情弹框-->
+<div id='dialogDetail' class="hide">
+    <table  class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>借款ID</th>
+            <th>客户姓名</th>
+            <th>车牌号</th>
+            <th>借款金额</th>
+            <th>借款产品名称</th>
+            <th>期数</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td id="orderId"></td>
+            <td id="userName"></td>
+            <td id="plateNumber"></td>
+            <td id="boPrice"></td>
+            <td id="productName"></td>
+            <td id="boExpect"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="secoundDetail" style="width:100%;"></div>
+    <div id="secoundDetailPay" style="width:100%;"></div>
+
+</div>
+<script id="seccoundView" type="text/html">
+    <table  class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>期数</th>
+            <th>日期</th>
+            <th>月供</th>
+            <th>本金</th>
+            <th>利息</th>
+            <th>服务费</th>
+            <th>违约金</th>
+            <th>还款状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.rows,function(index,item){ }}
+        <tr>
+            <td>{{item.repayExpect}}</td>
+            <td>{{item.brTime?ma.format(item.brTime,'yyyy-MM-dd'):''}}</td>
+            <td>{{item.repayAmount}}</td>
+            <td>{{item.capitalAmount}}</td>
+            <td>{{item.interestAmount}}</td>
+            <td>{{item.serviceFee}}</td>
+            <td>{{item.punishAmount}}</td>
+            <td>
+                {{#if(item.repayStatus==1){ }}
+                <span style="color:#FF5722">未还款</span>
+                {{#}else{}}
+                <span>已还款</span>
+                {{#};}}
+            </td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+<script id="secoundDetailPayView" type="text/html">
+    <table  class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>还款ID</th>
+            <th>还款时间</th>
+            <th>还款金额</th>
+            <th>还款类型</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.rows,function(index,item){ }}
+        <tr>
+            <td>{{item.orderPayId}}</td>
+            <td>{{item.payTime?ma.format(item.payTime,'yyyy-MM-dd'):''}}</td>
+            <td>{{item.payPrice}}</td>
+            <td>
+                {{#if(item.payType==1){ }}
+                <span style="color:#FF5722">正常还款</span>
+                {{#}else if(item.payType==2){}}
+                <span>提前还款</span>
+                {{#}else{}}
+                {{#};}}
+            </td>
+            <td>{{item.payTypeDesc}}</td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+<script>
+    layui.config({
+        base: '../../js/page/'
+    }).use('SearchRepayment');
+</script>
+</body>
+</html>

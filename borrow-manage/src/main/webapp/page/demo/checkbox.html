@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>表单</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+</head>
+
+<body>
+    <div class="layui-page">
+        <div class="layui-form">
+            <input type="checkbox" name="ck1" title="写作" lay-skin="primary" value="写作" lay-filter="ck1" id="ck1">
+            <input type="checkbox" name="ck2" title="发呆" lay-skin="primary" lay-filter="ck2" id="ck2">
+            <input type="checkbox" name="ck3" title="写作2" lay-skin="primary" value="写作" lay-filter="ck3" id="ck3">
+            <input type="checkbox" name="ck4" title="发呆3" lay-skin="primary" lay-filter="ck4" id="ck4">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" id="btnSubmit">立即提交</button>
+        </div>
+    </div>
+    <script>
+        layui.use(["form", "layer"], function() {
+            var form = layui.form();
+            form.on('checkbox(ck1)', function(data) {
+                console.error($(data.elem).prop("checked"))
+                console.error(data.elem.checked)
+
+                $("#ck2").prop("checked", true)
+                form.render("checkbox")
+            })
+            form.on('submit(formDemo)', function(data) {
+                console.error(data.field)
+            })
+        });
+    </script>
+</body>
+
+</html>

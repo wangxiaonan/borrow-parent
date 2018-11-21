@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>创建贷款申请</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+    <script src="../../js/local/common.js"></script>
+</head>
+<body>
+<div class="layui-page">
+    <!--<form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">借款金额</label>
+            <div class="layui-input-inline">
+                <input id='industry' type="text" style="border:0" readonly="readonly" name="industry" required lay-verify="required" autocomplete="off" class="borderNone layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">期限</label>
+            <div class="layui-input-inline">
+                <input type="text" id='workNature' style="border:0" readonly="readonly" name="workNature" required lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">GPRS费</label>
+            <div class="layui-input-inline">
+                <input type="text" id='userEarns' style="border:0" readonly="readonly" name="userEarns" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">前期服务费</label>
+            <div class="layui-input-inline">
+                <input type="text" id='creditDec' style="border:0" readonly="readonly" name="creditDec" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">到账金额</label>
+            <div class="layui-input-inline">
+                <input type="text" id='boPaySource' style="border:0" readonly="readonly" name="boPaySource" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </form>-->
+    <table class="layui-table layui-form" lay-skin="line">
+            <thead>
+                <tr>
+                    <th>借款金额</th>
+                    <th>期限</th>
+                    <th>GPRS费</th>
+                    <th>前期服务费</th>
+                    <th>到账金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="boPrice" >100000</td>
+                    <td id="boExpect" >12</td>
+                    <td id="gpsCost" >300</td>
+                    <td id="earlyServiceRate" >234</td>
+                    <td id="boFinishPrice" >100000</td>
+                </tr>
+
+            </tbody>
+        </table>
+    <script id="view" type="text/html">
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>期数</th>
+                <th>日期</th>
+                <th>月供</th>
+                <th>本金</th>
+                <th>利息</th>
+                <th>服务费</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# layui.each(d.rows,function(index,item){ }}
+            <tr>
+                <td class="text-center">{{item.repayExpect}}</td>
+                <td><a class="link">{{item.brTime?ma.format(item.brTime,'yyyy-MM-dd HH:mm:ss'):''}}</a></td>
+                <td>{{item.repayAmount}}</td>
+                <td>{{item.capitalAmount}}</td>
+                <td><a class="link">{{item.interestAmount}}</a></td>
+                <td><a class="link">{{item.serviceFee}}</a></td>
+            </tr>
+            {{# }); }}
+            </tbody>
+        </table>
+        </script>
+    <div id="creditTable" style="width:100%;"></div>
+</div>
+
+<script>
+    layui.config({
+     base: '../../js/page/'
+     }).use('LayerTable');
+</script>
+</body>
+</html>

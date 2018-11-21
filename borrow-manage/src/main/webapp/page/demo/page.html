@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>分页</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+</head>
+<body>
+ <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+ 
+<div id="demo8"></div>
+<ul id="biuuu_city_list"></ul> 
+
+<script>
+layui.use(['laypage', 'layer'], function(){
+  console.log("11")
+  var laypage = layui.laypage,layer = layui.layer;
+   //将一段数组分页展示
+   console.log(laypage)
+  //测试数据
+  var data = [
+    '北京',
+    '上海',
+    '广州',
+    '深圳',
+    '杭州',
+    '长沙',
+    '合肥',
+    '宁夏',
+    '成都',
+    '西安',
+    '南昌',
+    '上饶',
+    '沈阳',
+    '济南',
+    '厦门',
+    '福州',
+    '九江',
+    '宜春',
+    '赣州',
+    '宁波',
+    '绍兴',
+    '无锡',
+    '苏州',
+    '徐州',
+    '东莞',
+    '佛山',
+    '中山',
+    '成都',
+    '武汉',
+    '青岛',
+    '天津',
+    '重庆',
+    '南京',
+    '九江',
+    '香港',
+    '澳门',
+    '台北'
+  ];
+  
+  var nums = 5; //每页出现的数据量
+  
+  //模拟渲染
+  var render = function(data, curr){
+    var arr = []
+    ,thisData = data.concat().splice(curr*nums-nums, nums);
+    layui.each(thisData, function(index, item){
+      arr.push('<li>'+ item +'</li>');
+    });
+    console.log(arr);
+    return arr.join('');
+  };
+  
+  //调用分页
+  laypage({
+    cont: 'demo8'
+    ,pages: Math.ceil(data.length/nums) //得到总页数
+    ,jump: function(obj){
+      document.getElementById('biuuu_city_list').innerHTML = render(data, obj.curr);
+    }
+  });
+  /*******************************************/
+});
+</script>
+</body>
+</html>

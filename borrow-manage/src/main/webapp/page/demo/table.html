@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>表格</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+</head>
+
+<body>
+    <div class="layui-page">
+        <blockquote class="layui-elem-quote layui-elem-quote-orange">
+            <p>对于搜索区域条件相对较少的，请直接省略label说明，如下面示例</p>
+            <p>不要省略看似没有意义的class</p>
+            <p>搜索区域的按钮风格请和示例保持一致</p>
+        </blockquote>
+        <div class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <select name="city">
+                    <option value="">请选择一个城市</option>
+                    <option value="010">北京</option>
+                    <option value="021">上海</option>
+                    <option value="0571">杭州</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" placeholder="请输入编号" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-normal">搜索</button>
+                    <button type="reset" class="layui-btn">新建</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">导出</button>
+                </div>
+            </div>
+        </div>
+        <table class="layui-table layui-form" lay-skin="line">
+            <colgroup>
+                <col width="50">
+                <col width="150">
+                <col width="150">
+                <col width="200">
+                <col>
+                <col width="140">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                    <th>人物</th>
+                    <th>民族</th>
+                    <th>出场时间</th>
+                    <th>格言</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="" lay-skin="primary"></td>
+                    <td>贤心</td>
+                    <td>汉族</td>
+                    <td>1989-10-14</td>
+                    <td>人生似修行</td>
+                    <td>
+                        <button class="layui-btn layui-btn-small">修改</button>
+                        <button class="layui-btn layui-btn-small layui-btn-danger">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="" lay-skin="primary"></td>
+                    <td>张爱玲</td>
+                    <td>汉族</td>
+                    <td>1920-09-30</td>
+                    <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                    <td>
+                        <button class="layui-btn layui-btn-small">修改</button>
+                        <button class="layui-btn layui-btn-small layui-btn-danger">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="" lay-skin="primary"></td>
+                    <td>Helen Keller</td>
+                    <td>拉丁美裔</td>
+                    <td>1880-06-27</td>
+                    <td> Life is either a daring adventure or nothing.</td>
+                    <td>
+                        <button class="layui-btn layui-btn-small ">修改</button>
+                        <button class="layui-btn layui-btn-small layui-btn-danger">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="" lay-skin="primary"></td>
+                    <td>岳飞</td>
+                    <td>汉族</td>
+                    <td>1103-北宋崇宁二年</td>
+                    <td>教科书再滥改，也抹不去“民族英雄”的事实</td>
+                    <td>
+                        <button class="layui-btn layui-btn-small">修改</button>
+                        <button class="layui-btn layui-btn-small layui-btn-danger">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="" lay-skin="primary"></td>
+                    <td>孟子</td>
+                    <td>华夏族（汉族）</td>
+                    <td>公元前-372年</td>
+                    <td>猿强，则国强。国强，则猿更强！ </td>
+                    <td>
+                        <button class="layui-btn layui-btn-small">修改</button>
+                        <button class="layui-btn layui-btn-small layui-btn-danger">删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="pager" class="layui-laypage-wrap"></div>
+    </div>
+    <script>
+        layui.use(["form", "element", "laypage", "layer"], function() {
+            var laypage = layui.laypage
+            laypage({
+                cont: 'pager',
+                pages: 100
+            });
+        });
+    </script>
+</body>
+
+</html>

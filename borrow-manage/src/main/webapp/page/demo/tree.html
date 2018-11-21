@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>更新日志</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+</head>
+
+<body>
+    <div class="layui-page">
+        <ul id="tree1"></ul>
+    </div>
+    <script>
+        layui.use(['tree', 'layer'], function() {
+            layui.tree({
+                elem: '#tree1',
+                click: function(item) {
+                    layer.msg('当前节名称：' + item.name + '<br>全部参数：' + JSON.stringify(item));
+                },
+                nodes: [{
+                    name: '常用文件夹',
+                    id: 1,
+                    spread: true,
+                    children: [{
+                        name: '所有未读（设置跳转）',
+                        id: 11
+                    }, {
+                        name: '置顶邮件',
+                        id: 12
+                    }, {
+                        name: '标签邮件',
+                        id: 13
+                    }]
+                }, {
+                    name: '我的邮箱',
+                    id: 2,
+                    spread: true,
+                    children: [{
+                        name: 'QQ邮箱',
+                        id: 21,
+                        spread: true,
+                        children: [{
+                            name: '收件箱',
+                            id: 211,
+                            children: [{
+                                name: '所有未读',
+                                id: 2111
+                            }, {
+                                name: '置顶邮件',
+                                id: 2112
+                            }, {
+                                name: '标签邮件',
+                                id: 2113
+                            }]
+                        }, {
+                            name: '已发出的邮件',
+                            id: 212
+                        }, {
+                            name: '垃圾邮件',
+                            id: 213
+                        }]
+                    }, {
+                        name: '阿里云邮',
+                        id: 22,
+                        spread: true,
+                        children: [{
+                            name: '收件箱',
+                            id: 221
+                        }, {
+                            name: '已发出的邮件',
+                            id: 222
+                        }, {
+                            name: '垃圾邮件',
+                            id: 223
+                        }]
+                    }]
+                }]
+            });
+
+        })
+    </script>
+</body>
+
+</html>

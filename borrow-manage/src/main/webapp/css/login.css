@@ -1,0 +1,37 @@
+ .login-body {
+     background-color: #e2e2e2;
+     overflow: hidden;
+ }
+ 
+ .ma-login {
+     width: 360px;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     padding: 20px;
+     border-top: 0;
+     background: #fff;
+     color: #666;
+     border-radius: 2px;
+     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .117647), 0 0 6px 0 rgba(0, 0, 0, .0392157);
+ }
+ 
+ .ma-login .ma-login-title {
+     width: 100%;
+     height: 50px;
+     margin: 10px auto 20px;
+     background: url('../images/title.png') 50% no-repeat;
+     background-size: contain;
+ }
+ 
+ .ma-login .layui-form-checkbox[lay-skin=primary] {
+     margin-top: 0;
+     /* 边框错觉 */
+     margin-left: 1px;
+ }
+ 
+ .ma-login .layui-btn {
+     width: 100%;
+     margin-top: 20px;
+ }

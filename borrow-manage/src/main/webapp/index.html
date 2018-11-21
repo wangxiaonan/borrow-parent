@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>管理后台</title>
+    <link rel="stylesheet" href="./js/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/lib/jquery.min.js"></script>
+    <script src="./js/lib/layui/layui.js"></script>
+    <script src="./js/local/common.js"></script>
+
+</head>
+
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <h1 class="title">管理后台系统</h1>
+            <div class="ma-userinfo">
+                <a href="javascript:;">
+                    <img src="./images/user.png">
+                    <span>admin</span>
+                </a>
+                <!-- <div class="layui-tab" lay-filter="test"> -->
+                <div class="ma-user-menu layui-nav" lay-filter="jumpUrl">
+                    <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                        <dd><a href="javascript:;" id="jumpInfo" data-url="./user/InfoForm.html">个人信息</a></dd>
+                        <!--<dd><a href="javascript:;" id="modifyPass" data-url="page/user/ModifyPass.html">修改密码</a></dd>-->
+                        <dd class="layui-divider"></dd>
+                        <dd><a href="#" data-url="LoginOut" id="logout">退出登录</a></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="layui-side layui-bg-black ma-side">
+            <div class="layui-side-scroll">
+                <ul class="layui-nav layui-nav-tree ma-menu">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" data-hash='/createCriedit' data-url="./page/loan/createCriedit.html">创建贷款申请</a>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" data-hash='/searchCredit' data-url="./page/loan/searchCredit.html">借款申请查询</a>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" data-hash='/searchRepayment' data-url="./page/loan/searchRepayment.html">还款综合查询</a>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" data-hash='/repaymentList' data-url="./page/loan/repaymentList.html">待还款明细</a>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" data-hash='/loanProduct' data-url="./page/loan/loanProduct.html">借款产品列表</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="ma-split">
+        </div>
+        <div class="layui-body ma-body">
+            <iframe class="ma-iframe" id="jumpIframe" src="./Welcome.html"></iframe>
+        </div>
+    </div>
+    <script>
+
+        //权限列表
+        var menuList = [{
+            index: 0,
+            list: [{
+                title: "系统配置",
+                child: [{
+                    title: "菜单管理",
+                    url: "page/system/MenuList.html"
+                }, {
+                    title: "角色管理",
+                    url: "page/system/RoleList.html"
+                }, {
+                    title: "人员管理",
+                    url: "page/system/UserList.html"
+                }]
+            }]
+        }, {
+            index: 1,
+            list: [{
+                title: "风险大盘",
+                child: [{
+                    title: "逾期监控",
+                    url: "../Coll/page/OverdueMonitor.html"
+                }]
+            }, {
+                title: "贷后决策中心",
+                child: [{
+                    title: "分案管理",
+                    url: "../Coll/page/DivisionManage.html"
+                }]
+            }, {
+                title: "催收管理",
+                child: [{
+                    title: "内崔列表",
+                    url: "../Coll/page/CollectionList.html"
+                }]
+            }, {
+                title: "质量检测",
+                child: [{
+                    title: "案件质检列表",
+                    url: "../Coll/page/QualityList.html"
+                }]
+            }]
+        }, {
+            index: 2,
+            list: [{
+                title: "文档说明222",
+                child: [{
+                    title: "说明",
+                    url: "page/demo/introduced.html"
+                }, {
+                    title: "快速搭建",
+                    url: "page/demo/start.html"
+                }, {
+                    title: "更新日志",
+                    url: "page/demo/log.html"
+                }]
+            }]
+        }, {
+            index: 3,
+            list: [{
+                title: "文档说明",
+                child: [{
+                    title: "说明",
+                    url: "page/demo/introduced.html"
+                }, {
+                    title: "快速搭建",
+                    url: "page/demo/start.html"
+                }, {
+                    title: "更新日志",
+                    url: "page/demo/log.html"
+                }]
+            }, {
+                title: "常用组件",
+                child: [{
+                    title: "表单",
+                    url: "page/demo/form.html"
+                }, {
+                    title: "表格",
+                    url: "page/demo/table.html"
+                }, {
+                    title: "弹出层",
+                    url: "page/demo/layer.html"
+                }, {
+                    title: "标签",
+                    url: "page/demo/tag.html"
+                }, {
+                    title: "Grid",
+                    url: "page/demo/grid.html"
+                }, {
+                    title: "TreeGrid",
+                    url: "page/demo/treegrid.html"
+                }]
+            }, {
+                title: "第三方文档",
+                child: [{
+                    title: "LayUI文档",
+                    url: "http://www.layui.com/doc/"
+                }, {
+                    title: "LayUI示例",
+                    url: "http://www.layui.com/demo/"
+                }, {
+                    title: "ECharts",
+                    url: "http://echarts.baidu.com/"
+                }]
+            }]
+        }]
+    </script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>

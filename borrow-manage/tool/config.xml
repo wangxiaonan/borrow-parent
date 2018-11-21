@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="mysql-connector-java-5.1.26-bin.jar" />
+
+    <context id="rc-loan" targetRuntime="MyBatis3">
+
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://47.92.77.201:3306/rc_loan" userId="rcheng" password="ruichengcaifu@rcheng">
+        <!--connectionURL="jdbc:mysql://xuneasy.cn/snow?characterEncoding=utf8" userId="xuneasy" password="xuneasy">-->
+        </jdbcConnection>
+        <!--connectionURL="jdbc:mysql://xuneasy.online/snow?characterEncoding=utf8" userId="xuneasy" password="xuneasy">-->
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.borrow.manage.model.dto"
+                            targetProject="../src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.borrow.manage.dao.mapper"
+                         targetProject="../src/main/resources/mapper">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.borrow.manage.dao.mapper" targetProject="../src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--<table tableName="user_info" domainObjectName="UserInfo"/>-->
+        <!--<table tableName="user_car" domainObjectName="UserCar"/>-->
+        <!--<table tableName="borrow_salesman" domainObjectName="BorrowSalesman"/>-->
+        <!--<table tableName="borrow_repayment" domainObjectName="BorrowRepayment"/>-->
+        <!--<table tableName="bo_order_cost" domainObjectName="BoOrderCost"/>-->
+        <!--<table tableName="borrow_product" domainObjectName="BorrowProduct"/>-->
+        <!--<table tableName="borrow_order" domainObjectName="BorrowOrder"/>-->
+        <!--<table tableName="bo_product_rate" domainObjectName="BoProductRate"/>-->
+        <!--<table tableName="bo_order_audit" domainObjectName="BoOrderAudit"/>-->
+        <!--<table tableName="bo_order_pay_record" domainObjectName="BoOrderPayRecord"/>-->
+
+        <table tableName="task_lock" domainObjectName="TaskLock"/>
+
+
+    </context>
+</generatorConfiguration>
