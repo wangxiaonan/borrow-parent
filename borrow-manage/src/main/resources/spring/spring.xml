@@ -15,9 +15,11 @@
 
 <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="false"
         location="classpath:properties/jdbc.properties
-        ,classpath:properties/app-custom.properties"
+        ,classpath:properties/app-custom.properties,
+        ,classpath:properties/app-remote.properties"
         system-properties-mode="ENVIRONMENT"/>
 
+    <import resource="spring-rest.xml"/>
     <import resource="mybatis.xml"/>
 
 </beans>

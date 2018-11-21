@@ -4,8 +4,11 @@ import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
 import com.borrow.manage.factory.CarRepayPlanFactory;
+import com.borrow.manage.model.XMap;
 import com.borrow.manage.model.dto.*;
 import com.borrow.manage.provider.AbstractCarRepayPlan;
+import com.borrow.manage.provider.RemoteDataCollector;
+import com.borrow.manage.provider.remotecoll.RemoteDataCollectorService;
 import com.borrow.manage.service.OrderServcie;
 import com.borrow.manage.utils.ExcelData;
 import com.borrow.manage.utils.ExportExcelUtils;
@@ -54,17 +57,29 @@ public class OrderServcieImpl implements OrderServcie {
     BoOrderCostDao boOrderCostDao;
     @Autowired
     BorrowRepaymentDao borrowRepaymentDao;
+    @Autowired
+    RemoteDataCollector remoteDataCollectorService;
 
 
     @Override
     @Transactional
     public ResponseResult orderAdd(OrderCreateReq orderCreateReq) {
+
         BorrowOrderVo borrowOrderVo = orderCreateReq.getBorrowOrder();
         BorrowProduct borrowProduct = borrowProductDao.selByPcode(borrowOrderVo.getProductCode());
         if (borrowProduct == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
         UserInfoVo userInfoVo =  orderCreateReq.getUserInfo();
+        // 判断是否存管开户
+        XMap xMap = new XMap();
+        xMap.put(PlatformConstant.AssertParam.IDCARD,userInfoVo.getIdcard());
+        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
+        if(!xMapResponseResult.isSucceed()) {
+            return xMapResponseResult;
+        }
+        //判断是否是开户 和是否借款用户
+
         UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
         if (userInfo == null) {
             userInfo = convertUserInfoVo(userInfoVo);

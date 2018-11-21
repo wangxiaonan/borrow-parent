@@ -1,5 +1,7 @@
 package com.borrow.manage.vo;
 
+import org.apache.commons.lang.time.DateFormatUtils;
+
 import java.util.Date;
 
 /**
@@ -32,8 +34,8 @@ public class ProductListRes {
         this.pPayType = pPayType;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getCreateTime() {
+        return createTime ==null? "": DateFormatUtils.format(createTime,"yyyy-MM-dd HH:mm:ss");
     }
 
     public void setCreateTime(Date createTime) {
