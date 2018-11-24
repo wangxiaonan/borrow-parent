@@ -31,10 +31,16 @@ public class BorrowProductDaoImpl implements BorrowProductDao {
         logger.debug("selByPcode:pCode={}",pCode);
         BorrowProductExample example = new BorrowProductExample();
         example.createCriteria().andPCodeEqualTo(pCode);
-//        PageHelper.startPage(1, 1);
         List<BorrowProduct> productList =  borrowProductMapper.selectByExample(example);
-//        PageBaseRes pageBaseRes = new PageBaseRes<BorrowProduct>(productList);
+        return productList.isEmpty()?null:productList.get(0);
+    }
 
+    @Override
+    public BorrowProduct selByPUid(String pUid) {
+        logger.debug("selByPUid:pUid={}",pUid);
+        BorrowProductExample example = new BorrowProductExample();
+        example.createCriteria().andUuidEqualTo(pUid);
+        List<BorrowProduct> productList =  borrowProductMapper.selectByExample(example);
         return productList.isEmpty()?null:productList.get(0);
     }
 

@@ -16,12 +16,15 @@ public enum ExceptionCode {
     //2 系统提示
 
     USER_CHECK_OPEN("2010001","存管未开户"),
-    USER_CHECK_IDENTITY("2010002","不是借款身份"),
+    USER_CHECK_IDENTITY("2010002","不是借款用户"),
 
     // 3 远端服务调用异常 01 是理财
     USER_CHECK_IDENTITY_ERROR("3010001","理财服务—用户身份确认接口异常"),
+    REMOTE_ERROR("3010002","第三方服务状态码异常"),
+    ORDER_MAKE_RAISE_ERROR("3010003","理财服务—筹标接口异常"),
+    ORDER_TRANSFER_FUND_ERROR("3010004","理财服务—资金划拨接口异常");
 
-    REMOTE_ERROR("3010002","第三方服务状态码异常");
+
 
     private String errorCode;
     private String errorMessage;

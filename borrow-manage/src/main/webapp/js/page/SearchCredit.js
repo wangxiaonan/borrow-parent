@@ -175,9 +175,9 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         fn.confirm=function(){
             var orderId = gridTable.getRow().orderId;
             layer.confirm({
-                content: "确定放款？",
+                content: "确定筹标？",
                 yes: function(index) {
-                    confirm(orderId,'/make/loans');
+                    confirm(orderId,'/make/superscript');
                     layer.close(index);
                 },
                 no: function() {

@@ -21,7 +21,7 @@ public class RemoteDataCollectorService extends RemoteDataCollector {
     public ResponseResult<XMap> collect(XMap xMap) {
 
         DataClient dataClient = dataClientFactory
-                .getDataClient(xMap.getString(DataClientEnum.USER_CHECK_DATA.getUrlType()));
+                .getDataClient(xMap.getString(DataClientEnum.URL_TYPE.getUrlType()));
         String res = dataClient.getData(xMap);
         return dataClient.analyze(res);
     }

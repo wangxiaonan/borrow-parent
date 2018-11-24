@@ -48,7 +48,9 @@
             top.layer.success("添加成功");
                 self.location.reload();
             },
-            fail: function(res) {}
+            fail: function(res) {
+                top.layer.fail("失败");
+            }
         }
         layer.showLoad();
         ma.ajax(addUser);

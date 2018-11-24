@@ -9,7 +9,6 @@ import com.borrow.manage.exception.RemoteException;
 import com.borrow.manage.model.XMap;
 import com.borrow.manage.provider.RestHttpClientService;
 import com.borrow.manage.utils.UUIDProvider;
-import com.borrow.manage.vo.ResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,12 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 /**
- * Created by wxn on 2018/11/21
+ * Created by wxn on 2018/11/24
  */
 @Component
-public class UserCheckDataClient extends DataClient {
+public class OrderTransferFundDataClient extends DataClient{
+
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -31,31 +32,29 @@ public class UserCheckDataClient extends DataClient {
     RestHttpClientService commonRestTempate;
 
     @Override
-    public String getData(XMap map) {
+    public String getData(XMap param) {
         String jsonData = "";
         try {
-            HashMap param = new HashMap();
-            param.put(PlatformConstant.FundsParam.IDCARD,map.getString(PlatformConstant.FundsParam.IDCARD));
             param.put(PlatformConstant.FundsParam.REQ_NO, UUIDProvider.uuid());
-            param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.LOAN_USER_QUERY_REQUEST);
+            param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.LOANER_REPAY_REQUEST);
             param.put(PlatformConstant.FundsParam.REQ_TIME,String.valueOf(System.currentTimeMillis()));
             String reqParam = JSON.toJSONString(param);
-            logger.info("UserCheckData_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
+            logger.info("OrderTransferFund_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
 
             HashMap signatureMap = new HashMap();
             signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
             jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
-            logger.info("UserCheckData_res:result={}",jsonData);
+            logger.info("OrderTransferFund_res:result={}",jsonData);
 
         }catch (Exception e) {
-            logger.error("用户存管身份校验异常",e);
-            throw new RemoteException(ExceptionCode.USER_CHECK_IDENTITY_ERROR);
+            logger.error("理财资金划拨接口异常",e);
+            throw new RemoteException(ExceptionCode.ORDER_TRANSFER_FUND_ERROR);
         }
         return jsonData;
     }
 
     @Override
     protected String getUrlType() {
-        return DataClientEnum.USER_CHECK_DATA.getUrlType();
+        return DataClientEnum.ORDER_TRANSFER_FUND.getUrlType();
     }
 }

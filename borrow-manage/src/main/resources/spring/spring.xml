@@ -19,7 +19,15 @@
         ,classpath:properties/app-remote.properties"
         system-properties-mode="ENVIRONMENT"/>
 
+
+
     <import resource="spring-rest.xml"/>
     <import resource="mybatis.xml"/>
+
+    <bean class="com.borrow.manage.config.SpringContextHolder"/>
+
+    <task:executor id="notifyExecutor" pool-size="10-20" keep-alive = "600" queue-capacity="100" rejection-policy="CALLER_RUNS"/>
+    <task:annotation-driven executor="notifyExecutor"/>
+
 
 </beans>

@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RemoteConfig {
 
-    @Value("${assets.user.url}")
-    public String assetsUserUrl;
+    @Value("${funds.base.url}")
+    public String fundsBaseUrl;
 
 
 

@@ -19,7 +19,6 @@ layui.use(["grid"], function() {
         return table;
     }
     function seachFun(){
-        debugger;
         var pCode = ma.getParameterByName('pCode');
         var boPrice = ma.getParameterByName('boPrice');
         var searchData = {

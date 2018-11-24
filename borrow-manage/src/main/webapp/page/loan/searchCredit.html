@@ -69,9 +69,9 @@
                 <div class="layui-input-inline">
                     <select name="boIsState" >
                         <option value=""></option>
-                        <option value="1">待放款</option>
-                        <option value="2">放款中</option>
-                        <option value="3">已取消</option>
+                        <option value="1">待筹标</option>
+                        <option value="2">筹标中</option>
+                        <option value="3">已流标</option>
                         <option value="4">已放款</option>
                         <option value="5">还款中</option>
                         <option value="6">已还款</option>
@@ -123,11 +123,11 @@
                         <td>{{item.boExpect}}</td>
                         <td>
                             {{#if(item.boIsState==1){ }}
-                            <span style="color:#FF5722">待放款</span>
+                            <span style="color:#FF5722">待筹标</span>
                             {{#}else if(item.boIsState==2){}}
-                            <span>放款中</span>
+                            <span>筹标中</span>
                             {{#}else if(item.boIsState==3){}}
-                            <span>已取消</span>
+                            <span>已流标</span>
                             {{#}else if(item.boIsState==4){}}
                             <span>已放款</span>
                             {{#}else if(item.boIsState==5){}}
@@ -144,7 +144,7 @@
                             <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
                             {{#}else if(item.boIsState==1){}}
                             <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
-                            <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.confirm()">确认放款</a>
+                            <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.confirm()">确认筹标</a>
                             <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.cancel()">取消</a>
                             {{#}else{}}
                             <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>

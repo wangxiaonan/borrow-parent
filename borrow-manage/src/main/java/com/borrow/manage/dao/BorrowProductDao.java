@@ -11,6 +11,8 @@ public interface BorrowProductDao {
 
     BorrowProduct selByPcode(String pCode);
 
+    BorrowProduct selByPUid(String pUid);
+
     List<BorrowProduct> selBorrowList();
 
 }

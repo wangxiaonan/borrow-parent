@@ -4,8 +4,10 @@ import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
 import com.borrow.manage.factory.CarRepayPlanFactory;
+import com.borrow.manage.model.XMap;
 import com.borrow.manage.model.dto.*;
 import com.borrow.manage.provider.AbstractCarRepayPlan;
+import com.borrow.manage.provider.RemoteDataCollector;
 import com.borrow.manage.service.OrderRepayServcie;
 import com.borrow.manage.utils.ExcelData;
 import com.borrow.manage.utils.ExportExcelUtils;
@@ -48,6 +50,9 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
     private BoOrderPayRecordDao boOrderPayRecordDao;
     @Autowired
     private IdProvider idProvider;
+    @Autowired
+    RemoteDataCollector remoteDataCollectorService;
+
 
 
 
@@ -264,6 +269,24 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             }
         }
 
+        UserInfo userInfo = userInfoDao.selInfoByUid(repayment.getUserUid());
+        // 资金划拨
+        XMap thirdParamMap = new XMap();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID,String.valueOf(repayment.getOrderId()));
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_ID,String.valueOf(repayment.getRepayId()));
+        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD,String.valueOf(repayment.getRepayExpect()));
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE,repayment.getBrTime());
+        thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT,repayment.getRepayAmount().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST,repayment.getInterestAmount().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE,repayment.getServiceFee().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_FEE,repayment.getPunishAmount().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.OUTID,userInfo.getIdcard());
+
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_TRANSFER_FUND.getUrlType());
+        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        if (!responseResult.isSucceed()) {
+            return responseResult;
+        }
         BorrowRepayment borrowRepayment = new BorrowRepayment();
         borrowRepayment.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
         borrowRepayment.setRepayType(RepayTypeEnum.PAY_NORMA.getCode());

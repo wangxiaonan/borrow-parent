@@ -26,6 +26,10 @@ public interface OrderServcie {
 
      ResponseResult orderCancel(OrderCancelReq orderCancelReq);
 
+     ResponseResult makeRaise(MakeLoansReq makeLoansReq);
+
+
+
 
 
 

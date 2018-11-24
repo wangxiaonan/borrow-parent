@@ -8,6 +8,7 @@ import com.borrow.manage.vo.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -21,6 +22,15 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class Test {
     public static void main(String[] args) {
+        HashMap map = new HashMap();
+        map.put("control","borrowAuditHandle");
+        map.put("reqNo",UUIDProvider.uuid());
+        map.put("loanNo",UUIDProvider.uuid());
+        map.put("status","1");
+        map.put("reqTime","111");
+
+        System.out.printf(JSON.toJSONString(map));
+
 //        System.out.println(UUIDProvider.uuid());
 //        System.out.println(UUIDProvider.uuid());
 //        System.out.println(UUIDProvider.uuid());

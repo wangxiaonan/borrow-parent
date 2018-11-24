@@ -8,7 +8,6 @@ import com.borrow.manage.model.XMap;
 import com.borrow.manage.model.dto.*;
 import com.borrow.manage.provider.AbstractCarRepayPlan;
 import com.borrow.manage.provider.RemoteDataCollector;
-import com.borrow.manage.provider.remotecoll.RemoteDataCollectorService;
 import com.borrow.manage.service.OrderServcie;
 import com.borrow.manage.utils.ExcelData;
 import com.borrow.manage.utils.ExportExcelUtils;
@@ -24,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by wxn on 2018/9/12
@@ -59,6 +56,9 @@ public class OrderServcieImpl implements OrderServcie {
     BorrowRepaymentDao borrowRepaymentDao;
     @Autowired
     RemoteDataCollector remoteDataCollectorService;
+    @Autowired
+    BoProductRateDao boProductRateDao;
+
 
 
     @Override
@@ -71,15 +71,23 @@ public class OrderServcieImpl implements OrderServcie {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
         UserInfoVo userInfoVo =  orderCreateReq.getUserInfo();
-        // 判断是否存管开户
-        XMap xMap = new XMap();
-        xMap.put(PlatformConstant.AssertParam.IDCARD,userInfoVo.getIdcard());
-        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
-        if(!xMapResponseResult.isSucceed()) {
-            return xMapResponseResult;
-        }
-        //判断是否是开户 和是否借款用户
-
+        // 判断是否是开户 和是否借款用户
+//        XMap xMap = new XMap();
+//        xMap.put(PlatformConstant.FundsParam.IDCARD,userInfoVo.getIdcard());
+//        xMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.USER_CHECK_DATA.getUrlType());
+//        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
+//        if(!xMapResponseResult.isSucceed()) {
+//            return xMapResponseResult;
+//        }
+//        XMap xMapRes = xMapResponseResult.getData();
+//        String isOpen = xMapRes.getString(PlatformConstant.FundsParam.ISOPEN);
+//        String userType = xMapRes.getString(PlatformConstant.FundsParam.USER_TYPE);
+//        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
+//            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
+//        }
+//        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
+//            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
+//        }
         UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
         if (userInfo == null) {
             userInfo = convertUserInfoVo(userInfoVo);
@@ -262,6 +270,57 @@ public class OrderServcieImpl implements OrderServcie {
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
     }
 
+    @Override
+    public ResponseResult makeRaise(MakeLoansReq makeLoansReq) {
+        BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(Long.parseLong(makeLoansReq.getOrderId()));
+        if (borrowOrder ==  null) {
+            throw new BorrowException(ExceptionCode.PARAM_ERROR);
+        }
+        XMap thirdParamMap = new XMap();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowOrder.getOrderId());
+
+        BorrowProduct borrowProduct = borrowProductDao.selByPUid(borrowOrder.getProductUid());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowProduct.getpName());
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_MODE,borrowOrder.getBoPaytype());
+        thirdParamMap.put(PlatformConstant.FundsParam.CLOSE_PERIOD,borrowOrder.getBoExpect());
+
+        List<BoProductRate> boProductRates = boProductRateDao.selProductRateByPUid(borrowProduct.getUuid());
+        Map<String,String> mapRate = new HashMap();
+        boProductRates.stream().forEach(boProductRate -> {
+            mapRate.put(boProductRate.getRateKey(),boProductRate.getRateValue());
+        });
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_RATE,mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_RATE,mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_ACCRUAL_RATE,mapRate.get(ProductRateEnum.MONTH_ACCRUAL_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GURANTEE_VIOLATE_RATE,mapRate.get(ProductRateEnum.GUARANTEE_VIOLATE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_RATE,mapRate.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_PAY_RATE,mapRate.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
+
+
+        List<BoOrderCost> boOrderCosts = boOrderCostDao.selByOrderId(borrowOrder.getOrderId());
+        Map<String,BigDecimal> orderCostsMap = new HashMap<>();
+        boOrderCosts.stream().forEach(boOrderCost -> {
+            orderCostsMap.put(boOrderCost.getCostKey(),boOrderCost.getCostAmount());
+        });
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_FEE,orderCostsMap.get(ProductRateEnum.EARLY_SERVICE_COST.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GPS_COST,orderCostsMap.get(ProductRateEnum.GPS_COST.getRateKey()));
+
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_TYPE,borrowOrder.getBuesType().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_AMT,borrowOrder.getBoPrice().toString());
+
+        UserInfo userInfo = userInfoDao.selInfoByUid(borrowOrder.getUserUid());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_ID,userInfo.getIdcard());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_NAME,userInfo.getUserName());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_PHONE,userInfo.getMobile());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY,userInfo.getIndustry());
+        thirdParamMap.put(PlatformConstant.FundsParam.JOB_DESC,userInfo.getWorkNature());
+        thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC,userInfo.getUserEarns());
+        thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
+
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
+        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        return responseResult;
+    }
 
 
     @Override

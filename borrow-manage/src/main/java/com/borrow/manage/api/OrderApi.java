@@ -84,7 +84,21 @@ public class OrderApi {
         orderServcie.orderPaySelListExport(response,orderPayListReq);
     }
 
-    @RequestMapping(value = "/make/loans", method = RequestMethod.POST)
+    @RequestMapping(value = "/make/raise", method = RequestMethod.POST)
+    public ResponseResult makeRaise(@RequestBody MakeLoansReq makeLoansReq) {
+        logger.info("====>MakeRaise():req={}", JSON.toJSON(makeLoansReq));
+        ResponseResult res = null;
+        if (StringUtils.isEmpty(makeLoansReq.getOrderId())) {
+            res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
+        }else {
+            res =  orderServcie.makeRaise(makeLoansReq);
+        }
+        logger.info("<====makeRaise():res={}",JSON.toJSON(res));
+        return res;
+    }
+
+
+//    @RequestMapping(value = "/make/loans", method = RequestMethod.POST)
     public ResponseResult makeLoans(@RequestBody MakeLoansReq makeLoansReq) {
         logger.info("====>makeLoans():req={}", JSON.toJSON(makeLoansReq));
         ResponseResult res = null;
