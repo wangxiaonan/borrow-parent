@@ -35,11 +35,11 @@ public class PermissionFilter extends OncePerRequestFilter {
 
         String reqMethod = request.getMethod();
         if ("POST".equals(reqMethod)){
-//            response.setHeader("Cache-Control", "no-cache");
-//            response.setHeader("Pragma", "No-cache");
-//            response.setDateHeader("Expires", 0);
-//            response.setContentType("application/json;charset=utf-8");
-//            response.setCharacterEncoding("utf-8");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "No-cache");
+            response.setDateHeader("Expires", 0);
+            response.setContentType("application/json;charset=utf-8");
+            response.setCharacterEncoding("utf-8");
 
             PostBodyRequestWrapper requestWrapper = new PostBodyRequestWrapper(request);
             String body = HttpRequestHelper.getRequestBody(requestWrapper);
@@ -48,7 +48,6 @@ public class PermissionFilter extends OncePerRequestFilter {
             String token = xMap.getString("token");
             if (StringUtils.isEmpty(token)) {
                 logger.info("token is null");
-                response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(JSON.toJSONString(ResponseResult.error(ExceptionCode.SYS_TOKEN_FAIL.getErrorCode()
                         ,ExceptionCode.SYS_TOKEN_FAIL.getErrorMessage())));
                 return;

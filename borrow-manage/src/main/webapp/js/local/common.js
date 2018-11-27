@@ -50,11 +50,6 @@
             success: function(re) {
                 if (re.succeed) {
                     _def.done(re)
-                } else if (re.errorCode == "1202103") {
-                    _def.nologin(re)
-                } else if (re.errorCode == "1202104") {
-                    alert(11111)
-                    _def.nopower(re)
                 } else {
                     _def.fail(re)
                 }

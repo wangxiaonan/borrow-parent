@@ -58,7 +58,8 @@ public class OrderServcieImpl implements OrderServcie {
     RemoteDataCollector remoteDataCollectorService;
     @Autowired
     BoProductRateDao boProductRateDao;
-
+    @Autowired
+    BoOrderItemDao boOrderItemDao;
 
 
     @Override
@@ -131,6 +132,13 @@ public class OrderServcieImpl implements OrderServcie {
         boOrderAudits.stream().forEach(boOrderAudit -> {
             boOrderAuditDao.insertOrderAudit(boOrderAudit);
         });
+        BoOrderItem  boOrderItem = new BoOrderItem();
+        boOrderItem.setUuid(UUIDProvider.uuid());
+        boOrderItem.setOrderId(borrowOrder.getOrderId());
+        boOrderItem.setItemKey(BoOrderItemEnum.BO_SOURCE.getItemKey());
+        boOrderItem.setItemValue(orderCreateReq.getBoOrderItem().getBoSource());
+        boOrderItem.setItemDesc(BoOrderItemEnum.BO_SOURCE.getItemDesc());
+        boOrderItemDao.insertItem(boOrderItem);
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
     }
 

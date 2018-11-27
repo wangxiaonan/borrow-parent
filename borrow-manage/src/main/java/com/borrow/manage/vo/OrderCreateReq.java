@@ -16,6 +16,16 @@ public class OrderCreateReq extends BaseReq{
 
     private OrderAuditVo orderAudit;
 
+    private BoOrderItemVo boOrderItem;
+
+    public BoOrderItemVo getBoOrderItem() {
+        return boOrderItem;
+    }
+
+    public void setBoOrderItem(BoOrderItemVo boOrderItem) {
+        this.boOrderItem = boOrderItem;
+    }
+
     public UserInfoVo getUserInfo() {
         return userInfo;
     }

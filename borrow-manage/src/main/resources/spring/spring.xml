@@ -16,7 +16,11 @@
 <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="false"
         location="classpath:properties/jdbc.properties
         ,classpath:properties/app-custom.properties,
-        ,classpath:properties/app-remote.properties"
+        ,classpath:properties/app-remote.properties,
+        file:/JAVA_Files/borrow/config/app-custom.properties
+        file:/JAVA_Files/borrow/config/app-remote.properties
+        file:/JAVA_Files/borrow/config/jdbc.properties
+        "
         system-properties-mode="ENVIRONMENT"/>
 
 

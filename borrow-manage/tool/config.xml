@@ -51,7 +51,8 @@
 
         <!--<table tableName="task_lock" domainObjectName="TaskLock"/>-->
         <!--<table tableName="sys_user" domainObjectName="SysUser"/>-->
-        <table tableName="sys_user_token" domainObjectName="SysUserToken"/>
+        <!--<table tableName="sys_user_token" domainObjectName="SysUserToken"/>-->
+        <table tableName="bo_order_item" domainObjectName="BoOrderItem"/>
 
 
     </context>

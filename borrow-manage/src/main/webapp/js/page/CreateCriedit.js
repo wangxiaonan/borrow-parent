@@ -39,7 +39,11 @@
               "boPrice": formData.boPrice,
               "boPaySource": formData.boPaySource,
               "productCode": formData.productCode
+          },
+          "boOrderItem": {
+            "boSource": formData.boSource
           }
+
       }
       var addUser = {
         url: ma.host+"/borrow/order/add",
@@ -48,9 +52,9 @@
             top.layer.success("添加成功");
                 self.location.reload();
             },
-            fail: function(res) {
-                top.layer.fail("失败");
-            }
+          fail: function(re) {
+              layer.error(re.errorMessage);
+          }
         }
         layer.showLoad();
         ma.ajax(addUser);
