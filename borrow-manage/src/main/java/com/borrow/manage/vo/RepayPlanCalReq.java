@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by wxn on 2018/9/19
  */
-public class RepayPlanCalReq {
+public class RepayPlanCalReq extends BaseReq {
 
 
     private String pCode;

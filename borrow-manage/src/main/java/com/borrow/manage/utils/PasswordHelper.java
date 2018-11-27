@@ -1,4 +1,4 @@
-package com.malt.permission.utils;
+package com.borrow.manage.utils;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
-
 
 
 public class PasswordHelper {
@@ -93,7 +92,7 @@ public class PasswordHelper {
             SecretKeySpec secretKey = new SecretKeySpec(PERMISSION_SESSION_KEY.getBytes(), "HmacSHA256");
             sha256Hmac.init(secretKey);
             String str = Base64.encodeBase64String(sha256Hmac.doFinal(message.getBytes()));
-            return str.substring(0,str.length()-2);
+            return str;
         } catch (Exception ignored) {
             return "";
         }

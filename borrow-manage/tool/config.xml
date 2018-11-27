@@ -13,7 +13,7 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-        connectionURL="jdbc:mysql://47.92.77.201:3306/rc_loan" userId="rcheng" password="ruichengcaifu@rcheng">
+        connectionURL="jdbc:mysql://47.92.246.248:3306/rc_loan" userId="root" password="Ruicheng77553300">
         <!--connectionURL="jdbc:mysql://xuneasy.cn/snow?characterEncoding=utf8" userId="xuneasy" password="xuneasy">-->
         </jdbcConnection>
         <!--connectionURL="jdbc:mysql://xuneasy.online/snow?characterEncoding=utf8" userId="xuneasy" password="xuneasy">-->
@@ -49,7 +49,9 @@
         <!--<table tableName="bo_order_audit" domainObjectName="BoOrderAudit"/>-->
         <!--<table tableName="bo_order_pay_record" domainObjectName="BoOrderPayRecord"/>-->
 
-        <table tableName="task_lock" domainObjectName="TaskLock"/>
+        <!--<table tableName="task_lock" domainObjectName="TaskLock"/>-->
+        <table tableName="sys_user" domainObjectName="SysUser"/>
+        <table tableName="sys_user_token" domainObjectName="SysUserToken"/>
 
 
     </context>

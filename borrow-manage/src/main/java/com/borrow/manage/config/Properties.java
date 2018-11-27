@@ -1,44 +1,34 @@
-package com.risk.app.config;
+package com.borrow.manage.config;
 
-import com.csyy.core.utils.PropertiesUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
+
 
 /**
- * Created by wangxindong on 18/5/16
+ * Created by wxn on 2018/9/15
  */
 @Configuration
 public class Properties {
 
-    public static String BIGDATA_SYSID;
+    public static String THREE_DES_BASE64_KEY;
+    public static String THREE_DES_IV;
 
-    public static String CEPH_ACCESS_KEY;
-
-    public static String CEPH_SECRET_KEY;
-
-    public static String CEPH_ENDPOINT;
+    public static String THREE_DES_ALGORITHM;
 
 
-
-    @Value("b${bigdata.sysId}")
-    public void setBigdataSysid(String bigdataSysid) {
-        BIGDATA_SYSID = bigdataSysid;
+    @Value("${three_des_base64_key}")
+    public void setCephAccessKey(String threeDesBase64Key) {
+        THREE_DES_BASE64_KEY = threeDesBase64Key;
     }
 
-    @Value("${ceph.access.key}")
-    public void setCephAccessKey(String cephAccessKey) {
-        CEPH_ACCESS_KEY = cephAccessKey;
+    @Value("${three_des_iv}")
+    public void setCephSecretKey(String threeDesIv) {
+        THREE_DES_IV = threeDesIv;
     }
 
-    @Value("${ceph.secret.key}")
-    public void setCephSecretKey(String cephSecretKey) {
-        CEPH_SECRET_KEY = cephSecretKey;
-    }
-
-    @Value("${ceph.endpoint}")
-    public void setCephEndpoint(String cephEndpoint) {
-        CEPH_ENDPOINT = cephEndpoint;
+    @Value("${three_des_algorithm}")
+    public void setCephEndpoint(String threeDesAlgorithm) {
+        THREE_DES_ALGORITHM = threeDesAlgorithm;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.borrow.manage.provider.remotecoll;
 
 import com.alibaba.fastjson.JSON;
+import com.borrow.manage.config.Properties;
 import com.borrow.manage.config.RemoteConfig;
 import com.borrow.manage.enums.DataClientEnum;
 import com.borrow.manage.enums.ExceptionCode;
@@ -8,6 +9,7 @@ import com.borrow.manage.enums.PlatformConstant;
 import com.borrow.manage.exception.RemoteException;
 import com.borrow.manage.model.XMap;
 import com.borrow.manage.provider.RestHttpClientService;
+import com.borrow.manage.utils.ThreeDES;
 import com.borrow.manage.utils.UUIDProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ import java.util.HashMap;
  * Created by wxn on 2018/11/24
  */
 
-@Component
+@Component("orderMakeRaiseDataClient")
 public class OrderMakeRaiseDataClient extends  DataClient {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -42,6 +44,7 @@ public class OrderMakeRaiseDataClient extends  DataClient {
             logger.info("OrderMakeRaise_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
 
             HashMap signatureMap = new HashMap();
+            reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
             signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
             jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
             logger.info("OrderMakeRaise_res:result={}",jsonData);

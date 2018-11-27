@@ -1,6 +1,7 @@
 package com.borrow.manage.api;
 
 import com.alibaba.fastjson.JSON;
+import com.borrow.manage.annotation.SignatureIncrease;
 import com.borrow.manage.enums.ExceptionCode;
 import com.borrow.manage.enums.FundsNotifyEnum;
 import com.borrow.manage.model.XMap;
@@ -9,10 +10,8 @@ import com.borrow.manage.vo.ResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.Executors;
 
 
 /**
@@ -23,9 +22,10 @@ public class FundsCallbackApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    private ThreadPoolTaskExecutor notifyExecutor;
+    private TaskExecutor notifyTaskExecutor;
 
     @RequestMapping(value = "/funds/notify", method = RequestMethod.POST)
+    @SignatureIncrease
     public ResponseResult fundsNotify(String Signature) {
         logger.info("====>fundsNotify():req={}", Signature);
         XMap paramMap = JSON.parseObject(Signature, XMap.class);
@@ -35,15 +35,16 @@ public class FundsCallbackApi {
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
                     ,ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
-        notifyExecutor.execute(new Runnable() {
+        notifyTaskExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 FundsNotifyContext notifyContext = new FundsNotifyContext(notifyEnum);
-                notifyContext.fundsNotify(paramMap);
+                ResponseResult res = notifyContext.fundsNotify(paramMap);
+
             }
         });
         ResponseResult res = ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
-        logger.info("<====fundsNotify():res={}",JSON.toJSON(res));
+        logger.info("<====fundsNotify():res={}",res);
         return res;
     }
 

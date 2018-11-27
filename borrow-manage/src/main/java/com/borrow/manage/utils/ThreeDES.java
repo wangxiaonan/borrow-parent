@@ -1,4 +1,4 @@
-package com.esoft.core.util;
+package com.borrow.manage.utils;
 
 /**  
  * Description:   
@@ -193,6 +193,29 @@ public class ThreeDES {
 			result[j] = arr[j];
 		}
 		return result;
+	}
+
+	public static void main(String[] args) {
+
+
+		String three_des_base64_key= "p2p_standard2_base64_key";
+		String three_des_base64_key2= "p2p_standard2_base64_key_2";
+		String three_des_iv= "p2p_s2iv";
+		String three_des_iv2= "p2p_s2iv_2";
+		String three_des_algorithm="DESede/CBC/PKCS5Padding";
+		String three_des_algorithm2="DESede/CBC/PKCS5Padding_2";
+		String str = "{\n" +
+				"\t\"loanNo\": \"131978446942240769\",\n" +
+				"\t\"reqNo\": \"C6BCB535F7AE487D9EA5F114247E0FE7\",\n" +
+				"\t\"control\": \"borrowOrderIdAuditHandle\",\n" +
+				"\t\"reqTime\": \"1543142329263\",\n" +
+				"\t\"status\": \"1\"\n" +
+				"}";
+
+		String s = ThreeDES.encrypt(str,three_des_base64_key,three_des_iv,three_des_algorithm);
+		System.out.println(s);
+//		String ss = ThreeDES.decrypt(s,three_des_base64_key,three_des_iv,three_des_algorithm);
+//		System.out.println(ss);
 	}
 
 }

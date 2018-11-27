@@ -65,6 +65,12 @@ public  interface PlatformConstant {
         String SERVICE_VIOLATE_FEE = "serviceViolateFee";
         String OUTID = "outID";
 
+        String AUDIT_STATUS = "status";
+        String AUDIT_STATUS_YES = "1";
+        String AUDIT_STATUS_NO = "2";
+
+        String TYPE = "type";
+
 
 
 

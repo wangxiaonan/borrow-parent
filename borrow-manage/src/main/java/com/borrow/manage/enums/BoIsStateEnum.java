@@ -7,10 +7,10 @@ public enum BoIsStateEnum {
 
     WAITING("待筹标",1),
     LOANING("筹标中",2),
-    LOAN_CANCEL("流标",3),
+    LOAN_CANCEL("已流标",3),
     LOAN_OVER("已放款",4),
     PAYING("还款中",5),
-    PAY_OVER("已放款",6);
+    PAY_OVER("已还款",6);
 
     BoIsStateEnum(String name, int code) {
         this.name = name;

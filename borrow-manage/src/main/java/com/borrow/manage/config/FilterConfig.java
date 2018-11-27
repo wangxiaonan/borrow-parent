@@ -1,6 +1,6 @@
-package com.risk.app.config;
+package com.borrow.manage.config;
 
-import com.risk.app.filter.WhiteIpFilter;
+import com.borrow.manage.filter.PermissionFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,17 +22,17 @@ public class FilterConfig {
 
 
     @Bean
-    public WhiteIpFilter whiteIpFilter(){
-        final WhiteIpFilter whiteIpFilter = new WhiteIpFilter();
-        return whiteIpFilter;
+    public PermissionFilter permissionFilter(){
+        final PermissionFilter permissionFilter = new PermissionFilter();
+        return permissionFilter;
     }
 
     @Bean
     public FilterRegistrationBean someFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(whiteIpFilter());
-        registration.addUrlPatterns("/dcinapi/*");
-        registration.setName("whiteIpFilter");
+        registration.setFilter(permissionFilter());
+        registration.addUrlPatterns("/borrow/*");
+        registration.setName("permissionFilter");
         registration.setOrder(1);
         return registration;
     }

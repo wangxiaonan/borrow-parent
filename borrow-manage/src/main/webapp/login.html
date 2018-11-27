@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>管理后台</title>
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="./js/lib/layui/css/layui.css">
     <script src="./js/lib/jquery.min.js"></script>
  	<script src="./js/lib/layui/layui.js"></script>
  	<script src="./js/local/common.js"></script>
+
+
     <style>
         body {
             background-color: #e2e2e2;
@@ -49,7 +50,7 @@
 <body>
 <!-- <form class="layui-form">        name="password"  -->
     <div class="ma-login layui-form">
-        <div class="ma-login-title">欢迎使用后台管理系统</div>
+        <div class="ma-login-title">欢迎使用贷款系统</div>
         <div class="layui-form-item">
             <input type="text" name="loginName" autocomplete="off" placeholder="账号" id="username" class="layui-input">
         </div>
@@ -60,10 +61,10 @@
             <input type="checkbox" title="记住账号" lay-skin="primary" checked>
         </div>
         <div class="layui-form-item">
-            <button type="button" class="layui-btn" lay-submit lay-filter="formLogin"   id="login">登录</button>
+            <button type="button" class="layui-btn" lay-submit lay-filter="formLogin"  id="login">登录</button>
         </div>
     </div>
-<!-- </form> -->
+ </form>
     <script>
         layui.use(["form", "layer"], function() {
           var form = layui.form();
@@ -71,23 +72,25 @@
                 // console.log("demo",data.field)
                 var  obj = {
                     type: "post",
-                    url: "user/permission/login",
+                    url: ma.host +"/user/permission/login",
                     data: data.field,
                     done: function(data) {
-                        // console.log("loginre",data);
+                        console.log("loginre",data);
                         //存储当前当前用户id
-                        var userUid = data.data.userInfoRes.userUid
-                        sessionStorage.setItem("userUid", userUid);
+                        var sysUserUid = data.data.sysUserUid
+                        var token = data.data.token
+                        sessionStorage.setItem("sysUserUid", sysUserUid);
+                        sessionStorage.setItem("token", token);
                             window.location.href="index.html";
                     }
                 }
                 ma.ajax(obj);
                 return false;
             });
-      
+
 
         });
-        
+
     </script>
 </body>
 

@@ -177,7 +177,7 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
             layer.confirm({
                 content: "确定筹标？",
                 yes: function(index) {
-                    confirm(orderId,'/make/superscript');
+                    confirm(orderId,'/make/raise');
                     layer.close(index);
                 },
                 no: function() {

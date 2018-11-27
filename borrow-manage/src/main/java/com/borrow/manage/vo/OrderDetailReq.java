@@ -3,7 +3,7 @@ package com.borrow.manage.vo;
 /**
  * Created by wxn on 2018/9/16
  */
-public class OrderDetailReq {
+public class OrderDetailReq extends PageBaseReq{
 
     private String orderId;
 

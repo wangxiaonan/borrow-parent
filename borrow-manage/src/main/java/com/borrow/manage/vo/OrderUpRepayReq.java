@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by wxn on 2018/9/21
  */
-public class OrderUpRepayReq {
+public class OrderUpRepayReq extends BaseReq {
 
     private String orderId;
 //    private String repayId;

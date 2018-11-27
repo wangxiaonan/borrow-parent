@@ -1,6 +1,7 @@
 package com.borrow.manage.api;
 
 import com.alibaba.fastjson.JSON;
+import com.borrow.manage.utils.PasswordHelper;
 import com.borrow.manage.utils.UUIDProvider;
 import com.borrow.manage.utils.Utility;
 import com.borrow.manage.vo.*;
@@ -23,13 +24,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class Test {
     public static void main(String[] args) {
         HashMap map = new HashMap();
-        map.put("control","borrowAuditHandle");
-        map.put("reqNo",UUIDProvider.uuid());
-        map.put("loanNo",UUIDProvider.uuid());
-        map.put("status","1");
-        map.put("reqTime","111");
-
-        System.out.printf(JSON.toJSONString(map));
+        System.out.println(UUIDProvider.uuid());
+        System.out.println(PasswordHelper.encryptPassword("123456"));
 
 //        System.out.println(UUIDProvider.uuid());
 //        System.out.println(UUIDProvider.uuid());
@@ -44,12 +40,12 @@ public class Test {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        BlockingQueue blockingQueue = new ArrayBlockingQueue(50);
-        try {
-            blockingQueue.take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        BlockingQueue blockingQueue = new ArrayBlockingQueue(50);
+//        try {
+//            blockingQueue.take();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 //        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
 //        System.out.println(reentrantReadWriteLock.hashCode());
 //        CarRepayPlanVo carRepayPlanVo = new CarRepayPlanVo();

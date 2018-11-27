@@ -1,9 +1,11 @@
 package com.borrow.manage.vo;
 
+import com.alibaba.fastjson.JSON;
+
 /**
  * Created by wxn on 2018/9/15
  */
-public class PageBaseReq {
+public class PageBaseReq extends BaseReq {
     private int pageNo = 1;
     private int pageSize = 10;
 
@@ -25,4 +27,5 @@ public class PageBaseReq {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
 }

@@ -25,7 +25,7 @@ public class ProductApi {
     public ResponseResult selProductList() {
         logger.info("====>selProductList()");
         ResponseResult res = productService.productSelList();
-        logger.info("<====selProductList():res={}", JSON.toJSON(res));
+        logger.info("<====selProductList():res={}", res);
         return res;
     }
 

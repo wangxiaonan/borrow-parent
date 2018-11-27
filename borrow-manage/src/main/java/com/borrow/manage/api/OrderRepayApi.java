@@ -27,24 +27,24 @@ public class OrderRepayApi {
 
     @RequestMapping(value = "/borrow/repayment/sel", method = RequestMethod.POST)
     public ResponseResult selRepaymentList(@RequestBody OrderRepayListReq orderRepayListReq) {
-        logger.info("====>selRepaymentList():req={}", JSON.toJSON(orderRepayListReq));
+        logger.info("====>selRepaymentList():req={}", orderRepayListReq);
 
         ResponseResult res = orderRepayServcie.orderRepaySelList(orderRepayListReq);
-        logger.info("<====selRepaymentList():res={}",JSON.toJSON(res));
+        logger.info("<====selRepaymentList():res={}",res);
         return res;
     }
 
     @RequestMapping(value = "/borrow/repayment/sel/export")
     @ResponseBody
     public void selRepaymentListExport(HttpServletResponse response, OrderRepayListReq orderRepayListReq) {
-        logger.info("====>selRepaymentListExport():req={}", JSON.toJSON(orderRepayListReq));
+        logger.info("====>selRepaymentListExport():req={}", orderRepayListReq);
         orderRepayServcie.orderRepaySelListExport(response,orderRepayListReq);
 
     }
 
     @RequestMapping(value = "/borrow/repayplan/cal", method = RequestMethod.POST)
     public ResponseResult repayPlanCal(@RequestBody RepayPlanCalReq repayPlanCalReq) {
-        logger.info("====>repayPlanCal():req={}", JSON.toJSON(repayPlanCalReq));
+        logger.info("====>repayPlanCal():req={}", repayPlanCalReq);
         ResponseResult res = null;
 
         if (repayPlanCalReq.getBoPrice() == null
@@ -56,8 +56,9 @@ public class OrderRepayApi {
 
 
         }else {
-            return orderRepayServcie.orderRepayPlanCal(repayPlanCalReq);
+            res = orderRepayServcie.orderRepayPlanCal(repayPlanCalReq);
         }
+        logger.info("<====repayPlanCal():res={}", res);
         return res;
 
     }
@@ -65,7 +66,7 @@ public class OrderRepayApi {
 
     @RequestMapping(value = "/order/repay/plan", method = RequestMethod.POST)
     public ResponseResult orderRepayPlan(@RequestBody OrderRepayPlanReq orderCancelReq) {
-        logger.info("====>orderRepayPlan():req={}", JSON.toJSON(orderCancelReq));
+        logger.info("====>orderRepayPlan():req={}", orderCancelReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderCancelReq.getOrderId())) {
@@ -73,13 +74,13 @@ public class OrderRepayApi {
         }else {
             res =  orderRepayServcie.orderRepayPlan(orderCancelReq);
         }
-        logger.info("<====orderRepayPlan():res={}",JSON.toJSON(res));
+        logger.info("<====orderRepayPlan():res={}",res);
         return res;
     }
 
     @RequestMapping(value = "/order/repay/detail", method = RequestMethod.POST)
     public ResponseResult orderRepayDetail(@RequestBody RepayListDetailReq repayListDetailReq) {
-        logger.info("====>orderRepayDetail():req={}", JSON.toJSON(repayListDetailReq));
+        logger.info("====>orderRepayDetail():req={}", repayListDetailReq);
 
         ResponseResult res = null;
 
@@ -88,7 +89,7 @@ public class OrderRepayApi {
         }else {
             res =  orderRepayServcie.selRepayListDetail(repayListDetailReq);
         }
-        logger.info("<====orderRepayDetail():res={}",JSON.toJSON(res));
+        logger.info("<====orderRepayDetail():res={}",res);
         return res;
     }
 
@@ -96,7 +97,7 @@ public class OrderRepayApi {
 
     public ResponseResult orderRepayOver(@RequestBody OrderPayOverReq orderPayOverReq) {
 
-        logger.info("====>orderRepayOver():req={}", JSON.toJSON(orderPayOverReq));
+        logger.info("====>orderRepayOver():req={}", orderPayOverReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderPayOverReq.getOrderId())
@@ -105,13 +106,13 @@ public class OrderRepayApi {
         else {
             res =  orderRepayServcie.orderRepayOver(orderPayOverReq);
         }
-        logger.info("<====orderRepayOver():res={}",JSON.toJSON(res));
+        logger.info("<====orderRepayOver():res={}",res);
         return res;
     }
 
     @RequestMapping(value = "/order/up/repay/cal", method = RequestMethod.POST)
     public ResponseResult orderUpRepayCal(@RequestBody OrderUpRepayCalReq orderUpRepayCalReq) {
-        logger.info("====>orderUpRepayCal():req={}", JSON.toJSON(orderUpRepayCalReq));
+        logger.info("====>orderUpRepayCal():req={}", orderUpRepayCalReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderUpRepayCalReq.getOrderId())
@@ -121,7 +122,7 @@ public class OrderRepayApi {
         else {
             res =  orderRepayServcie.orderUpRepayCal(orderUpRepayCalReq);
         }
-        logger.info("<====orderUpRepayCal():res={}",JSON.toJSON(res));
+        logger.info("<====orderUpRepayCal():res={}",res);
         return res;
 
 
@@ -130,7 +131,7 @@ public class OrderRepayApi {
     @RequestMapping(value = "/order/up/repay", method = RequestMethod.POST)
     public ResponseResult orderUpRepay(@RequestBody OrderUpRepayReq orderUpRepayReq) {
 
-        logger.info("====>orderUpRepay():req={}", JSON.toJSON(orderUpRepayReq));
+        logger.info("====>orderUpRepay():req={}", orderUpRepayReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderUpRepayReq.getOrderId())
@@ -143,7 +144,7 @@ public class OrderRepayApi {
         else {
             res =  orderRepayServcie.orderUpRepay(orderUpRepayReq);
         }
-        logger.info("<====orderUpRepay():res={}",JSON.toJSON(res));
+        logger.info("<====orderUpRepay():res={}",res);
         return res;
     }
 

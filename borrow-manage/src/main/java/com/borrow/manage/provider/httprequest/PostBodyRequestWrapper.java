@@ -1,4 +1,4 @@
-package com.risk.common.utils.PostRequestWrapper;
+package com.borrow.manage.provider.httprequest;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -9,17 +9,14 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
 
-/**
- * Created by wangxindong on 18/7/4
- */
-public class PostBodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
+
+public class PostBodyRequestWrapper extends HttpServletRequestWrapper {
 
 
     private final byte[] body;
 
-    public PostBodyReaderHttpServletRequestWrapper(HttpServletRequest request) {
+    public PostBodyRequestWrapper(HttpServletRequest request) {
         super(request);
         body = HttpRequestHelper.getRequestBody(request).getBytes(Charset.forName("UTF-8"));
     }

@@ -180,8 +180,6 @@ layui.use(["form", "layer", "element"], function () {
         ma.ajax(obj);
     }
 
-
-
     //刷新验证码
     $('#verify-section-refresh').on('click', function() {
         getCode()

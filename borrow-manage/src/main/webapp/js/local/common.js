@@ -6,7 +6,7 @@
 
     var loginUrl = "login"
 
-    var ajaxError = '网络异常,请稍后重试'
+    var ajaxError = '登录超时,请重新登录'
 
     var loginTimeOut = "登录超时,请重新登录"
 
@@ -14,9 +14,13 @@
 
     function getUserUid() {
         var userInfo = layui.data("MA_USER");
-        return userInfo["userUid"] || " "
+        return userInfo["sysUserUid"] || " "
     }
 
+    function getToken() {
+        var userInfo = layui.data("MA_USER");
+        return userInfo["token"] || " "
+    }
     function ajax(obj,source) {
         if(source&&$(source).hasClass("disable")){
             return;
@@ -32,9 +36,10 @@
             obj.data = {}
         }
         if (obj.data && typeof obj.data === "object") {
-            if (!obj.data["userUid"]) {
-                obj.data["userUid"] = getUserUid()
-            }
+            // if (!obj.data["sysUserUid"]) {
+            obj.data["sysUserUid"] =  sessionStorage.getItem("sysUserUid");
+            obj.data["token"] =  sessionStorage.getItem("token");
+            // }
             obj.data = JSON.stringify(obj.data)
         }
 
@@ -48,6 +53,7 @@
                 } else if (re.errorCode == "1202103") {
                     _def.nologin(re)
                 } else if (re.errorCode == "1202104") {
+                    alert(11111)
                     _def.nopower(re)
                 } else {
                     _def.fail(re)

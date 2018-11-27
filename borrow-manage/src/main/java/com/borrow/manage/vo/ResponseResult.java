@@ -76,7 +76,7 @@ public class ResponseResult<T> {
     }
 
     public String toString() {
-        return this.data != null ? "ResponseResult [errorCode=" + this.errorCode + ", errorMessage=" + this.errorMessage + ", data=" + this.data.toString() + "]" : "ResponseResult [errorCode=" + this.errorCode + ", errorMessage=" + this.errorMessage + "]";
+        return JSON.toJSONString(this);
     }
 }
 

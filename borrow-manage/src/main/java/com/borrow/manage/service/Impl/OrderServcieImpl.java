@@ -123,6 +123,7 @@ public class OrderServcieImpl implements OrderServcie {
         borrowOrder.setBoPaytype(borrowProduct.getpPayType());
         borrowOrder.setBoIsState(BoIsStateEnum.WAITING.getCode());
         borrowOrder.setBoPaySource(borrowOrderVo.getBoPaySource());
+        borrowOrder.setBoPayState(BoRepayStatusEnum.NORMAL.getCode());
         borrowOrderDao.insertBorrowOrder(borrowOrder);
         OrderAuditVo orderAuditVo = orderCreateReq.getOrderAudit();
         //TODO 可以用批量插入
@@ -256,8 +257,7 @@ public class OrderServcieImpl implements OrderServcie {
         BorrowOrder bo = new BorrowOrder();
         bo.setBoIsState(BoIsStateEnum.LOAN_OVER.getCode());
         bo.setBoFinishPrice(BigDecimal.valueOf(Double.valueOf(repayPlanRes.getBoFinishPrice())));
-        bo.setBoPayState(BoRepayStatusEnum.NORMAL.getCode());
-        bo.setBoIsFinish(1);
+        bo.setBoIsFinish(BoIsFinishEnum.Finish_YES.getCode());
         bo.setBoFinishTime(new Date());
         bo.setFirstExpectTime(repaymentsResult.get(0).getBrTime());
         borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),bo);
@@ -276,13 +276,13 @@ public class OrderServcieImpl implements OrderServcie {
         if (borrowOrder ==  null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        XMap thirdParamMap = new XMap();
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowOrder.getOrderId());
+        XMap<String,String> thirdParamMap = new XMap<String, String>();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowOrder.getOrderId().toString());
 
         BorrowProduct borrowProduct = borrowProductDao.selByPUid(borrowOrder.getProductUid());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowProduct.getpName());
-        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_MODE,borrowOrder.getBoPaytype());
-        thirdParamMap.put(PlatformConstant.FundsParam.CLOSE_PERIOD,borrowOrder.getBoExpect());
+        thirdParamMap.put(PlatformConstant.FundsParam.PRODUCT_NAME,borrowProduct.getpName());
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_MODE,String.valueOf(borrowOrder.getBoPaytype()));
+        thirdParamMap.put(PlatformConstant.FundsParam.CLOSE_PERIOD,borrowOrder.getBoExpect().toString());
 
         List<BoProductRate> boProductRates = boProductRateDao.selProductRateByPUid(borrowProduct.getUuid());
         Map<String,String> mapRate = new HashMap();
@@ -290,20 +290,19 @@ public class OrderServcieImpl implements OrderServcie {
             mapRate.put(boProductRate.getRateKey(),boProductRate.getRateValue());
         });
         thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_RATE,mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_RATE,mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_RATE,mapRate.get(ProductRateEnum.MONTH_SERVICE_RATE.getRateKey()));
         thirdParamMap.put(PlatformConstant.FundsParam.MONTH_ACCRUAL_RATE,mapRate.get(ProductRateEnum.MONTH_ACCRUAL_RATE.getRateKey()));
         thirdParamMap.put(PlatformConstant.FundsParam.GURANTEE_VIOLATE_RATE,mapRate.get(ProductRateEnum.GUARANTEE_VIOLATE_RATE.getRateKey()));
         thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_RATE,mapRate.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
         thirdParamMap.put(PlatformConstant.FundsParam.EARLY_PAY_RATE,mapRate.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
 
 
-        List<BoOrderCost> boOrderCosts = boOrderCostDao.selByOrderId(borrowOrder.getOrderId());
-        Map<String,BigDecimal> orderCostsMap = new HashMap<>();
-        boOrderCosts.stream().forEach(boOrderCost -> {
-            orderCostsMap.put(boOrderCost.getCostKey(),boOrderCost.getCostAmount());
-        });
-        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_FEE,orderCostsMap.get(ProductRateEnum.EARLY_SERVICE_COST.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.GPS_COST,orderCostsMap.get(ProductRateEnum.GPS_COST.getRateKey()));
+        String gpsCost = mapRate.get(ProductRateEnum.GPS_COST.getRateKey());
+        BigDecimal earlyServiceRate = BigDecimal.valueOf(Double.valueOf(thirdParamMap.getString(PlatformConstant.FundsParam.EARLY_SERVICE_RATE)));
+        BigDecimal earlyServiceCost = borrowOrder.getBoPrice().multiply(earlyServiceRate);
+
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_FEE,earlyServiceCost.toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.GPS_COST,gpsCost);
 
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_TYPE,borrowOrder.getBuesType().toString());
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_AMT,borrowOrder.getBoPrice().toString());

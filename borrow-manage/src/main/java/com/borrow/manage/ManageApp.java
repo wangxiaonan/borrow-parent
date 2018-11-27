@@ -18,7 +18,6 @@ import org.springframework.web.filter.CorsFilter;
 /**
  * Created by wxn on 2018/9/12
  */
-@EnableAutoConfiguration
 @SpringBootApplication
 @EnableTransactionManagement
 @ComponentScan(basePackages="com.borrow")

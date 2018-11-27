@@ -1,14 +1,14 @@
-package com.risk.app.annotation;
+package com.borrow.manage.annotation;
 
 import java.lang.annotation.*;
 
 /**
- * Created by wangxindong on 18/5/24
+ * Created by wxn on 2018/11/22
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface InfoIncrease {
+public @interface SignatureIncrease {
 
 
 

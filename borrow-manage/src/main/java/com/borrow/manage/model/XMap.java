@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Created by wxn on 2018/11/21
  */
-public class XMap extends HashMap {
+public class XMap<K,V>  extends HashMap<K,V> {
 
 
     public String getString(Object key) {

@@ -1,4 +1,4 @@
-package com.borrow.manage.utils;
+package com.borrow.manage.provider.httprequest;
 
 import javax.servlet.ServletRequest;
 import java.io.BufferedReader;

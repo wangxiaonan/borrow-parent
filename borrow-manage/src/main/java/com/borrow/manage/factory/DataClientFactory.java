@@ -13,12 +13,22 @@ public class DataClientFactory {
 
     @Autowired
     DataClient userCheckDataClient;
+    @Autowired
+    DataClient orderMakeRaiseDataClient;
+    @Autowired
+    DataClient orderTransferFundDataClient;
+
 
     public DataClient  getDataClient(String urlType){
         DataClientEnum dataClientEnum = DataClientEnum.getEnum(urlType);
         switch (dataClientEnum){
             case USER_CHECK_DATA:
                 return this.userCheckDataClient;
+            case ORDER_MAKE_RAISE:
+                return this.orderMakeRaiseDataClient;
+            case ORDER_TRANSFER_FUND:
+                return this.orderTransferFundDataClient;
+
         }
         return null;
     }

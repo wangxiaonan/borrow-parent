@@ -3,7 +3,7 @@ package com.borrow.manage.vo;
 /**
  * Created by wxn on 2018/9/12
  */
-public class OrderCreateReq {
+public class OrderCreateReq extends BaseReq{
 
 
     private UserInfoVo userInfo;

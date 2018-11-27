@@ -3,16 +3,12 @@ package com.borrow.manage.enums;
 /**
  * Created by wxn on 2018/9/15
  */
-public enum BoIsStateEnum {
+public enum BoIsFinishEnum {
 
-    WAITING("待筹标",1),
-    LOANING("筹标中",2),
-    LOAN_CANCEL("流标",3),
-    LOAN_OVER("已放款",4),
-    PAYING("还款中",5),
-    PAY_OVER("已放款",6);
+    Finish_YES("已完成",1),
+    FINISH_NO("未完成",0);
 
-    BoIsStateEnum(String name, int code) {
+    BoIsFinishEnum(String name, int code) {
         this.name = name;
         this.code = code;
     }
@@ -36,7 +32,7 @@ public enum BoIsStateEnum {
     }
 
     public  static String getNameValue(int code) {
-        for (BoIsStateEnum stateEnum : BoIsStateEnum.values()) {
+        for (BoIsFinishEnum stateEnum : BoIsFinishEnum.values()) {
              if (stateEnum.getCode() == code) {
                  return stateEnum.getName();
              }

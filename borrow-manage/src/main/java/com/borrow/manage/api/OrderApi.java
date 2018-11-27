@@ -28,35 +28,35 @@ public class OrderApi {
     @RequestMapping(value = "/borrow/order/add", method = RequestMethod.POST)
     public ResponseResult addOrder(@RequestBody OrderCreateReq orderCreateReq) {
         ResponseResult res = null;
-        logger.info("====>addOrder():req={}", JSON.toJSON(orderCreateReq));
+        logger.info("====>addOrder():req={}", orderCreateReq);
 
         if (checkAddParams(orderCreateReq)) {
             res= orderServcie.orderAdd(orderCreateReq);
         }else {
             res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
-        logger.info("<====addOrder():res={}",JSON.toJSON(res));
+        logger.info("<====addOrder():res={}",res);
         return res;
     }
     @RequestMapping(value = "/borrow/order/sel", method = RequestMethod.POST)
     public ResponseResult selOrderList(@RequestBody OrderListReq orderListReq) {
-        logger.info("====>selOrderList():req={}", JSON.toJSON(orderListReq));
+        logger.info("====>selOrderList():req={}", orderListReq);
         ResponseResult res =  orderServcie.orderSelList(orderListReq);
-        logger.info("<====selOrderList():res={}",JSON.toJSON(res));
+        logger.info("<====selOrderList():res={}",res);
         return res;
     }
 
     @RequestMapping(value = "/borrow/order/sel/export")
     @ResponseBody
     public void selOrderListExport(HttpServletResponse response, OrderListReq orderListReq) {
-        logger.info("====>selOrderListExport():req={}", JSON.toJSON(orderListReq));
+        logger.info("====>selOrderListExport():req={}", orderListReq);
         orderServcie.orderSelListExport(response,orderListReq);
     }
 
 
     @RequestMapping(value = "/borrow/order/sel/detail", method = RequestMethod.POST)
     public ResponseResult selOrderDetail(@RequestBody OrderDetailReq orderDetailReq) {
-        logger.info("====>selOrderDetail():req={}", JSON.toJSON(orderDetailReq));
+        logger.info("====>selOrderDetail():req={}", orderDetailReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderDetailReq.getOrderId())) {
@@ -65,15 +65,15 @@ public class OrderApi {
         }else {
             res =  orderServcie.orderDetailSel(orderDetailReq);
         }
-        logger.info("<====selOrderDetail():res={}",JSON.toJSON(res));
+        logger.info("<====selOrderDetail():res={}",res);
         return res;
     }
 
     @RequestMapping(value = "/borrow/pay/sel", method = RequestMethod.POST)
     public ResponseResult selOrderPayList(@RequestBody OrderPayListReq orderPayListReq) {
-        logger.info("====>selOrderPayList():req={}", JSON.toJSON(orderPayListReq));
+        logger.info("====>selOrderPayList():req={}", orderPayListReq);
         ResponseResult res =  orderServcie.orderPaySelList(orderPayListReq);
-        logger.info("<====selOrderPayList():res={}",JSON.toJSON(res));
+        logger.info("<====selOrderPayList():res={}",res);
         return res;
     }
 
@@ -86,21 +86,21 @@ public class OrderApi {
 
     @RequestMapping(value = "/make/raise", method = RequestMethod.POST)
     public ResponseResult makeRaise(@RequestBody MakeLoansReq makeLoansReq) {
-        logger.info("====>MakeRaise():req={}", JSON.toJSON(makeLoansReq));
+        logger.info("====>MakeRaise():req={}", makeLoansReq);
         ResponseResult res = null;
         if (StringUtils.isEmpty(makeLoansReq.getOrderId())) {
             res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
         }else {
             res =  orderServcie.makeRaise(makeLoansReq);
         }
-        logger.info("<====makeRaise():res={}",JSON.toJSON(res));
+        logger.info("<====makeRaise():res={}",res);
         return res;
     }
 
 
 //    @RequestMapping(value = "/make/loans", method = RequestMethod.POST)
     public ResponseResult makeLoans(@RequestBody MakeLoansReq makeLoansReq) {
-        logger.info("====>makeLoans():req={}", JSON.toJSON(makeLoansReq));
+        logger.info("====>makeLoans():req={}", makeLoansReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(makeLoansReq.getOrderId())) {
@@ -108,13 +108,13 @@ public class OrderApi {
         }else {
             res =  orderServcie.makeLoans(makeLoansReq);
         }
-        logger.info("<====makeLoans():res={}",JSON.toJSON(res));
+        logger.info("<====makeLoans():res={}",res);
         return res;
     }
 
     @RequestMapping(value = "/order/cancel", method = RequestMethod.POST)
     public ResponseResult orderCancel(@RequestBody OrderCancelReq orderCancelReq) {
-        logger.info("====>orderCancel():req={}", JSON.toJSON(orderCancelReq));
+        logger.info("====>orderCancel():req={}", orderCancelReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderCancelReq.getOrderId())) {
@@ -122,7 +122,7 @@ public class OrderApi {
         }else {
             res =  orderServcie.orderCancel(orderCancelReq);
         }
-        logger.info("<====orderCancel():res={}",JSON.toJSON(res));
+        logger.info("<====orderCancel():res={}",res);
         return res;
     }
 

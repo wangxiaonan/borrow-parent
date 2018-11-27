@@ -17,6 +17,11 @@ public enum ExceptionCode {
 
     USER_CHECK_OPEN("2010001","存管未开户"),
     USER_CHECK_IDENTITY("2010002","不是借款用户"),
+    SIGNATURE_FAIL("2010003","签名解析是失败"),
+    LOGIN_NAME_FAIL("2010004","用户名不存在"),
+    LOGIN_PASSWD_FAIL("2010005","密码错误"),
+    SYS_TOKEN_FAIL("2010006","请重新登录"),
+
 
     // 3 远端服务调用异常 01 是理财
     USER_CHECK_IDENTITY_ERROR("3010001","理财服务—用户身份确认接口异常"),

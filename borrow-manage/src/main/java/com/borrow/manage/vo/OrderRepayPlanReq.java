@@ -3,7 +3,7 @@ package com.borrow.manage.vo;
 /**
  * Created by wxn on 2018/9/20
  */
-public class OrderRepayPlanReq {
+public class OrderRepayPlanReq extends BaseReq {
 
     private String orderId;
 

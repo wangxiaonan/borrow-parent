@@ -14,16 +14,17 @@ import static com.borrow.manage.enums.ProductEnum.*;
 public class CarRepayPlanFactory {
 
     @Autowired
-    AbstractCarRepayPlan carOneRepayPlan;
+    AbstractCarRepayPlan carDefaultRepayPlan;
 
     public AbstractCarRepayPlan getCarRepayPlan(ProductEnum productEnum){
 
         switch (productEnum){
             case CAR_LOAN_ONE:
-                return this.carOneRepayPlan;
+                return this.carDefaultRepayPlan;
             case CAR_LOAN_TWO:
-                return this.carOneRepayPlan;
+                return this.carDefaultRepayPlan;
         }
-        return null;
+
+        return carDefaultRepayPlan;
     }
 }
