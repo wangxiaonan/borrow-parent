@@ -2,7 +2,6 @@ package com.borrow.manage.model.dto;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class SysUserTokenExample {
@@ -194,32 +193,6 @@ public class SysUserTokenExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -803,52 +776,52 @@ public class SysUserTokenExample {
         }
 
         public Criteria andExpireTimeEqualTo(Date value) {
-            addCriterionForJDBCDate("expire_time =", value, "expireTime");
+            addCriterion("expire_time =", value, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeNotEqualTo(Date value) {
-            addCriterionForJDBCDate("expire_time <>", value, "expireTime");
+            addCriterion("expire_time <>", value, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeGreaterThan(Date value) {
-            addCriterionForJDBCDate("expire_time >", value, "expireTime");
+            addCriterion("expire_time >", value, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("expire_time >=", value, "expireTime");
+            addCriterion("expire_time >=", value, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeLessThan(Date value) {
-            addCriterionForJDBCDate("expire_time <", value, "expireTime");
+            addCriterion("expire_time <", value, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("expire_time <=", value, "expireTime");
+            addCriterion("expire_time <=", value, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeIn(List<Date> values) {
-            addCriterionForJDBCDate("expire_time in", values, "expireTime");
+            addCriterion("expire_time in", values, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeNotIn(List<Date> values) {
-            addCriterionForJDBCDate("expire_time not in", values, "expireTime");
+            addCriterion("expire_time not in", values, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("expire_time between", value1, value2, "expireTime");
+            addCriterion("expire_time between", value1, value2, "expireTime");
             return (Criteria) this;
         }
 
         public Criteria andExpireTimeNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("expire_time not between", value1, value2, "expireTime");
+            addCriterion("expire_time not between", value1, value2, "expireTime");
             return (Criteria) this;
         }
 

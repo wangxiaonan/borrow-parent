@@ -52,7 +52,7 @@ public class SysUserServiceImpl implements SysUserService {
         }else {
             userToken.setToken(token);
             long expiteTime = System.currentTimeMillis()+3600*1000;
-            sysUserToken.setExpireTime(new Date(expiteTime));
+            userToken.setExpireTime(new Date(expiteTime));
             sysUserTokenDao.updateByUserUid(sysUser.getUuid(),userToken);
         }
         LoginRes loginRes = new LoginRes();
