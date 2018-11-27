@@ -50,7 +50,7 @@
         <!--<table tableName="bo_order_pay_record" domainObjectName="BoOrderPayRecord"/>-->
 
         <!--<table tableName="task_lock" domainObjectName="TaskLock"/>-->
-        <table tableName="sys_user" domainObjectName="SysUser"/>
+        <!--<table tableName="sys_user" domainObjectName="SysUser"/>-->
         <table tableName="sys_user_token" domainObjectName="SysUserToken"/>
 
 
