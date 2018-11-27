@@ -7,6 +7,7 @@ import com.borrow.manage.vo.OrderPayListReq;
 import com.borrow.manage.vo.OrderPayListRes;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +38,8 @@ public interface BorrowOrderDao {
     void upBoPayExpectCount(long orderId);
 
     void updateBorrowOrder(long orderId,BorrowOrder borrowOrder);
+
+    List<BorrowOrder> selByState(int state);
 
 
 }

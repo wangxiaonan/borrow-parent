@@ -96,6 +96,14 @@ public class BorrowOrderDaoImpl implements BorrowOrderDao {
     }
 
     @Override
+    public List<BorrowOrder> selByState(int state) {
+        BorrowOrderExample example = new BorrowOrderExample();
+        example.createCriteria().andBoIsStateEqualTo(state);
+        List<BorrowOrder> borrowOrders = borrowOrderMapper.selectByExample(example);
+        return borrowOrders;
+    }
+
+    @Override
     public List<OrderListRes> selOrderListWhere(OrderListReq orderListReq) {
         PageHelper.startPage(orderListReq.getPageNo(), orderListReq.getPageSize());
         return borrowOrderMapper.selOrderList(orderListReq);
