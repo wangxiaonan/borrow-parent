@@ -73,22 +73,22 @@ public class OrderServcieImpl implements OrderServcie {
         }
         UserInfoVo userInfoVo =  orderCreateReq.getUserInfo();
         // 判断是否是开户 和是否借款用户
-//        XMap xMap = new XMap();
-//        xMap.put(PlatformConstant.FundsParam.IDCARD,userInfoVo.getIdcard());
-//        xMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.USER_CHECK_DATA.getUrlType());
-//        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
-//        if(!xMapResponseResult.isSucceed()) {
-//            return xMapResponseResult;
-//        }
-//        XMap xMapRes = xMapResponseResult.getData();
-//        String isOpen = xMapRes.getString(PlatformConstant.FundsParam.ISOPEN);
-//        String userType = xMapRes.getString(PlatformConstant.FundsParam.USER_TYPE);
-//        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
-//            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
-//        }
-//        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
-//            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
-//        }
+        XMap xMap = new XMap();
+        xMap.put(PlatformConstant.FundsParam.IDCARD,userInfoVo.getIdcard());
+        xMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.USER_CHECK_DATA.getUrlType());
+        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
+        if(!xMapResponseResult.isSucceed()) {
+            return xMapResponseResult;
+        }
+        XMap xMapRes = xMapResponseResult.getData();
+        String isOpen = xMapRes.getString(PlatformConstant.FundsParam.ISOPEN);
+        String userType = xMapRes.getString(PlatformConstant.FundsParam.USER_TYPE);
+        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
+            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
+        }
+        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
+            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
+        }
         UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
         if (userInfo == null) {
             userInfo = convertUserInfoVo(userInfoVo);
