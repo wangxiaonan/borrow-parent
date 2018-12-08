@@ -335,12 +335,12 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
 
         List<BoOrderAudit> boOrderAudits = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
-        List<Map> mapList = new ArrayList<>();
+        List<AuditStatusVo> mapList = new ArrayList<>();
         boOrderAudits.stream().forEach(boOrderAudit -> {
-            Map<String,String> params = new HashMap<>();
-            params.put(OrderAuditEnum.getAuthCodeByKey(boOrderAudit.getAuditKey())
-                    ,OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
-            mapList.add(params);
+            AuditStatusVo statusVo = new AuditStatusVo();
+            statusVo.setId(OrderAuditEnum.getAuthCodeByKey(boOrderAudit.getAuditKey()));
+            statusVo.setAudit(OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
+            mapList.add(statusVo);
         });
         thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
 
@@ -463,6 +463,8 @@ public class OrderServcieImpl implements OrderServcie {
             boOrderAudit.setOrderId(orderId);
             boOrderAudit.setAuditTime(new Date());
             boOrderAudit.setAuditKey(s);
+            boOrderAudit.setAuthName(OrderAuditEnum.getAuthNameByKey(s));
+            boOrderAudit.setAuditValue(OrderAuditEnum.getAuthCodeByKey(s));
             boOrderAudits.add(boOrderAudit);
         });
         return boOrderAudits;
