@@ -14,6 +14,7 @@ public  interface PlatformConstant {
         String REQ_NO = "reqNo";
         String REQ_TIME = "reqTime";
         String STATUS = "status";
+        String CODE = "code";
         String MSG = "msg";
 
         String ISOPEN = "isOpen";
@@ -54,6 +55,7 @@ public  interface PlatformConstant {
         String LOAN_DESC = "loanDesc";
         String GUARANTEE_COMPANY_NAME = "guaranteeCompanyName";
         String GUARANTEE_INFO_DESC = "guaranteeInfoDesc";
+        String AUDIT = "audit";
 
         String LOAN_ID = "loanId";
         String REPAY_ID = "repayId";

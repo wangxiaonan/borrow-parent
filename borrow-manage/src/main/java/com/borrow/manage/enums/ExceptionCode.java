@@ -27,9 +27,11 @@ public enum ExceptionCode {
     USER_CHECK_IDENTITY_ERROR("3010001","理财服务—用户身份确认接口异常"),
     REMOTE_ERROR("3010002","第三方服务状态码异常"),
     ORDER_MAKE_RAISE_ERROR("3010003","理财服务—筹标接口异常"),
-    ORDER_TRANSFER_FUND_ERROR("3010004","理财服务—资金划拨接口异常");
+    ORDER_TRANSFER_FUND_ERROR("3010004","理财服务—资金划拨接口异常"),
+    ORDER_STATUS_FUND_ERROR("3010005","理财服务—订单状态重复通知异常"),
 
-
+    // 4 数据库异常 01 订单
+    ORDER_IS_NOT_EXIST_ERROR("4010001","订单不存在");
 
     private String errorCode;
     private String errorMessage;

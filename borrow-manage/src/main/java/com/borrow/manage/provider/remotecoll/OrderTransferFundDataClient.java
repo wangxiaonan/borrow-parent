@@ -11,6 +11,7 @@ import com.borrow.manage.model.XMap;
 import com.borrow.manage.provider.RestHttpClientService;
 import com.borrow.manage.utils.ThreeDES;
 import com.borrow.manage.utils.UUIDProvider;
+import com.borrow.manage.utils.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class OrderTransferFundDataClient extends DataClient{
         try {
             param.put(PlatformConstant.FundsParam.REQ_NO, UUIDProvider.uuid());
             param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.LOANER_REPAY_REQUEST);
-            param.put(PlatformConstant.FundsParam.REQ_TIME,String.valueOf(System.currentTimeMillis()));
+            param.put(PlatformConstant.FundsParam.REQ_TIME, Utility.dateStr());
             String reqParam = JSON.toJSONString(param);
             logger.info("OrderTransferFund_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
 
@@ -47,6 +48,7 @@ public class OrderTransferFundDataClient extends DataClient{
             reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
             signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
             jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
+            jsonData = ThreeDES.decrypt(jsonData,Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
             logger.info("OrderTransferFund_res:result={}",jsonData);
 
         }catch (Exception e) {

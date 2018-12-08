@@ -22,9 +22,9 @@ public abstract class DataClient {
 
     ResponseResult<XMap> analyze(String res) {
         XMap xMap = JSON.parseObject(res,XMap.class);
-        String status = xMap.getString(PlatformConstant.FundsParam.STATUS);
+        String code = xMap.getString(PlatformConstant.FundsParam.CODE);
         String msg = xMap.getString(PlatformConstant.FundsParam.MSG);
-        if (PlatformConstant.FundsParam.SUCCESS.equals(status)) {
+        if (PlatformConstant.FundsParam.SUCCESS.equals(code)) {
             return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),xMap);
         }else {
             return ResponseResult.error(ExceptionCode.REMOTE_ERROR.getErrorCode(),msg);

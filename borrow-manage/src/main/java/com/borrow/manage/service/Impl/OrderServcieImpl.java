@@ -1,5 +1,6 @@
 package com.borrow.manage.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
@@ -62,6 +63,7 @@ public class OrderServcieImpl implements OrderServcie {
     BoOrderItemDao boOrderItemDao;
 
 
+
     @Override
     @Transactional
     public ResponseResult orderAdd(OrderCreateReq orderCreateReq) {
@@ -81,8 +83,10 @@ public class OrderServcieImpl implements OrderServcie {
             return xMapResponseResult;
         }
         XMap xMapRes = xMapResponseResult.getData();
-        String isOpen = xMapRes.getString(PlatformConstant.FundsParam.ISOPEN);
-        String userType = xMapRes.getString(PlatformConstant.FundsParam.USER_TYPE);
+        String data = xMapRes.getString("data");
+        XMap p = JSON.parseObject(data,XMap.class);
+        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
+        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
         if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
             throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
         }
@@ -279,12 +283,18 @@ public class OrderServcieImpl implements OrderServcie {
     }
 
     @Override
+    public ResponseResult orderLoaning(String orderId) {
+        borrowOrderDao.upBorrowOrderByOrderId(Long.valueOf(orderId),BoIsStateEnum.LOANING.getCode());
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+    }
+
+    @Override
     public ResponseResult makeRaise(MakeLoansReq makeLoansReq) {
         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(Long.parseLong(makeLoansReq.getOrderId()));
         if (borrowOrder ==  null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        XMap<String,String> thirdParamMap = new XMap<String, String>();
+        XMap<String,Object> thirdParamMap = new XMap<String, Object>();
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowOrder.getOrderId().toString());
 
         BorrowProduct borrowProduct = borrowProductDao.selByPUid(borrowOrder.getProductUid());
@@ -324,11 +334,26 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC,userInfo.getUserEarns());
         thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
 
+        List<BoOrderAudit> boOrderAudits = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
+        List<Map> mapList = new ArrayList<>();
+        boOrderAudits.stream().forEach(boOrderAudit -> {
+            Map<String,String> params = new HashMap<>();
+            params.put(OrderAuditEnum.getAuthCodeByKey(boOrderAudit.getAuditKey())
+                    ,OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
+            mapList.add(params);
+        });
+        thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
+
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        if (!responseResult.isSucceed()) {
+            throw  new BorrowException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
+        }
+        BorrowOrder borr = new BorrowOrder();
+        borr.setBoIsState(BoIsStateEnum.LOANING.getCode());
+        borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),borr);
         return responseResult;
     }
-
 
     @Override
     public ResponseResult orderDetailSel(OrderDetailReq orderDetailReq) {

@@ -3,6 +3,7 @@ package com.borrow.manage.dao.impl;
 import com.borrow.manage.dao.BorrowOrderDao;
 import com.borrow.manage.dao.mapper.BorrowOrderMapper;
 import com.borrow.manage.enums.ExceptionCode;
+import com.borrow.manage.exception.BorrowDaoException;
 import com.borrow.manage.exception.BorrowException;
 import com.borrow.manage.model.dto.BorrowOrder;
 import com.borrow.manage.model.dto.BorrowOrderExample;
@@ -63,7 +64,10 @@ public class BorrowOrderDaoImpl implements BorrowOrderDao {
         BorrowOrder borrowOrder = new BorrowOrder();
         borrowOrder.setUpdateTime(new Date());
         borrowOrder.setBoIsState(boIsState);
-        borrowOrderMapper.updateByExampleSelective(borrowOrder,orderExample);
+        int count = borrowOrderMapper.updateByExampleSelective(borrowOrder,orderExample);
+        if (count != 1) {
+            throw new BorrowDaoException(ExceptionCode.ORDER_IS_NOT_EXIST_ERROR);
+        }
     }
 
     @Override
@@ -76,7 +80,10 @@ public class BorrowOrderDaoImpl implements BorrowOrderDao {
         order.setBoPayState(1);
         order.setBoFinishPrice(boFinishPrice);
         order.setBoIsFinish(1);
-        borrowOrderMapper.updateByExampleSelective(order,record);
+        int count = borrowOrderMapper.updateByExampleSelective(order,record);
+        if (count != 1) {
+            throw new BorrowDaoException(ExceptionCode.ORDER_IS_NOT_EXIST_ERROR);
+        }
     }
 
     @Override

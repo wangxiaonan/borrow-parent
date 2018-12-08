@@ -44,6 +44,8 @@ public class OrderIdAuditNotifyImpl implements FundsNotifyService {
                 OrderCancelReq cancelReq = new OrderCancelReq();
                 cancelReq.setOrderId(orderId);
                 orderServcie.orderCancel(cancelReq);
+            }else if (PlatformConstant.FundsParam.AUDIT_STATUS_YES.equals(auditStatus)) {
+                orderServcie.orderLoaning(orderId);
             }
         }catch (BorrowException b) {
             result = ResponseResult.error(b.getExceptionCode().getErrorCode(),b.getExceptionCode().getErrorMessage());

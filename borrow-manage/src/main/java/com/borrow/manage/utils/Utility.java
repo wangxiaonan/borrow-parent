@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -59,11 +60,26 @@ public class Utility {
         return time;
     }
 
-
+    public static  String dateStr(){
+        return DateFormatUtils.format(new Date(),"yyyyMMddHHmmssSSS");
+    }
+    public static  String dateStr(Date date){
+        return DateFormatUtils.format(date,"yyyyMMddHHmmssSSS");
+    }
 
     public static void main(String[] args) {
 
-        System.out.println(DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        System.out.println(DateFormatUtils.format(new Date(),"yyyyMMddHHmmssSSS"));
+        LocalDateTime localDateTime = LocalDateTime.now();
+        StringBuffer str = new StringBuffer();
+        int year = localDateTime.getYear();
+        int month = localDateTime.getMonthValue();
+        int day = localDateTime.getDayOfMonth();
+        int hour = localDateTime.getHour();
+        int minute = localDateTime.getMinute();
+        int second = localDateTime.getSecond();
+        int nano = localDateTime.getNano();
+
 //        System.out.println(getBrTime(5));
 //        Date brTime = null;
 //        try {
