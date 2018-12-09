@@ -334,6 +334,15 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC,userInfo.getUserEarns());
         thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
 
+        List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(borrowOrder.getOrderId());
+        Map itemkeys = new HashMap();
+        boOrderItems.stream().forEach( boOrderItem -> {
+            itemkeys.put(boOrderItem.getItemKey(),boOrderItem.getItemValue());
+        });
+
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_DESC,itemkeys.get(BoOrderItemEnum.BO_SOURCE.getItemKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GUARANTEE_INFO_DESC,borrowOrder.getBoPaySource());
+
         List<BoOrderAudit> boOrderAudits = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
         List<AuditStatusVo> mapList = new ArrayList<>();
         boOrderAudits.stream().forEach(boOrderAudit -> {
