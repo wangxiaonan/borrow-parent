@@ -1,8 +1,8 @@
 ! function(window, undefined) {
 
-    var host =  'http://127.0.0.1:8080/borrow-manage'
+    //var host =  'http://localhost:8080/borrow-manage'
     // var host = 'http://47.92.246.248:8088/borrow-manage'
-    // var host = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + '/';
+     var host = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + '/';
 
     var loginUrl = "login"
 
