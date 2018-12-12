@@ -35,8 +35,10 @@
                 <td><a class="link">{{item.productName}}</a></td>
                 <td>{{item.productExpect}}</td>
                 <td>{{item.earlyServiceRate*100}}%</td>
-                <td><a class="link">{{item.monthServiceRate*100}}%</a></td>
-                <td>{{item.monthAccrualRate*100}}%</td>
+                <!--<td><a class="link">{{parseFloat(item.monthServiceRate)*100}}%</a></td>-->
+                <td><a class="link">{{parseFloat((item.monthServiceRate*100).toPrecision(12))}}%</a></td>
+                <td>{{parseFloat((item.monthAccrualRate*100).toPrecision(12))}}%</td>
+                <!--<td>{{item.monthAccrualRate*100}}%</td>-->
                 <td>{{item.guaranteeViolateRate*100}}%</td>
                 <td><a class="link">{{item.serviceViolateRate*100}}%</a></td>
                 <td>{{item.earlyPayRate*100}}%</td>

@@ -18,6 +18,8 @@ public class CarRepayPlanFactory {
 
     public AbstractCarRepayPlan getCarRepayPlan(ProductEnum productEnum){
 
+        if (productEnum == null)
+            return carDefaultRepayPlan;
         switch (productEnum){
             case CAR_LOAN_ONE:
                 return this.carDefaultRepayPlan;

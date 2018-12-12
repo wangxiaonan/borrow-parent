@@ -47,6 +47,7 @@ public class BorrowProductDaoImpl implements BorrowProductDao {
     @Override
     public List<BorrowProduct> selBorrowList() {
         BorrowProductExample borrowProductExample = new BorrowProductExample();
+        borrowProductExample.createCriteria().andPEnabledEqualTo(1);
         return  borrowProductMapper.selectByExample(borrowProductExample);
     }
 

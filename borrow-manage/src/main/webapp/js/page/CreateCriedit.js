@@ -54,6 +54,7 @@
             },
           fail: function(re) {
               layer.error(re.errorMessage);
+              layer.hideLoad();
           }
         }
         layer.showLoad();
