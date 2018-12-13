@@ -17,9 +17,9 @@
         location="classpath:properties/jdbc.properties
         ,classpath:properties/app-custom.properties,
         ,classpath:properties/app-remote.properties,
-        file:/JAVA_Files/borrow/config/app-custom.properties
-        file:/JAVA_Files/borrow/config/app-remote.properties
-        file:/JAVA_Files/borrow/config/jdbc.properties
+        file:/prod/JAVA_Files/borrow/config/app-custom.properties
+        file:/prod/JAVA_Files/borrow/config/app-remote.properties
+        file:/prod/JAVA_Files/borrow/config/jdbc.properties
         "
         system-properties-mode="ENVIRONMENT"/>
 
