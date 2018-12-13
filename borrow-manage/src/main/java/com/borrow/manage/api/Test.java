@@ -24,8 +24,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class Test {
     public static void main(String[] args) {
         HashMap map = new HashMap();
-        System.out.println(UUIDProvider.uuid());
-        System.out.println(PasswordHelper.encryptPassword("123456"));
+        for (int i = 0;i<8;i++) {
+            System.out.println(UUIDProvider.uuid());
+        }
+
+//        System.out.println(PasswordHelper.encryptPassword("123456"));
 
 //        System.out.println(UUIDProvider.uuid());
 //        System.out.println(UUIDProvider.uuid());
