@@ -34,6 +34,24 @@ public class OrderRepayListRes  {
     private String  boIsState;
 
     private Date brRepayTime;
+    private String suretyStatus;
+    private Date suretyTime;
+
+    public String getSuretyStatus() {
+        return suretyStatus;
+    }
+
+    public void setSuretyStatus(String suretyStatus) {
+        this.suretyStatus = suretyStatus;
+    }
+
+    public String getSuretyTime() {
+        return suretyTime == null ? "":DateFormatUtils.format(suretyTime,"yyyy-MM-dd HH:ss:mm");
+    }
+
+    public void setSuretyTime(Date suretyTime) {
+        this.suretyTime = suretyTime;
+    }
 
     public String getUserMobile() {
         return userMobile;

@@ -591,6 +591,8 @@
     ,borrow_repayment.bo_repay_status as boRepayStatus
     ,borrow_order.bo_is_state as boIsState
     ,borrow_repayment.br_repay_time as brRepayTime
+    ,borrow_repayment.surety_status as suretyStatus
+    ,borrow_repayment.surety_time as suretyTime
     from borrow_repayment
     INNER JOIN borrow_order
     ON borrow_repayment.order_id = borrow_order.order_id

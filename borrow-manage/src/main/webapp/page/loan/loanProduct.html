@@ -46,6 +46,9 @@
                     {{#if(item.pPayType==1){ }}
                     <span>一次性还本息</span>
                     {{#};}}
+                    {{#if(item.pPayType==2){ }}
+                    <span>等额本息</span>
+                    {{#};}}
                 </td>
                 <td>{{item.createTime}}</td>
             </tr>

@@ -8,7 +8,8 @@ public enum DataClientEnum {
     URL_TYPE("URL_TYPE","URL类型"),
     USER_CHECK_DATA("USER_CHECK_DATA","用户存管开户校验"),
     ORDER_MAKE_RAISE("ORDER_MAKE_RAISE","理财筹标接口"),
-    ORDER_TRANSFER_FUND("ORDER_TRANSFER_FUND","理财资金划拨接口");
+    ORDER_TRANSFER_FUND("ORDER_TRANSFER_FUND","理财资金划拨接口"),
+    COMPENSATORY_REPAY_REQUEST("COMPENSATORY_REPAY_REQUEST","理财资金划拨接口");
 
     DataClientEnum(String urlType, String desc) {
         this.urlType = urlType;

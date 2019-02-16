@@ -21,6 +21,7 @@ public enum ExceptionCode {
     LOGIN_NAME_FAIL("2010004","用户名不存在"),
     LOGIN_PASSWD_FAIL("2010005","密码错误"),
     SYS_TOKEN_FAIL("2010006","请重新登录"),
+    AMOUNT_FAIL_ZREO("2010007","金额为0"),
 
 
     // 3 远端服务调用异常 01 是理财

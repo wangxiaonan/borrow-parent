@@ -23,3 +23,4 @@ out/
 argfile*
 .gitgnore
 .DS_Store
+*.zip
