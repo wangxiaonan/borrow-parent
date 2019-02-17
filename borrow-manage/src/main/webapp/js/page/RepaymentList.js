@@ -138,7 +138,7 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         layer.confirm({
             content: "请确认借款人未按时还款，才可进行垫付操作",
             yes: function(index) {
-                confirm(row,'/order/repay/over');
+                confirm(row,'/order/repay/surety');
                 layer.close(index);
             },
             no: function() {

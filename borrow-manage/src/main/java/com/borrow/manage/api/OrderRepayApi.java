@@ -155,7 +155,7 @@ public class OrderRepayApi {
     @RequestMapping(value = "/order/repay/surety", method = RequestMethod.POST)
     public ResponseResult orderRepaySurety(@RequestBody OrderPayOverReq orderPayOverReq) {
 
-        logger.info("====>orderRepayOver():req={}", orderPayOverReq);
+        logger.info("====>orderRepaySurety():req={}", orderPayOverReq);
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderPayOverReq.getOrderId())
@@ -164,7 +164,7 @@ public class OrderRepayApi {
         else {
             res =  orderRepayServcie.orderRepaySurety(orderPayOverReq);
         }
-        logger.info("<====orderRepayOver():res={}",res);
+        logger.info("<====orderRepaySurety():res={}",res);
         return res;
     }
 

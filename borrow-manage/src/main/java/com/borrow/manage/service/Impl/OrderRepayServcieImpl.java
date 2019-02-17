@@ -454,6 +454,11 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
                     ,ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
+        if(repayment.getRepayStatus() == 2) {
+            logger.error("orderRepaySurety:repaystatus is 2");
+            return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
+                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+        }
         List<BorrowRepayment> repayments = borrowRepaymentDao.selByOrderId(repayment.getOrderId());
         for (BorrowRepayment bre :repayments) {
             if (bre.getRepayExpect() < repayment.getRepayExpect()) {
@@ -465,19 +470,22 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             }
         }
         // 代偿还款
-        XMap thirdParamMap = new XMap();
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(repayment.getOrderId()));
-        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_ID, String.valueOf(repayment.getRepayId()));
-        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD, String.valueOf(repayment.getRepayExpect()));
-        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStr(repayment.getBrTime()));
-        thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT, repayment.getCapitalAmount().toString());
-        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
-        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_TRANSFER_FUND.getUrlType());
-        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
-        if (!responseResult.isSucceed()) {
-            return responseResult;
-        }
-
+//        XMap thirdParamMap = new XMap();
+//        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(repayment.getOrderId()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_ID, String.valueOf(repayment.getRepayId()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD, String.valueOf(repayment.getRepayExpect()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStr(repayment.getBrTime()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT, repayment.getCapitalAmount().toString());
+//        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
+//        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
+//        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+//        if (!responseResult.isSucceed()) {
+//            return responseResult;
+//        }
+        BorrowRepayment repay = new BorrowRepayment();
+        repay.setSuretyStatus(SuretyStatusEnum.SURETY_STATUS_YES.getCode());
+        repay.setSuretyTime(new Date());
+        borrowRepaymentDao.updateBoRepayment(repayId,repay);
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
     }
 }
