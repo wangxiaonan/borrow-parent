@@ -18,9 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -74,19 +72,28 @@ public class OverdueTask{
                     }else {
                         orderIds.add(repayment.getOrderId());
                         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(repayment.getOrderId());
-                        List<BoProductRate> rateList = boProductRateDao.selProductRateByPUid(borrowOrder.getProductUid());
-                        BigDecimal rateValue = BigDecimal.ZERO;
-                        for (BoProductRate boProductRate : rateList) {
-                            if (boProductRate.getRateKey().equals(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey())) {
-                                rateValue= BigDecimal.valueOf(Double.valueOf(boProductRate.getRateValue()));
-                                break;
-                            }
-                        }
+                        List<BoProductRate> boProductRates = boProductRateDao.selProductRateByPUid(borrowOrder.getProductUid());
+
+                        Map<String,String> productRateMap = new HashMap<>();
+                        boProductRates.stream().forEach(boProductRate -> {
+                            productRateMap.put(boProductRate.getRateKey(),boProductRate.getRateValue());
+                        });
+
+                        String rateValuestr = productRateMap.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey());
+                        rateValuestr = rateValuestr == null ? "0":rateValuestr;
+                        BigDecimal rateValue = BigDecimal.valueOf(Double.valueOf(rateValuestr));
+
+                        String fineRateStr = productRateMap.get(ProductRateEnum.FINE_SERVICE_RATE.getRateKey());
+                        fineRateStr = fineRateStr == null ? "0":fineRateStr;
+                        BigDecimal fineRate = BigDecimal.valueOf(Double.valueOf(fineRateStr));
+
+
                         BigDecimal rateDay = BigDecimal.valueOf(Utility.getOverdueDay(repayment.getBrTime()));
                         BorrowRepayment rep = new BorrowRepayment();
                         rep.setBoRepayStatus(BoRepayStatusEnum.OVERDUE.getCode());
                         BigDecimal punishAmount = repayment.getCapitalAmount().multiply(rateValue).multiply(rateDay);
                         rep.setPunishAmount(punishAmount);
+
                         borrowRepaymentDao.updateBoRepayment(repayment.getRepayId(),rep);
                     }
             }

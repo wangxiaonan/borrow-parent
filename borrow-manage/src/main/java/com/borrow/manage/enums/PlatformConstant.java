@@ -87,6 +87,8 @@ public  interface PlatformConstant {
         String PROJECT_CREATE_REQUEST = "projectCreateRequest";
         //资金划拨
         String LOANER_REPAY_REQUEST = "loanerRepayRequest";
+        //代偿
+        String COMPENSATORY_REPAY_REQUEST = "compensatoryRepayRequest";
 
     }
 

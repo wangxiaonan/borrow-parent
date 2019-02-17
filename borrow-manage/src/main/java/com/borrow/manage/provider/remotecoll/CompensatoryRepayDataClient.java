@@ -23,7 +23,7 @@ import java.util.HashMap;
  * Created by wxn on 2018/11/24
  */
 
-@Component("orderMakeRaiseDataClient")
+@Component("compensatoryRepayDataClient")
 public class CompensatoryRepayDataClient extends  DataClient {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -39,27 +39,27 @@ public class CompensatoryRepayDataClient extends  DataClient {
         String jsonData = "";
         try {
             param.put(PlatformConstant.FundsParam.REQ_NO, UUIDProvider.uuid());
-            param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.PROJECT_CREATE_REQUEST);
+            param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.COMPENSATORY_REPAY_REQUEST);
             param.put(PlatformConstant.FundsParam.REQ_TIME, Utility.dateStr());
             String reqParam = JSON.toJSONString(param);
-            logger.info("OrderMakeRaise_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
+            logger.info("compensatory_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
 
             HashMap signatureMap = new HashMap();
             reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
             signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
             jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
             jsonData = ThreeDES.decrypt(jsonData,Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
-            logger.info("OrderMakeRaise_res:result={}",jsonData);
+            logger.info("compensatory_res:result={}",jsonData);
 
         }catch (Exception e) {
-            logger.error("理财筹标接口异常",e);
-            throw new RemoteException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
+            logger.error("代偿接口异常",e);
+            throw new RemoteException(ExceptionCode.COMPENSATORY_REPAY_ERROR);
         }
         return jsonData;
     }
 
     @Override
     protected String getUrlType() {
-        return DataClientEnum.ORDER_MAKE_RAISE.getUrlType();
+        return DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType();
     }
 }

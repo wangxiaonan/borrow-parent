@@ -30,6 +30,7 @@ public enum ExceptionCode {
     ORDER_MAKE_RAISE_ERROR("3010003","理财服务—筹标接口异常"),
     ORDER_TRANSFER_FUND_ERROR("3010004","理财服务—资金划拨接口异常"),
     ORDER_STATUS_FUND_ERROR("3010005","理财服务—订单状态重复通知异常"),
+    COMPENSATORY_REPAY_ERROR("3010006","理财服务—代偿借款异常"),
 
     // 4 数据库异常 01 订单
     ORDER_IS_NOT_EXIST_ERROR("4010001","订单不存在");
