@@ -13,7 +13,7 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-        connectionURL="jdbc:mysql://47.92.246.248:3306/rc_loan" userId="root" password="Ruicheng77553300">
+        connectionURL="jdbc:mysql://47.92.246.248:3306/rc_loan_stb" userId="loan_stb" password="123456">
         <!--connectionURL="jdbc:mysql://xuneasy.cn/snow?characterEncoding=utf8" userId="xuneasy" password="xuneasy">-->
         </jdbcConnection>
         <!--connectionURL="jdbc:mysql://xuneasy.online/snow?characterEncoding=utf8" userId="xuneasy" password="xuneasy">-->
