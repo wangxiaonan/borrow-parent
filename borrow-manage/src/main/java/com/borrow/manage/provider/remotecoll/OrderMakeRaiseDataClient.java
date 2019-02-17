@@ -43,12 +43,7 @@ public class OrderMakeRaiseDataClient extends  DataClient {
             param.put(PlatformConstant.FundsParam.REQ_TIME, Utility.dateStr());
             String reqParam = JSON.toJSONString(param);
             logger.info("OrderMakeRaise_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
-
-            HashMap signatureMap = new HashMap();
-            reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
-            signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
-            jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
-            jsonData = ThreeDES.decrypt(jsonData,Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
+            jsonData = doSendRequest(reqParam);
             logger.info("OrderMakeRaise_res:result={}",jsonData);
 
         }catch (Exception e) {

@@ -1812,6 +1812,66 @@ public class BorrowRepaymentExample {
             addCriterion("surety_time not between", value1, value2, "suretyTime");
             return (Criteria) this;
         }
+
+        public Criteria andFineAmountIsNull() {
+            addCriterion("fine_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountIsNotNull() {
+            addCriterion("fine_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountEqualTo(BigDecimal value) {
+            addCriterion("fine_amount =", value, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountNotEqualTo(BigDecimal value) {
+            addCriterion("fine_amount <>", value, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountGreaterThan(BigDecimal value) {
+            addCriterion("fine_amount >", value, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("fine_amount >=", value, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountLessThan(BigDecimal value) {
+            addCriterion("fine_amount <", value, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("fine_amount <=", value, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountIn(List<BigDecimal> values) {
+            addCriterion("fine_amount in", values, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountNotIn(List<BigDecimal> values) {
+            addCriterion("fine_amount not in", values, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("fine_amount between", value1, value2, "fineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andFineAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("fine_amount not between", value1, value2, "fineAmount");
+            return (Criteria) this;
+        }
     }
 
     /**

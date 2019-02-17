@@ -211,6 +211,7 @@
             <th>利息</th>
             <th>服务费</th>
             <th>违约金</th>
+            <th>罚息</th>
             <th>还款状态</th>
         </tr>
         </thead>
@@ -224,6 +225,7 @@
             <td>{{item.interestAmount}}</td>
             <td>{{item.serviceFee}}</td>
             <td>{{item.punishAmount}}</td>
+            <td>{{item.fineAmount}}</td>
             <td>
                 {{#if(item.repayStatus==1){ }}
                 <span style="color:#FF5722">未还款</span>

@@ -28,7 +28,6 @@ import java.util.*;
 @EnableScheduling
 public class OverdueTask{
 
-
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private BorrowRepaymentDao borrowRepaymentDao;
@@ -91,9 +90,11 @@ public class OverdueTask{
                         BigDecimal rateDay = BigDecimal.valueOf(Utility.getOverdueDay(repayment.getBrTime()));
                         BorrowRepayment rep = new BorrowRepayment();
                         rep.setBoRepayStatus(BoRepayStatusEnum.OVERDUE.getCode());
-                        BigDecimal punishAmount = repayment.getCapitalAmount().multiply(rateValue).multiply(rateDay);
+                        BigDecimal punishAmount = repayment.getRepayAmount().multiply(rateValue);
                         rep.setPunishAmount(punishAmount);
 
+                        BigDecimal fineRateAmount = borrowOrder.getBoPrice().multiply(fineRate).multiply(rateDay);
+                        rep.setFineAmount(fineRateAmount);
                         borrowRepaymentDao.updateBoRepayment(repayment.getRepayId(),rep);
                     }
             }

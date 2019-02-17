@@ -25,14 +25,7 @@ import java.util.HashMap;
 @Component("orderTransferFundDataClient")
 public class OrderTransferFundDataClient extends DataClient{
 
-
     private Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    RemoteConfig remoteConfig;
-
-    @Autowired
-    RestHttpClientService commonRestTempate;
 
     @Override
     public String getData(XMap param) {
@@ -43,12 +36,7 @@ public class OrderTransferFundDataClient extends DataClient{
             param.put(PlatformConstant.FundsParam.REQ_TIME, Utility.dateStr());
             String reqParam = JSON.toJSONString(param);
             logger.info("OrderTransferFund_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
-
-            HashMap signatureMap = new HashMap();
-            reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
-            signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
-            jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
-            jsonData = ThreeDES.decrypt(jsonData,Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
+            jsonData = doSendRequest(reqParam);
             logger.info("OrderTransferFund_res:result={}",jsonData);
 
         }catch (Exception e) {
