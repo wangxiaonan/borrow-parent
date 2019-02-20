@@ -24,6 +24,15 @@ public class OrderRepayListRes  {
     //应还日期
 
     private Date brTime;
+    private long brTimeDate;
+
+    public long getBrTimeDate() {
+        return brTime.getTime();
+    }
+
+    public void setBrTimeDate(long brTimeDate) {
+        this.brTimeDate = brTimeDate;
+    }
 
     private String repayAmount;
     //支付状态
@@ -144,6 +153,7 @@ public class OrderRepayListRes  {
     public String getBrTime() {
         return brTime == null ? "":DateFormatUtils.format(brTime,"yyyy-MM-dd");
     }
+
 
     public void setBrTime(Date brTime) {
         this.brTime = brTime;

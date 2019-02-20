@@ -19,6 +19,8 @@ public class DataClientFactory {
     DataClient orderTransferFundDataClient;
     @Autowired
     DataClient compensatoryRepayDataClient;
+    @Autowired
+    DataClient overdueRepayRequestClient;
 
     public DataClient  getDataClient(String urlType){
         DataClientEnum dataClientEnum = DataClientEnum.getEnum(urlType);
@@ -31,6 +33,8 @@ public class DataClientFactory {
                 return this.orderTransferFundDataClient;
             case COMPENSATORY_REPAY_REQUEST:
                 return this.compensatoryRepayDataClient;
+            case LOANER_OVERDUE_REPAY_REQUEST:
+                return this.overdueRepayRequestClient;
 
         }
         return null;

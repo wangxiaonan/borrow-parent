@@ -289,12 +289,12 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
                 thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_FEE, repayment.getPunishAmount().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST, repayment.getFineAmount().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
-                thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_TRANSFER_FUND.getUrlType());
+                thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_OVERDUE_REPAY_REQUEST.getUrlType());
             }else {
                 thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_FEE, repayment.getPunishAmount().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
-                thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_OVERDUE_REPAY_REQUEST.getUrlType());
+                thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_TRANSFER_FUND.getUrlType());
             }
 
             ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
@@ -465,8 +465,14 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
                     ,ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
-        if(repayment.getRepayStatus() == 2) {
+        if(repayment.getRepayStatus() == RepayStatusEnum.PAY_YES.getCode()
+                || repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode()) {
             logger.error("orderRepaySurety:repaystatus is 2");
+            return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
+                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+        }
+        if (repayment.getBrTime().getTime() > new Date().getTime()) {
+            logger.error("orderRepaySurety:time is error");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
                     ,ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
