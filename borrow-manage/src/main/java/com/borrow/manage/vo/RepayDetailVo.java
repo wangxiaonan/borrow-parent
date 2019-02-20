@@ -29,7 +29,16 @@ public class RepayDetailVo {
     private String repayFinishAmount;
     //还款类型
     private String repayType;
+    //罚息
+    private String fineAmount;
 
+    public String getFineAmount() {
+        return fineAmount;
+    }
+
+    public void setFineAmount(String fineAmount) {
+        this.fineAmount = fineAmount;
+    }
 
     public String getRepayId() {
         return repayId;

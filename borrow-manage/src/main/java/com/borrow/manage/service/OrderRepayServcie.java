@@ -31,4 +31,7 @@ public interface OrderRepayServcie {
     ResponseResult orderUpRepay(OrderUpRepayReq orderUpRepayReq);
 
 
+    ResponseResult orderRepaySurety(OrderPayOverReq orderPayOverReq);
+
+
 }

@@ -96,10 +96,12 @@ public interface BorrowRepaymentMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(BorrowRepayment record);
+
     /**
      * 还款明细查询
      * @param orderRepayListReq
      * @return
      */
     List<OrderRepayListRes> selOrderRepayList(OrderRepayListReq orderRepayListReq);
+
 }

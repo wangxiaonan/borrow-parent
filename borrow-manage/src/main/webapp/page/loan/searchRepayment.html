@@ -75,8 +75,12 @@
             <div class="layui-input-inline">
                 <select name="pCode">
                     <option value=""></option>
-                    <option value="0001">车满金1号</option>
-                    <option value="0002">车满金2号</option>
+                    <option value="0003">车贷3期-4%-2%</option>
+                    <option value="0004">车贷6期-7.5%-4.5%</option>
+                    <option value="0005">车贷6期-7%-5%</option>
+                    <option value="0006">车贷12期-12%-12%</option>
+                    <option value="0007">车贷12期-10.4%-13.6%</option>
+                    <option value="0008">车贷3期-等额本息</option>
 
                 </select>
             </div>
@@ -211,6 +215,7 @@
             <th>利息</th>
             <th>服务费</th>
             <th>违约金</th>
+            <th>罚息</th>
             <th>还款状态</th>
         </tr>
         </thead>
@@ -224,6 +229,7 @@
             <td>{{item.interestAmount}}</td>
             <td>{{item.serviceFee}}</td>
             <td>{{item.punishAmount}}</td>
+            <td>{{item.fineAmount}}</td>
             <td>
                 {{#if(item.repayStatus==1){ }}
                 <span style="color:#FF5722">未还款</span>

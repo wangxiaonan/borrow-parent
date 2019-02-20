@@ -133,4 +133,18 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         })
     };
 
+    fn.suretyconfirm=function(){
+        var row = gridTable.getRow();
+        layer.confirm({
+            content: "请确认借款人未按时还款，才可进行垫付操作",
+            yes: function(index) {
+                confirm(row,'/order/repay/surety');
+                layer.close(index);
+            },
+            no: function() {
+                // layer.error("取消确定还款了哦!")
+            }
+        })
+    };
+
 });

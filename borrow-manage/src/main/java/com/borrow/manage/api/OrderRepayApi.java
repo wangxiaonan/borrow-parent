@@ -94,7 +94,6 @@ public class OrderRepayApi {
     }
 
     @RequestMapping(value = "/order/repay/over", method = RequestMethod.POST)
-
     public ResponseResult orderRepayOver(@RequestBody OrderPayOverReq orderPayOverReq) {
 
         logger.info("====>orderRepayOver():req={}", orderPayOverReq);
@@ -148,6 +147,25 @@ public class OrderRepayApi {
         return res;
     }
 
+    /**
+     * 担保垫付
+     * @param orderPayOverReq
+     * @return
+     */
+    @RequestMapping(value = "/order/repay/surety", method = RequestMethod.POST)
+    public ResponseResult orderRepaySurety(@RequestBody OrderPayOverReq orderPayOverReq) {
 
+        logger.info("====>orderRepaySurety():req={}", orderPayOverReq);
+        ResponseResult res = null;
+
+        if (StringUtils.isEmpty(orderPayOverReq.getOrderId())
+                || StringUtils.isEmpty(orderPayOverReq.getRepayId()))
+            res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(), ExceptionCode.PARAM_ERROR.getErrorMessage());
+        else {
+            res =  orderRepayServcie.orderRepaySurety(orderPayOverReq);
+        }
+        logger.info("<====orderRepaySurety():res={}",res);
+        return res;
+    }
 
 }

@@ -208,6 +208,27 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
                 singleSelect: true
             }).build();
         }
+        function getDetailData(param){
+            var getDetail = {
+                url: ma.host+"/order/repay/detail",
+                data: {"orderId": param.orderId},
+                done: function(res) {
+                    if(res.errorCode!=='0000000'){
+                        top.layer.success("获取失败");
+                        return;
+                    };
+                    $('#orderId').html(res.data.orderId);
+                    $('#userName').html(res.data.userName);
+                    $('#plateNumber').html(res.data.plateNumber);
+                    $('#boPrice').html(res.data.boPrice);
+                    $('#productName').html(res.data.productName);
+                    $('#boExpect').html(res.data.boExpect);
+                    createDetailTable(res.data.repayDetails,'secoundDetail','seccoundView');
+                    createDetailPayTable(res.data.orderPayRecords,'secoundDetailPay','secoundDetailPayView');
+                }
+            }
+            ma.ajax(getDetail);
+        }
         function getPlanData(orderId){
             var planData = {
                 url: ma.host+'/order/repay/plan',

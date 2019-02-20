@@ -39,8 +39,12 @@
             <div class="layui-input-inline">
                 <select name="pCode">
                     <option value=""></option>
-                    <option value="0001">车满金1号</option>
-                    <option value="0002">车满金2号</option>
+                    <option value="0003">车贷3期-4%-2%</option>
+                    <option value="0004">车贷6期-7.5%-4.5%</option>
+                    <option value="0005">车贷6期-7%-5%</option>
+                    <option value="0006">车贷12期-12%-12%</option>
+                    <option value="0007">车贷12期-10.4%-13.6%</option>
+                    <option value="0008">车贷3期-等额本息</option>
 
                 </select>
             </div>
@@ -103,10 +107,13 @@
                 <th>期数</th>
                 <th>所属期数</th>
                 <th>当期应还日</th>
+                <th>当期应还日时间</th>
                 <th>当期应还金额</th>
                 <th>是否逾期</th>
                 <th>还款状态</th>
                 <th>已还款时间</th>
+                <th>担保垫付状态</th>
+                <th>垫付时间</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -124,6 +131,8 @@
                 <td>{{item.repayExpect}}</td>
 
                 <td>{{item.brTime}}</td>
+                <td>{{new Date().getTime()}}</td>
+
                 <td><a class="link">{{item.repayAmount}}</a></td>
                 <td>
                     {{#if(item.boRepayStatus==1){ }}
@@ -141,11 +150,32 @@
                 </td>
                 <td>{{item.brRepayTime}}</td>
                 <td>
+                    {{#if(item.suretyStatus==2){ }}
+                    <span style="color:#FF5722">已垫付</span>
+                    {{#}else{}}
+                    <span>未垫付</span>
+                    {{#};}}
+                </td>
+                <td>
+                    {{#if(item.suretyStatus==2){ }}
+                    <span>{{item.suretyTime}}</span>
+                    {{#}else{}}
+                    <span></span>
+                    {{#};}}
+                </td>
+                <td>
                     {{#if(item.repayStatus==2){ }}
                     <span></span>
                     {{#}else{}}
                     <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.confirm()">还款确认</a>
                     {{#};}}
+                    {{#if(item.suretyStatus==1 &&item.repayStatus==1 && new Date().getTime() > item.brTimeDate ){ }}
+                    <span>
+                       <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.suretyconfirm()">担保垫付</a>
+                    </span>
+                    {{#}else{}}
+                    {{#};}}
+
                 </td>
             </tr>
             {{# }); }}

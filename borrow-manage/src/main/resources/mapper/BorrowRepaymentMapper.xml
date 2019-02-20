@@ -30,6 +30,9 @@
     <result column="bo_repay_status" property="boRepayStatus" jdbcType="INTEGER" />
     <result column="repay_type" property="repayType" jdbcType="INTEGER" />
     <result column="repay_finish_amount" property="repayFinishAmount" jdbcType="DECIMAL" />
+    <result column="surety_status" property="suretyStatus" jdbcType="INTEGER" />
+    <result column="surety_time" property="suretyTime" jdbcType="TIMESTAMP" />
+    <result column="fine_amount" property="fineAmount" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -105,7 +108,7 @@
     id, disabled, uuid, create_user, create_time, update_user, update_time, remark, repay_id,
     order_id, user_uid, repay_amount, capital_amount, br_time, br_repay_time, repay_expect,
     interest_amount, punish_amount, service_fee, early_pay_fee, repay_status, bo_repay_status,
-    repay_type, repay_finish_amount
+    repay_type, repay_finish_amount, surety_status, surety_time, fine_amount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.borrow.manage.model.dto.BorrowRepaymentExample" >
     <!--
@@ -165,7 +168,8 @@
     capital_amount, br_time, br_repay_time,
     repay_expect, interest_amount, punish_amount,
     service_fee, early_pay_fee, repay_status,
-    bo_repay_status, repay_type, repay_finish_amount
+    bo_repay_status, repay_type, repay_finish_amount,
+    surety_status, surety_time, fine_amount
     )
     values (#{id,jdbcType=BIGINT}, #{disabled,jdbcType=BIT}, #{uuid,jdbcType=VARCHAR},
     #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
@@ -174,7 +178,8 @@
     #{capitalAmount,jdbcType=DECIMAL}, #{brTime,jdbcType=DATE}, #{brRepayTime,jdbcType=TIMESTAMP},
     #{repayExpect,jdbcType=INTEGER}, #{interestAmount,jdbcType=DECIMAL}, #{punishAmount,jdbcType=DECIMAL},
     #{serviceFee,jdbcType=DECIMAL}, #{earlyPayFee,jdbcType=DECIMAL}, #{repayStatus,jdbcType=INTEGER},
-    #{boRepayStatus,jdbcType=INTEGER}, #{repayType,jdbcType=INTEGER}, #{repayFinishAmount,jdbcType=DECIMAL}
+    #{boRepayStatus,jdbcType=INTEGER}, #{repayType,jdbcType=INTEGER}, #{repayFinishAmount,jdbcType=DECIMAL},
+    #{suretyStatus,jdbcType=INTEGER}, #{suretyTime,jdbcType=TIMESTAMP}, #{fineAmount,jdbcType=DECIMAL}
     )
   </insert>
   <insert id="insertSelective" parameterType="com.borrow.manage.model.dto.BorrowRepayment" >
@@ -256,6 +261,15 @@
       <if test="repayFinishAmount != null" >
         repay_finish_amount,
       </if>
+      <if test="suretyStatus != null" >
+        surety_status,
+      </if>
+      <if test="suretyTime != null" >
+        surety_time,
+      </if>
+      <if test="fineAmount != null" >
+        fine_amount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -329,6 +343,15 @@
       </if>
       <if test="repayFinishAmount != null" >
         #{repayFinishAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="suretyStatus != null" >
+        #{suretyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="suretyTime != null" >
+        #{suretyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fineAmount != null" >
+        #{fineAmount,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -421,6 +444,15 @@
       <if test="record.repayFinishAmount != null" >
         repay_finish_amount = #{record.repayFinishAmount,jdbcType=DECIMAL},
       </if>
+      <if test="record.suretyStatus != null" >
+        surety_status = #{record.suretyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.suretyTime != null" >
+        surety_time = #{record.suretyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fineAmount != null" >
+        fine_amount = #{record.fineAmount,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -455,7 +487,10 @@
     repay_status = #{record.repayStatus,jdbcType=INTEGER},
     bo_repay_status = #{record.boRepayStatus,jdbcType=INTEGER},
     repay_type = #{record.repayType,jdbcType=INTEGER},
-    repay_finish_amount = #{record.repayFinishAmount,jdbcType=DECIMAL}
+    repay_finish_amount = #{record.repayFinishAmount,jdbcType=DECIMAL},
+    surety_status = #{record.suretyStatus,jdbcType=INTEGER},
+    surety_time = #{record.suretyTime,jdbcType=TIMESTAMP},
+    fine_amount = #{record.fineAmount,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -536,6 +571,15 @@
       <if test="repayFinishAmount != null" >
         repay_finish_amount = #{repayFinishAmount,jdbcType=DECIMAL},
       </if>
+      <if test="suretyStatus != null" >
+        surety_status = #{suretyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="suretyTime != null" >
+        surety_time = #{suretyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fineAmount != null" >
+        fine_amount = #{fineAmount,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -567,7 +611,10 @@
     repay_status = #{repayStatus,jdbcType=INTEGER},
     bo_repay_status = #{boRepayStatus,jdbcType=INTEGER},
     repay_type = #{repayType,jdbcType=INTEGER},
-    repay_finish_amount = #{repayFinishAmount,jdbcType=DECIMAL}
+    repay_finish_amount = #{repayFinishAmount,jdbcType=DECIMAL},
+    surety_status = #{suretyStatus,jdbcType=INTEGER},
+    surety_time = #{suretyTime,jdbcType=TIMESTAMP},
+    fine_amount = #{fineAmount,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -591,6 +638,8 @@
     ,borrow_repayment.bo_repay_status as boRepayStatus
     ,borrow_order.bo_is_state as boIsState
     ,borrow_repayment.br_repay_time as brRepayTime
+    ,borrow_repayment.surety_status as suretyStatus
+    ,borrow_repayment.surety_time as suretyTime
     from borrow_repayment
     INNER JOIN borrow_order
     ON borrow_repayment.order_id = borrow_order.order_id

@@ -22,32 +22,39 @@ import java.util.HashMap;
 /**
  * Created by wxn on 2018/11/24
  */
-@Component("orderTransferFundDataClient")
-public class OrderTransferFundDataClient extends DataClient{
+
+@Component("compensatoryRepayDataClient")
+public class CompensatoryRepayDataClient extends  DataClient {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Override
-    public String getData(XMap param) {
+    @Autowired
+    RemoteConfig remoteConfig;
+
+    @Autowired
+    RestHttpClientService commonRestTempate;
+
+
+    public String getData(XMap param){
         String jsonData = "";
         try {
             param.put(PlatformConstant.FundsParam.REQ_NO, UUIDProvider.uuid());
-            param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.LOANER_REPAY_REQUEST);
+            param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.COMPENSATORY_REPAY_REQUEST);
             param.put(PlatformConstant.FundsParam.REQ_TIME, Utility.dateStr());
             String reqParam = JSON.toJSONString(param);
-            logger.info("OrderTransferFund_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
+            logger.info("compensatory_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
             jsonData = doSendRequest(reqParam);
-            logger.info("OrderTransferFund_res:result={}",jsonData);
+            logger.info("compensatory_res:result={}",jsonData);
 
         }catch (Exception e) {
-            logger.error("理财资金划拨接口异常",e);
-            throw new RemoteException(ExceptionCode.ORDER_TRANSFER_FUND_ERROR);
+            logger.error("代偿接口异常",e);
+            throw new RemoteException(ExceptionCode.COMPENSATORY_REPAY_ERROR);
         }
         return jsonData;
     }
 
     @Override
     protected String getUrlType() {
-        return DataClientEnum.ORDER_TRANSFER_FUND.getUrlType();
+        return DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType();
     }
 }

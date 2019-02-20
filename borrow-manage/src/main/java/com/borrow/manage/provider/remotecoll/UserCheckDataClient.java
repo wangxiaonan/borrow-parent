@@ -45,14 +45,8 @@ public class UserCheckDataClient extends DataClient {
 
             String reqParam = JSON.toJSONString(param);
             logger.info("UserCheckData_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
-
-            HashMap signatureMap = new HashMap();
-            reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
-            signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);
-            jsonData = commonRestTempate.postForObjectMultiValue(remoteConfig.fundsBaseUrl,signatureMap,String.class);
-            jsonData = ThreeDES.decrypt(jsonData,Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
+            jsonData = doSendRequest(reqParam);
             logger.info("UserCheckData_res:result={}",jsonData);
-
         }catch (Exception e) {
             logger.error("用户存管身份校验异常",e);
             throw new RemoteException(ExceptionCode.USER_CHECK_IDENTITY_ERROR);

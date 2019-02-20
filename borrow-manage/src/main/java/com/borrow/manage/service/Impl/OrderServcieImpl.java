@@ -74,25 +74,26 @@ public class OrderServcieImpl implements OrderServcie {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
         UserInfoVo userInfoVo =  orderCreateReq.getUserInfo();
+        //TODO
         // 判断是否是开户 和是否借款用户
-        XMap xMap = new XMap();
-        xMap.put(PlatformConstant.FundsParam.IDCARD,userInfoVo.getIdcard());
-        xMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.USER_CHECK_DATA.getUrlType());
-        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
-        if(!xMapResponseResult.isSucceed()) {
-            return xMapResponseResult;
-        }
-        XMap xMapRes = xMapResponseResult.getData();
-        String data = xMapRes.getString("data");
-        XMap p = JSON.parseObject(data,XMap.class);
-        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
-        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
-        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
-            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
-        }
-        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
-            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
-        }
+//        XMap xMap = new XMap();
+//        xMap.put(PlatformConstant.FundsParam.IDCARD,userInfoVo.getIdcard());
+//        xMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.USER_CHECK_DATA.getUrlType());
+//        ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
+//        if(!xMapResponseResult.isSucceed()) {
+//            return xMapResponseResult;
+//        }
+//        XMap xMapRes = xMapResponseResult.getData();
+//        String data = xMapRes.getString("data");
+//        XMap p = JSON.parseObject(data,XMap.class);
+//        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
+//        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
+//        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
+//            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
+//        }
+//        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
+//            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
+//        }
         UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
         if (userInfo == null) {
             userInfo = convertUserInfoVo(userInfoVo);
@@ -258,7 +259,8 @@ public class OrderServcieImpl implements OrderServcie {
         if (borrowOrder ==  null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        AbstractCarRepayPlan abstractCarRepayPlan = carRepayPlanFactory.getCarRepayPlan(ProductEnum.getProductEnum(borrowOrder.getpCode()));
+        BorrowProduct borrowProduct = borrowProductDao.selByPcode(borrowOrder.getpCode());
+        AbstractCarRepayPlan abstractCarRepayPlan = carRepayPlanFactory.getCarRepayPlan(ProductPayTypeEnum.getProductPayType(borrowProduct.getpPayType()));
         RepayPlanCalReq repayPlanCalReq = new RepayPlanCalReq();
         repayPlanCalReq.setpCode(borrowOrder.getpCode());
         repayPlanCalReq.setBoPrice(borrowOrder.getBoPrice());
@@ -354,14 +356,16 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
 
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
-        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
-        if (!responseResult.isSucceed()) {
-            throw  new BorrowException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
-        }
+        //TODO 筹标
+//                ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+//        if (!responseResult.isSucceed()) {
+//            throw  new BorrowException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
+//        }
         BorrowOrder borr = new BorrowOrder();
         borr.setBoIsState(BoIsStateEnum.LOANING.getCode());
         borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),borr);
-        return responseResult;
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+//        return responseResult;
     }
 
     @Override

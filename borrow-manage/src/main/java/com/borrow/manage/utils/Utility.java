@@ -68,6 +68,10 @@ public class Utility {
     }
 
     public static void main(String[] args) {
+        System.out.println(PasswordHelper.encryptPassword("123456"));
+        for (int i = 0; i< 7 ;i++) {
+            System.out.println(UUIDProvider.uuid());
+        }
 
         System.out.println(DateFormatUtils.format(new Date(),"yyyyMMddHHmmssSSS"));
         LocalDateTime localDateTime = LocalDateTime.now();

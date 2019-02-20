@@ -24,6 +24,15 @@ public class OrderRepayListRes  {
     //应还日期
 
     private Date brTime;
+    private long brTimeDate;
+
+    public long getBrTimeDate() {
+        return brTime.getTime();
+    }
+
+    public void setBrTimeDate(long brTimeDate) {
+        this.brTimeDate = brTimeDate;
+    }
 
     private String repayAmount;
     //支付状态
@@ -34,6 +43,24 @@ public class OrderRepayListRes  {
     private String  boIsState;
 
     private Date brRepayTime;
+    private String suretyStatus;
+    private Date suretyTime;
+
+    public String getSuretyStatus() {
+        return suretyStatus;
+    }
+
+    public void setSuretyStatus(String suretyStatus) {
+        this.suretyStatus = suretyStatus;
+    }
+
+    public String getSuretyTime() {
+        return suretyTime == null ? "":DateFormatUtils.format(suretyTime,"yyyy-MM-dd HH:ss:mm");
+    }
+
+    public void setSuretyTime(Date suretyTime) {
+        this.suretyTime = suretyTime;
+    }
 
     public String getUserMobile() {
         return userMobile;
@@ -126,6 +153,7 @@ public class OrderRepayListRes  {
     public String getBrTime() {
         return brTime == null ? "":DateFormatUtils.format(brTime,"yyyy-MM-dd");
     }
+
 
     public void setBrTime(Date brTime) {
         this.brTime = brTime;

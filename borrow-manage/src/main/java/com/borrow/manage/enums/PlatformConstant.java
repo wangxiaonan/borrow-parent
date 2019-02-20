@@ -72,6 +72,12 @@ public  interface PlatformConstant {
         String AUDIT_STATUS_NO = "2";
 
         String TYPE = "type";
+        //服务费
+        String SERVICE_FEE = "serviceFee";
+        //罚金
+        String PENALTY_FEE = "penaltyFee";
+        //罚息
+        String PENALTY_INTEREST = "penaltyInterest";
 
 
 
@@ -87,6 +93,10 @@ public  interface PlatformConstant {
         String PROJECT_CREATE_REQUEST = "projectCreateRequest";
         //资金划拨
         String LOANER_REPAY_REQUEST = "loanerRepayRequest";
+        //代偿
+        String COMPENSATORY_REPAY_REQUEST = "compensatoryRepayRequest";
+        //逾期还款
+        String LOANER_OVERDUE_REPAY_REQUEST = "loanerOverdueRepayRequest";
 
     }
 

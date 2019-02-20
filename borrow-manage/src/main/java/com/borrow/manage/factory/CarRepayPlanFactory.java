@@ -1,6 +1,7 @@
 package com.borrow.manage.factory;
 
 import com.borrow.manage.enums.ProductEnum;
+import com.borrow.manage.enums.ProductPayTypeEnum;
 import com.borrow.manage.provider.AbstractCarRepayPlan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,16 +16,18 @@ public class CarRepayPlanFactory {
 
     @Autowired
     AbstractCarRepayPlan carDefaultRepayPlan;
+    @Autowired
+    AbstractCarRepayPlan principalCarRepayPlan;
 
-    public AbstractCarRepayPlan getCarRepayPlan(ProductEnum productEnum){
+    public AbstractCarRepayPlan getCarRepayPlan(ProductPayTypeEnum payTypeEnum){
 
-        if (productEnum == null)
+        if (payTypeEnum == null)
             return carDefaultRepayPlan;
-        switch (productEnum){
-            case CAR_LOAN_ONE:
+        switch (payTypeEnum){
+            case PAY_TYPE_ONE:
                 return this.carDefaultRepayPlan;
-            case CAR_LOAN_TWO:
-                return this.carDefaultRepayPlan;
+            case PAY_TYPE_TWO:
+                return this.principalCarRepayPlan;
         }
 
         return carDefaultRepayPlan;
