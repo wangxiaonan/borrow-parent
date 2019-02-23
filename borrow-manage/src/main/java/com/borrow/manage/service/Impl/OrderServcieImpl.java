@@ -433,6 +433,7 @@ public class OrderServcieImpl implements OrderServcie {
             repayment.setServiceFee(BigDecimal.valueOf(Double.valueOf(carRepayPlanVo.getServiceFee())));
             repayment.setRepayStatus(RepayStatusEnum.PAY_NO.getCode());
             repayment.setBoRepayStatus(BoRepayStatusEnum.NORMAL.getCode());
+            repayment.setSuretyStatus(SuretyStatusEnum.SURETY_STATUS_NO.getCode());
             borrowRepaymentDao.insertRepayment(repayment);
             result.add(repayment);
         });

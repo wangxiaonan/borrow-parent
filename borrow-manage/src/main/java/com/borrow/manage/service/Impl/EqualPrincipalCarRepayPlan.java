@@ -60,7 +60,7 @@ public class EqualPrincipalCarRepayPlan extends AbstractCarRepayPlan {
 //        System.out.println("等额本息---每月还款本金：" + mapPrincipal);
 
         int boExpect = Integer.valueOf(borrowProduct.getpExpect());
-        for (int i = 1; i< boExpect; i++) {
+        for (int i = 1; i<= boExpect; i++) {
             CarRepayPlanVo carRepayPlanVo = new CarRepayPlanVo();
             carRepayPlanVo.setCapitalAmount(mapPrincipal.get(i).toString());
             carRepayPlanVo.setInterestAmount(mapInterest.get(i).toString());

@@ -98,7 +98,7 @@ public class OrderApi {
     }
 
 
-    @RequestMapping(value = "/make/loans", method = RequestMethod.POST)
+//    @RequestMapping(value = "/make/loans", method = RequestMethod.POST)
     public ResponseResult makeLoans(@RequestBody MakeLoansReq makeLoansReq) {
         logger.info("====>makeLoans():req={}", makeLoansReq);
         ResponseResult res = null;
