@@ -18,6 +18,8 @@ public class CarRepayPlanFactory {
     AbstractCarRepayPlan carDefaultRepayPlan;
     @Autowired
     AbstractCarRepayPlan principalCarRepayPlan;
+    @Autowired
+    AbstractCarRepayPlan equalPrincipalCarRepayPlan;
 
     public AbstractCarRepayPlan getCarRepayPlan(ProductPayTypeEnum payTypeEnum){
 
@@ -28,6 +30,8 @@ public class CarRepayPlanFactory {
                 return this.carDefaultRepayPlan;
             case PAY_TYPE_TWO:
                 return this.principalCarRepayPlan;
+            case PAY_TYPE_THREE:
+                return this.equalPrincipalCarRepayPlan;
         }
 
         return carDefaultRepayPlan;

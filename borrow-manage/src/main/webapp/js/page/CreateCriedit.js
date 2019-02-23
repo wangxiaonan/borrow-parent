@@ -82,10 +82,8 @@
              done: function(res) {
                  var data = res.data;
                  for (var i =0;i< data.length;i++) {
-                     alert(data[i].productCode)
-                     alert(data[i].productName)
-                     document.getElementById("productCode").options.add(new Option(data[i].productName,data[i].productCode));
-                     // $("#productCode").append('<option value="' + data[i].productCode + '">' + data[i].productName + '</option>');
+                     // document.getElementById("productCode").options.add(new Option(data[i].productName,data[i].productCode));
+                     $("#productCode").append('<option value="' + data[i].productCode + '">' + data[i].productName + '</option>');
 
                      form.render('select');
                  }

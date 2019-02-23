@@ -208,27 +208,6 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
                 singleSelect: true
             }).build();
         }
-        function getDetailData(param){
-            var getDetail = {
-                url: ma.host+"/order/repay/detail",
-                data: {"orderId": param.orderId},
-                done: function(res) {
-                    if(res.errorCode!=='0000000'){
-                        top.layer.success("获取失败");
-                        return;
-                    };
-                    $('#orderId').html(res.data.orderId);
-                    $('#userName').html(res.data.userName);
-                    $('#plateNumber').html(res.data.plateNumber);
-                    $('#boPrice').html(res.data.boPrice);
-                    $('#productName').html(res.data.productName);
-                    $('#boExpect').html(res.data.boExpect);
-                    createDetailTable(res.data.repayDetails,'secoundDetail','seccoundView');
-                    createDetailPayTable(res.data.orderPayRecords,'secoundDetailPay','secoundDetailPayView');
-                }
-            }
-            ma.ajax(getDetail);
-        }
         function getPlanData(orderId){
             var planData = {
                 url: ma.host+'/order/repay/plan',
@@ -257,5 +236,26 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
                 content: $("#dialog")
             });
         }
+
+    initProduct();
+    function initProduct(){
+        var produ = {
+            url: ma.host+"/borrow/product/sel",
+            data: {},
+            done: function(res) {
+                var data = res.data;
+                for (var i =0;i< data.length;i++) {
+                    // document.getElementById("productCode").options.add(new Option(data[i].productName,data[i].productCode));
+                    $("#pCode").append('<option value="' + data[i].productCode + '">' + data[i].productName + '</option>');
+
+                    form.render('select');
+                }
+            },
+            fail: function(re) {
+                layer.error(re.errorMessage);
+            }
+        }
+        ma.ajax(produ);
+    }
 
 });

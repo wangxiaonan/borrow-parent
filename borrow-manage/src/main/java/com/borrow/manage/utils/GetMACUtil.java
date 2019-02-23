@@ -1,4 +1,4 @@
-package com.zhiwei.credit.util;
+package com.borrow.manage.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,16 +12,7 @@ public class GetMACUtil
         return System.getProperty("os.name").toLowerCase();
     }
 
-    public static void main(String[] args) {
-        String macAddress = getMacStr();
-        System.out.println(getMacStr());
-        try {
-            String str = java.net.URLEncoder.encode(macAddress,"UTF-8");
-            System.out.println(str + "===");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
+
     public static String getUnixMACAddress()
     {
         return "00-16-3E-0A-BA-EF";

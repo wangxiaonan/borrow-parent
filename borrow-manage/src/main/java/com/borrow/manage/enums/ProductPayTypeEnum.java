@@ -7,7 +7,8 @@ public enum ProductPayTypeEnum {
 
 
     PAY_TYPE_ONE("一次性还本息",1),
-    PAY_TYPE_TWO("等额本息",2);
+    PAY_TYPE_TWO("先息后本",2),
+    PAY_TYPE_THREE("等额本息",3);
 
     ProductPayTypeEnum(String name, int code) {
         this.name = name;

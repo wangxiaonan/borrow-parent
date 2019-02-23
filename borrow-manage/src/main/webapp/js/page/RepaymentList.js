@@ -147,4 +147,24 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         })
     };
 
+    initProduct();
+    function initProduct(){
+        var produ = {
+            url: ma.host+"/borrow/product/sel",
+            data: {},
+            done: function(res) {
+                var data = res.data;
+                for (var i =0;i< data.length;i++) {
+                    // document.getElementById("productCode").options.add(new Option(data[i].productName,data[i].productCode));
+                    $("#pCode").append('<option value="' + data[i].productCode + '">' + data[i].productName + '</option>');
+
+                    form.render('select');
+                }
+            },
+            fail: function(re) {
+                layer.error(re.errorMessage);
+            }
+        }
+        ma.ajax(produ);
+    }
 });
