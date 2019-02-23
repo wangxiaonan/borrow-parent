@@ -42,14 +42,15 @@
                 <td>{{item.guaranteeViolateRate*100}}%</td>
                 <td><a class="link">{{item.serviceViolateRate*100}}%</a></td>
                 <td>{{item.earlyPayRate*100}}%</td>
-                <td>
-                    {{#if(item.pPayType==1){ }}
-                    <span>一次性还本息</span>
-                    {{#};}}
-                    {{#if(item.pPayType==2){ }}
-                    <span>等额本息</span>
-                    {{#};}}
-                </td>
+                <td>{{item.pPayTypeName}}</td>
+                <!--<td>-->
+                    <!--{{#if(item.pPayType==1){ }}-->
+                    <!--<span>一次性还本息</span>-->
+                    <!--{{#};}}-->
+                    <!--{{#if(item.pPayType==2){ }}-->
+                    <!--<span>等额本息</span>-->
+                    <!--{{#};}}-->
+                <!--</td>-->
                 <td>{{item.createTime}}</td>
             </tr>
             {{# }); }}

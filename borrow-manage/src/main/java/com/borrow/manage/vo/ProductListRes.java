@@ -1,5 +1,6 @@
 package com.borrow.manage.vo;
 
+import com.borrow.manage.enums.ProductPayTypeEnum;
 import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.util.Date;
@@ -23,6 +24,17 @@ public class ProductListRes {
     private String earlyPayRate;
 
     private String pPayType;
+
+    private String pPayTypeName;
+
+    public String getpPayTypeName() {
+        return ProductPayTypeEnum.getProductPayType(Integer.valueOf(pPayType)).getName();
+    }
+
+    public void setpPayTypeName(String pPayTypeName) {
+
+        this.pPayTypeName = pPayTypeName;
+    }
 
     private Date createTime;
 
