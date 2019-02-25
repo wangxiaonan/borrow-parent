@@ -120,7 +120,7 @@ public class AverageCapitalUtils {
     }
 
     public static void main(String[] args) {
-        double invest = 10000; // 本金
+        double invest = 80; // 本金
         int month = 24;
         double monthRate = 0.007; // 年利率
         double perMonthPrincipalInterest = getPerMonthPrincipalInterest(invest, monthRate, month);

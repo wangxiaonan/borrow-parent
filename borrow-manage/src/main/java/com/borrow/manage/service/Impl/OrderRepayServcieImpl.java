@@ -284,7 +284,8 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStr(repayment.getBrTime()));
             thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT, repayment.getCapitalAmount().toString());
             thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
-            if (repayment.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()) {
+            if (repayment.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()
+                    || repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode()) {
                 thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_FEE, repayment.getServiceFee().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_FEE, repayment.getPunishAmount().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST, repayment.getFineAmount().toString());
@@ -494,6 +495,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStr(repayment.getBrTime()));
         thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT, repayment.getCapitalAmount().toString());
         thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {

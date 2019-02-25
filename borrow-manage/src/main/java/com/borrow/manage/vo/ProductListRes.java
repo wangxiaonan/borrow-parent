@@ -27,6 +27,8 @@ public class ProductListRes {
 
     private String pPayTypeName;
 
+
+
     public String getpPayTypeName() {
         return ProductPayTypeEnum.getProductPayType(Integer.valueOf(pPayType)).getName();
     }
