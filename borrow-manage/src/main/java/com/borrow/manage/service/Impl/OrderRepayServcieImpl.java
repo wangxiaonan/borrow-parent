@@ -209,7 +209,13 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             detailVo.setRepayId(repayment.getRepayId().toString());
             detailVo.setRepayExpect(repayment.getRepayExpect().toString());
             detailVo.setBrTime(repayment.getBrTime());
-            detailVo.setRepayAmount(repayment.getRepayAmount().toString());
+
+            BigDecimal repayAmount = repayment.getCapitalAmount()
+                    .add(repayment.getInterestAmount())
+                    .add(repayment.getServiceFee())
+                    .add(repayment.getPunishAmount())
+                    .add(repayment.getFineAmount());
+            detailVo.setRepayAmount(repayAmount.toString());
             detailVo.setCapitalAmount(repayment.getCapitalAmount().toString());
             detailVo.setInterestAmount(repayment.getInterestAmount().toString());
             detailVo.setServiceFee(repayment.getServiceFee().toString());

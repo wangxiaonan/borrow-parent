@@ -21,7 +21,7 @@
                 <th>前期服务费率</th>
                 <th>月服务费率</th>
                 <th>月利息率</th>
-                <th>担保方违约费率</th>
+                <th>罚息率</th>
                 <th>平台违约金费率</th>
                 <th>提前还款费率</th>
                 <th>还款方式</th>
@@ -39,7 +39,7 @@
                 <td><a class="link">{{parseFloat((item.monthServiceRate*100).toPrecision(12))}}%</a></td>
                 <td>{{parseFloat((item.monthAccrualRate*100).toPrecision(12))}}%</td>
                 <!--<td>{{item.monthAccrualRate*100}}%</td>-->
-                <td>{{item.guaranteeViolateRate*100}}%</td>
+                <td>{{item.fineServiceRate*100}}%</td>
                 <td><a class="link">{{item.serviceViolateRate*100}}%</a></td>
                 <td>{{item.earlyPayRate*100}}%</td>
                 <td>{{item.pPayTypeName}}</td>

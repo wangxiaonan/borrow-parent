@@ -50,6 +50,7 @@ public class ProductServiceImpl implements ProductService{
             res.setGuaranteeViolateRate(stringMap.get(ProductRateEnum.GUARANTEE_VIOLATE_RATE.getRateKey()));
             res.setServiceViolateRate(stringMap.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
             res.setEarlyPayRate(stringMap.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
+            res.setFineServiceRate(stringMap.get(ProductRateEnum.FINE_SERVICE_RATE.getRateKey()));
 
             res.setpPayType(String.valueOf(borrowProduct.getpPayType()));
             res.setCreateTime(borrowProduct.getCreateTime());

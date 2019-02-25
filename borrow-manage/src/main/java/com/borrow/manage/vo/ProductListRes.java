@@ -27,6 +27,7 @@ public class ProductListRes {
 
     private String pPayTypeName;
 
+    private String fineServiceRate;
 
 
     public String getpPayTypeName() {
@@ -50,6 +51,14 @@ public class ProductListRes {
 
     public String getCreateTime() {
         return createTime ==null? "": DateFormatUtils.format(createTime,"yyyy-MM-dd HH:mm:ss");
+    }
+
+    public String getFineServiceRate() {
+        return fineServiceRate;
+    }
+
+    public void setFineServiceRate(String fineServiceRate) {
+        this.fineServiceRate = fineServiceRate;
     }
 
     public void setCreateTime(Date createTime) {
