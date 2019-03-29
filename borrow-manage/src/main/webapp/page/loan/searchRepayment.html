@@ -156,6 +156,10 @@
                     <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
                     <!--<a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.AdvanceRepatment()">提前还款</a>-->
                     {{#};}}
+                    {{# if(item.boIsState==5 && item.boExpect >1){}}
+                    <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.AdvanceRepatment()">提前还款</a>
+                    {{#}else{}}
+                    {{#};}}
                 </td>
             </tr>
             {{# }); }}
