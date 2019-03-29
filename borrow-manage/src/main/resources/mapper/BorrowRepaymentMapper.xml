@@ -646,7 +646,7 @@
     INNER JOIN user_info
     ON borrow_order.user_uid = user_info.uuid
     WHERE
-    borrow_order.bo_is_finish = 1
+    borrow_order.bo_is_finish = 1 and borrow_repayment.repay_amount != 0
     <if test="userName != null and userName!='' " >
       AND user_info.user_name LIKE CONCAT('%',#{userName},'%')
     </if>

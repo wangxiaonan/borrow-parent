@@ -38,6 +38,7 @@
     <result column="last_pay_time" property="lastPayTime" jdbcType="TIMESTAMP" />
     <result column="bo_pay_expect" property="boPayExpect" jdbcType="INTEGER" />
     <result column="first_expect_time" property="firstExpectTime" jdbcType="TIMESTAMP" />
+    <result column="last_expect_time" property="lastExpectTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -114,7 +115,7 @@
     bues_type, user_uid, product_uid, b_car_uid, product_name, p_code, plate_number,
     salesman_uid, sign_time, bo_price, bo_finish_price, bo_expect, bo_expect_unit, bo_paytype,
     bo_is_state, bo_is_finish, bo_finish_time, bo_pay_source, bo_pay_state, first_pay_time,
-    last_pay_time, bo_pay_expect, first_expect_time
+    last_pay_time, bo_pay_expect, first_expect_time, last_expect_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.borrow.manage.model.dto.BorrowOrderExample" >
     <!--
@@ -177,7 +178,8 @@
     bo_expect_unit, bo_paytype, bo_is_state,
     bo_is_finish, bo_finish_time, bo_pay_source,
     bo_pay_state, first_pay_time, last_pay_time,
-    bo_pay_expect, first_expect_time)
+    bo_pay_expect, first_expect_time, last_expect_time
+    )
     values (#{id,jdbcType=BIGINT}, #{disabled,jdbcType=BIT}, #{uuid,jdbcType=VARCHAR},
     #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
     #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT},
@@ -188,7 +190,8 @@
     #{boExpectUnit,jdbcType=INTEGER}, #{boPaytype,jdbcType=INTEGER}, #{boIsState,jdbcType=INTEGER},
     #{boIsFinish,jdbcType=INTEGER}, #{boFinishTime,jdbcType=TIMESTAMP}, #{boPaySource,jdbcType=VARCHAR},
     #{boPayState,jdbcType=INTEGER}, #{firstPayTime,jdbcType=TIMESTAMP}, #{lastPayTime,jdbcType=TIMESTAMP},
-    #{boPayExpect,jdbcType=INTEGER}, #{firstExpectTime,jdbcType=TIMESTAMP})
+    #{boPayExpect,jdbcType=INTEGER}, #{firstExpectTime,jdbcType=TIMESTAMP}, #{lastExpectTime,jdbcType=TIMESTAMP}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.borrow.manage.model.dto.BorrowOrder" >
     <!--
@@ -293,6 +296,9 @@
       <if test="firstExpectTime != null" >
         first_expect_time,
       </if>
+      <if test="lastExpectTime != null" >
+        last_expect_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -390,6 +396,9 @@
       </if>
       <if test="firstExpectTime != null" >
         #{firstExpectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastExpectTime != null" >
+        #{lastExpectTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -506,6 +515,9 @@
       <if test="record.firstExpectTime != null" >
         first_expect_time = #{record.firstExpectTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.lastExpectTime != null" >
+        last_expect_time = #{record.lastExpectTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -548,7 +560,8 @@
     first_pay_time = #{record.firstPayTime,jdbcType=TIMESTAMP},
     last_pay_time = #{record.lastPayTime,jdbcType=TIMESTAMP},
     bo_pay_expect = #{record.boPayExpect,jdbcType=INTEGER},
-    first_expect_time = #{record.firstExpectTime,jdbcType=TIMESTAMP}
+    first_expect_time = #{record.firstExpectTime,jdbcType=TIMESTAMP},
+    last_expect_time = #{record.lastExpectTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -653,6 +666,9 @@
       <if test="firstExpectTime != null" >
         first_expect_time = #{firstExpectTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="lastExpectTime != null" >
+        last_expect_time = #{lastExpectTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -692,7 +708,8 @@
     first_pay_time = #{firstPayTime,jdbcType=TIMESTAMP},
     last_pay_time = #{lastPayTime,jdbcType=TIMESTAMP},
     bo_pay_expect = #{boPayExpect,jdbcType=INTEGER},
-    first_expect_time = #{firstExpectTime,jdbcType=TIMESTAMP}
+    first_expect_time = #{firstExpectTime,jdbcType=TIMESTAMP},
+    last_expect_time = #{lastExpectTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -763,6 +780,7 @@
     ,borrow_order.bo_pay_state as boPayState
     ,borrow_order.bo_is_state as boIsState
     ,borrow_order.first_expect_time as firstExpectTime
+    ,borrow_order.last_expect_time as lastExpectTime
     ,borrow_order.last_pay_time as lastPayTime
 
     from borrow_order
@@ -801,4 +819,5 @@
     WHERE
     order_id = #{orderId} and bo_pay_expect &lt;bo_expect
   </update>
+
 </mapper>

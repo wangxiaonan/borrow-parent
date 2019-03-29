@@ -271,9 +271,10 @@ public class OrderServcieImpl implements OrderServcie {
         BorrowOrder bo = new BorrowOrder();
         bo.setBoIsState(BoIsStateEnum.LOAN_OVER.getCode());
         bo.setBoFinishPrice(BigDecimal.valueOf(Double.valueOf(repayPlanRes.getBoFinishPrice())));
-        bo.setBoIsFinish(BoIsFinishEnum.Finish_YES.getCode());
+        bo.setBoIsFinish(BoIsFinishEnum.FINISH_YES.getCode());
         bo.setBoFinishTime(new Date());
         bo.setFirstExpectTime(repaymentsResult.get(0).getBrTime());
+        bo.setLastExpectTime(repaymentsResult.get(repaymentsResult.size()-1).getBrTime());
         borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),bo);
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
     }

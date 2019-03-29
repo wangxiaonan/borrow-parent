@@ -2215,6 +2215,66 @@ public class BorrowOrderExample {
             addCriterion("first_expect_time not between", value1, value2, "firstExpectTime");
             return (Criteria) this;
         }
+
+        public Criteria andLastExpectTimeIsNull() {
+            addCriterion("last_expect_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeIsNotNull() {
+            addCriterion("last_expect_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeEqualTo(Date value) {
+            addCriterion("last_expect_time =", value, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeNotEqualTo(Date value) {
+            addCriterion("last_expect_time <>", value, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeGreaterThan(Date value) {
+            addCriterion("last_expect_time >", value, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("last_expect_time >=", value, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeLessThan(Date value) {
+            addCriterion("last_expect_time <", value, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeLessThanOrEqualTo(Date value) {
+            addCriterion("last_expect_time <=", value, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeIn(List<Date> values) {
+            addCriterion("last_expect_time in", values, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeNotIn(List<Date> values) {
+            addCriterion("last_expect_time not in", values, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeBetween(Date value1, Date value2) {
+            addCriterion("last_expect_time between", value1, value2, "lastExpectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastExpectTimeNotBetween(Date value1, Date value2) {
+            addCriterion("last_expect_time not between", value1, value2, "lastExpectTime");
+            return (Criteria) this;
+        }
     }
 
     /**

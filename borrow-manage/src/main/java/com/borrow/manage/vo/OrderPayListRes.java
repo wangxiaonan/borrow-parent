@@ -23,6 +23,16 @@ public class OrderPayListRes {
     private Date lastPayTime;
 
     private Date firstExpectTime;
+    private Date lastExpectTime;
+
+    public String getLastExpectTime() {
+        return lastExpectTime ==null ? "":DateFormatUtils.format(lastExpectTime,"yyyy-MM-dd");
+
+    }
+
+    public void setLastExpectTime(Date lastExpectTime) {
+        this.lastExpectTime = lastExpectTime;
+    }
 
     private String boPayState;
 

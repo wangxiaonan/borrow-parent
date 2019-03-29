@@ -5,7 +5,7 @@ package com.borrow.manage.enums;
  */
 public enum BoIsFinishEnum {
 
-    Finish_YES("已完成",1),
+    FINISH_YES("已完成",1),
     FINISH_NO("未完成",0);
 
     BoIsFinishEnum(String name, int code) {
