@@ -122,8 +122,12 @@ layui.use(["form", "grid", "layer",'laypage'], function() {
                     top.layer.success("获取失败");
                     return;
                 };
-                $('#payTotalAmount').html(res.data.payTotalAmount);
-                $('#repatDetail').html('还款本金'+res.data.payTotalCapitalAmount+'，利息'+res.data.payTotalInterestAmount+'，服务费'+res.data.payTotalServiceFee+'，提前结清费用'+res.data.earlyPayCostAmount);
+                $('#dpayTotalAmount').html(res.data.payTotalAmount);
+                $('#dexpectTotal').html(res.data.expectTotal);
+                $('#dpayExpect').html(res.data.payExpect);
+                $('#dfinishExpect').html(res.data.finishExpect);
+                $('#duserName').html(res.data.userName);
+                // $('#repatDetail').html('还款本金'+res.data.payTotalCapitalAmount+'，利息'+res.data.payTotalInterestAmount+'，服务费'+res.data.payTotalServiceFee+'，提前结清费用'+res.data.earlyPayCostAmount);
             }
         }
         ma.ajax(RepayCalData);

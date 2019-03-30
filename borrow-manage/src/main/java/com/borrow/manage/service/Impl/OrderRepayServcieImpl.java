@@ -23,13 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by wxn on 2018/9/18
  */
 @Service
-public class OrderRepayServcieImpl  implements OrderRepayServcie{
+public class OrderRepayServcieImpl implements OrderRepayServcie {
 
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -55,18 +57,16 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
     RemoteDataCollector remoteDataCollectorService;
 
 
-
-
     @Override
     public ResponseResult orderRepaySelList(OrderRepayListReq orderRepayListReq) {
         List<OrderRepayListRes> listRes = borrowRepaymentDao.selOrderRepayListWhere(orderRepayListReq);
         PageBaseRes pageBaseRes = new PageBaseRes<OrderRepayListRes>(listRes);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),pageBaseRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), pageBaseRes);
     }
 
     @Override
     public void orderRepaySelListExport(HttpServletResponse response,
-                                                  OrderRepayListReq orderRepayListReq) {
+                                        OrderRepayListReq orderRepayListReq) {
         List<OrderRepayListRes> res = borrowRepaymentDao.selOrderRepayListWhereALL(orderRepayListReq);
 
         ExcelData data = new ExcelData();
@@ -106,9 +106,9 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         });
         data.setRows(rows);
         try {
-            ExportExcelUtils.exportExcel(response,"待还款明细.xlsx",data);
+            ExportExcelUtils.exportExcel(response, "待还款明细.xlsx", data);
         } catch (Exception e) {
-            logger.error("申请查询导出异常:",e);
+            logger.error("申请查询导出异常:", e);
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
 
@@ -125,12 +125,12 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
                 .getCarRepayPlan(ProductPayTypeEnum.getProductPayType(borrowProduct.getpPayType()));
         if (carRepayPlan == null) {
             logger.error("orderRepayPlanCal:pCode is not exist");
-           return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                   ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+            return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
 
         }
         BoCarRepayPlanRes carRepayPlanRes = carRepayPlan.planCal(repayPlanCalReq);
-        return  ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),carRepayPlanRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), carRepayPlanRes);
     }
 
     @Override
@@ -139,32 +139,32 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         if (borrowOrder == null) {
             logger.error("orderRepayPlan:orderid is not exist");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         List<BoOrderCost> boOrderCosts = boOrderCostDao.selByOrderId(Long.valueOf(orderRepayPlanReq.getOrderId()));
-        Map<String,BigDecimal> orderCostsMap = new HashMap<>();
+        Map<String, BigDecimal> orderCostsMap = new HashMap<>();
         boOrderCosts.stream().forEach(boOrderCost -> {
-            orderCostsMap.put(boOrderCost.getCostKey(),boOrderCost.getCostAmount());
+            orderCostsMap.put(boOrderCost.getCostKey(), boOrderCost.getCostAmount());
         });
         List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(Long.valueOf(orderRepayPlanReq.getOrderId()));
         BorrowProduct borrowProduct = borrowProductDao.selByPcode(borrowOrder.getpCode());
         List<BoProductRate> boProductRates = boProductRateDao.selProductRateByPUid(borrowProduct.getUuid());
-        Map<String,String> productRateMap = new HashMap<>();
+        Map<String, String> productRateMap = new HashMap<>();
         boProductRates.stream().forEach(boProductRate -> {
-            productRateMap.put(boProductRate.getRateKey(),boProductRate.getRateValue());
+            productRateMap.put(boProductRate.getRateKey(), boProductRate.getRateValue());
         });
         BoCarRepayPlanRes repayPlanRes = new BoCarRepayPlanRes();
         repayPlanRes.setBoPrice(borrowOrder.getBoPrice().toString());
         repayPlanRes.setBoExpect(borrowOrder.getBoExpect().toString());
         BigDecimal gps = orderCostsMap.get(ProductRateEnum.GPS_COST.getRateKey());
         repayPlanRes.setGpsCost(
-                gps== null?BigDecimal.ZERO.toString():gps.toString());
+                gps == null ? BigDecimal.ZERO.toString() : gps.toString());
         repayPlanRes.setEarlyServiceRate(productRateMap.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
 
         repayPlanRes.setBoFinishPrice(borrowOrder.getBoFinishPrice().toString());
         BigDecimal serviceCost = orderCostsMap.get(ProductRateEnum.EARLY_SERVICE_COST.getRateKey());
         repayPlanRes.setEarlyServiceCost(
-                serviceCost== null?BigDecimal.ZERO.toString():serviceCost.toString()
+                serviceCost == null ? BigDecimal.ZERO.toString() : serviceCost.toString()
         );
         List<CarRepayPlanVo> repayPlans = new ArrayList<>();
 
@@ -180,7 +180,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         });
         repayPlanRes.setRepayPlans(repayPlans);
 
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),repayPlanRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), repayPlanRes);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         if (borrowOrder == null) {
             logger.error("selRepayListDetail:orderid is not exist");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(orderId);
         UserInfo userInfo = userInfoDao.selInfoByUid(borrowOrder.getUserUid());
@@ -204,7 +204,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         detailRes.setBoExpect(borrowOrder.getBoExpect().toString());
 
         List<RepayDetailVo> repayDetailVos = new ArrayList<>();
-        repaymentList.stream().forEach(repayment ->  {
+        repaymentList.stream().forEach(repayment -> {
             RepayDetailVo detailVo = new RepayDetailVo();
             detailVo.setRepayId(repayment.getRepayId().toString());
             detailVo.setRepayExpect(repayment.getRepayExpect().toString());
@@ -223,7 +223,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             detailVo.setRepayStatus(repayment.getRepayStatus().toString());
             detailVo.setBrRepayTime(repayment.getBrRepayTime());
             BigDecimal finishAmount = repayment.getRepayFinishAmount();
-            detailVo.setRepayFinishAmount(finishAmount==null?BigDecimal.ZERO.toString():finishAmount.toString());
+            detailVo.setRepayFinishAmount(finishAmount == null ? BigDecimal.ZERO.toString() : finishAmount.toString());
             detailVo.setRepayType(repayment.getRepayType().toString());
             detailVo.setFineAmount(repayment.getFineAmount().toString());
             repayDetailVos.add(detailVo);
@@ -242,7 +242,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             payRecordVos.add(payRecordVo);
         });
         detailRes.setOrderPayRecords(payRecordVos);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),detailRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), detailRes);
     }
 
     @Override
@@ -253,25 +253,25 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         if (repayment == null) {
             logger.error("orderRepayOver:repayId is not exist");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         if (!orderPayOverReq.getOrderId().equals(repayment.getOrderId().toString())) {
             logger.error("orderRepayOver:orderId is not exist");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         List<BorrowRepayment> repayments = borrowRepaymentDao.selByOrderId(repayment.getOrderId());
         int orderPayState = 0;
         if (repayment.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()) {
             orderPayState = BoRepayStatusEnum.NORMAL.getCode();
         }
-        for (BorrowRepayment bre :repayments) {
+        for (BorrowRepayment bre : repayments) {
             if (bre.getRepayExpect() < repayment.getRepayExpect()) {
-               if (bre.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()) {
-                   logger.error("orderRepayOver repayexpect is error : repayId={},repayStatus={}");
-                   return ResponseResult.error(ExceptionCode.EXPECT_ERROR.getErrorCode()
-                           ,ExceptionCode.EXPECT_ERROR.getErrorMessage());
-               }
+                if (bre.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()) {
+                    logger.error("orderRepayOver repayexpect is error : repayId={},repayStatus={}");
+                    return ResponseResult.error(ExceptionCode.EXPECT_ERROR.getErrorCode()
+                            , ExceptionCode.EXPECT_ERROR.getErrorMessage());
+                }
             }
             if (bre.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()
                     && bre.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()
@@ -297,7 +297,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
                 thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST, repayment.getFineAmount().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
                 thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_OVERDUE_REPAY_REQUEST.getUrlType());
-            }else {
+            } else {
                 thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_FEE, repayment.getPunishAmount().toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
@@ -314,7 +314,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         borrowRepayment.setRepayType(RepayTypeEnum.PAY_NORMA.getCode());
         borrowRepayment.setRepayFinishAmount(repayment.getRepayAmount());
         borrowRepayment.setBrRepayTime(new Date());
-        borrowRepaymentDao.updateBoRepayment(repayId,borrowRepayment);
+        borrowRepaymentDao.updateBoRepayment(repayId, borrowRepayment);
         borrowOrderDao.upBoPayExpectCount(repayment.getOrderId());
 
         BoOrderPayRecord boOrderPayRecord = new BoOrderPayRecord();
@@ -328,16 +328,22 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         if (orderPayState == BoRepayStatusEnum.NORMAL.getCode()) {
             BorrowOrder borrowOrder = new BorrowOrder();
             borrowOrder.setBoPayState(BoRepayStatusEnum.NORMAL.getCode());
-            borrowOrderDao.updateBorrowOrder(repayment.getOrderId(),borrowOrder);
+            borrowOrderDao.updateBorrowOrder(repayment.getOrderId(), borrowOrder);
         }
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
-    private OrderUpRepayCalRes repaCal(long orderId){
+
+    private OrderUpRepayCalRes repaCal(long orderId) {
         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(orderId);
         if (borrowOrder == null) {
             logger.error("orderUpRepayCal:orderId is not exist");
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
+        UserInfo userInfo = userInfoDao.selInfoByUid(borrowOrder.getUserUid());
+        OrderUpRepayCalRes repayCalRes = new OrderUpRepayCalRes();
+        String payTotalAmount;
+        String payExpect;
+        String finishExpect;
         List<BoProductRate> rateList = boProductRateDao.selProductRateByPUid(borrowOrder.getProductUid());
         BigDecimal earlyPayRate = BigDecimal.ZERO;
         for (BoProductRate productRate : rateList) {
@@ -347,45 +353,78 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
             }
         }
         List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(orderId);
-        BigDecimal payTotalAmount = BigDecimal.ZERO;
-        BigDecimal payTotalCapitalAmount = BigDecimal.ZERO;
-        BigDecimal payTotalInterestAmount = BigDecimal.ZERO;
-        BigDecimal payTotalServiceFee = BigDecimal.ZERO;
-        BigDecimal payTotalPunishAmount = BigDecimal.ZERO;
 
-        BigDecimal earlyPayCostAmount = BigDecimal.ZERO;
-
-        long millTimeNow = System.currentTimeMillis();
-        for (BorrowRepayment repayment : repaymentList) {
-            if (repayment.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()) {
-                payTotalCapitalAmount = payTotalCapitalAmount.add(repayment.getCapitalAmount());
-                long brTime = repayment.getBrTime().getTime();
-                if (brTime < millTimeNow) {
-                    payTotalInterestAmount = payTotalInterestAmount.add(repayment.getInterestAmount());
-                    payTotalServiceFee = payTotalServiceFee.add(repayment.getServiceFee());
-                    payTotalPunishAmount = payTotalPunishAmount.add(repayment.getPunishAmount());
-                }else {
-                    earlyPayCostAmount = earlyPayCostAmount.add(
-                            repayment.getCapitalAmount().multiply(earlyPayRate));
-                    earlyPayCostAmount = earlyPayCostAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
+        List<BorrowRepayment> yesRepay = repaymentList.stream()
+                .filter(re -> re.getRepayStatus() ==  RepayStatusEnum.PAY_YES.getCode()).collect(Collectors.toList());
+        yesRepay.sort(new Comparator<BorrowRepayment>() {
+            @Override
+            public int compare(BorrowRepayment o1, BorrowRepayment o2) {
+                return o2.getRepayExpect() - o1.getRepayExpect();
             }
+        });
+        List<BorrowRepayment> noRepay = repaymentList.stream()
+                .filter(repayment -> repayment.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()).collect(Collectors.toList());
+        if (noRepay.isEmpty()) {
+            throw new BorrowException(ExceptionCode.UP_REPAY_CHECK);
         }
-        payTotalAmount = payTotalCapitalAmount.add(payTotalInterestAmount)
-                .add(payTotalServiceFee).add(earlyPayCostAmount).add(payTotalPunishAmount);
-        OrderUpRepayCalRes repayCalRes = new OrderUpRepayCalRes();
-        repayCalRes.setPayTotalAmount(payTotalAmount.toString());
-        repayCalRes.setPayTotalCapitalAmount(payTotalCapitalAmount.toString());
-        repayCalRes.setPayTotalInterestAmount(payTotalInterestAmount.toString());
-        repayCalRes.setPayTotalServiceFee(payTotalServiceFee.toString());
-        repayCalRes.setEarlyPayCostAmount(earlyPayCostAmount.toString());
+        List<BorrowRepayment> overdueRepay = noRepay.stream()
+                .filter(bt -> bt.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()).collect(Collectors.toList());
+        if (overdueRepay.isEmpty()) {
+            noRepay.sort(new Comparator<BorrowRepayment>() {
+                @Override
+                public int compare(BorrowRepayment o1, BorrowRepayment o2) {
+                    return o1.getRepayExpect() - o2.getRepayExpect();
+                }
+            });
+            List<BorrowRepayment> noRepayCopy = new ArrayList<>(noRepay);
+            BorrowRepayment currRepayment = noRepayCopy.remove(0);
+            BigDecimal currTotalAmount = currRepayment.getInterestAmount()
+                    .add(currRepayment.getServiceFee())
+                    .add(currRepayment.getPunishAmount())
+                    .add(currRepayment.getFineAmount())
+                    .add(currRepayment.getCapitalAmount());
+
+            BigDecimal noPaycapAmount = BigDecimal.valueOf(noRepayCopy.stream()
+                    .mapToDouble(b -> b.getCapitalAmount().doubleValue()).sum())
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal earlyPayRateAmount = noPaycapAmount.multiply(earlyPayRate);
+            payTotalAmount = currTotalAmount
+                    .add(noPaycapAmount)
+                    .add(earlyPayRateAmount)
+                    .setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+            finishExpect = yesRepay.isEmpty() ? "0" : yesRepay.get(0).getRepayExpect().toString();
+            payExpect = currRepayment.getRepayExpect().toString();
+        }else {
+            BigDecimal currTotalAmount =
+                    BigDecimal.valueOf(overdueRepay.stream().mapToDouble(currRepayment-> currRepayment.getInterestAmount()
+                    .add(currRepayment.getServiceFee())
+                    .add(currRepayment.getPunishAmount())
+                    .add(currRepayment.getFineAmount())
+                    .add(currRepayment.getCapitalAmount()).doubleValue()).sum());
+            List<BorrowRepayment> noRepayCopy = new ArrayList<>(noRepay);
+            noRepayCopy.removeAll(overdueRepay);
+            BigDecimal noPaycapAmount  = BigDecimal.valueOf(noRepayCopy.stream()
+                    .mapToDouble(r-> r.getCapitalAmount().doubleValue()).sum());
+            BigDecimal earlyPayRateAmount = noPaycapAmount.multiply(earlyPayRate);
+            payTotalAmount = currTotalAmount.add(noPaycapAmount).add(earlyPayRateAmount)
+                    .setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+            finishExpect = yesRepay.isEmpty() ? "0" : yesRepay.get(0).getRepayExpect().toString();
+            payExpect = noRepay.get(0).getRepayExpect().toString();
+        }
+        repayCalRes.setPayTotalAmount(payTotalAmount);
+        repayCalRes.setPayExpect(payExpect);
+        repayCalRes.setFinishExpect(finishExpect);
+        repayCalRes.setExpectTotal(borrowOrder.getBoExpect().toString());
+        repayCalRes.setUserName(userInfo.getUserName());
+
 
         return repayCalRes;
     }
+
     @Override
     public ResponseResult orderUpRepayCal(OrderUpRepayCalReq orderUpRepayCalReq) {
         long orderId = Long.valueOf(orderUpRepayCalReq.getOrderId());
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),repaCal(orderId));
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), repaCal(orderId));
     }
 
     @Override
@@ -393,64 +432,49 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
     public ResponseResult orderUpRepay(OrderUpRepayReq orderUpRepayReq) {
         long orderId = Long.valueOf(orderUpRepayReq.getOrderId());
         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(orderId);
-
-        List<BoProductRate> rateList = boProductRateDao.selProductRateByPUid(borrowOrder.getProductUid());
-        BigDecimal earlyPayRate = BigDecimal.ZERO;
-        for (BoProductRate productRate : rateList) {
-            if (productRate.getRateKey().equals(ProductRateEnum.EARLY_PAY_RATE.getRateKey())) {
-                earlyPayRate = BigDecimal.valueOf(Double.valueOf(productRate.getRateValue()));
-                break;
-            }
+        if (borrowOrder == null) {
+            logger.error("orderUpRepayCal:orderId is not exist");
+            throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        BigDecimal payTotalAmount = BigDecimal.ZERO;
-        BigDecimal payTotalCapitalAmount = BigDecimal.ZERO;
-        BigDecimal payTotalInterestAmount = BigDecimal.ZERO;
-        BigDecimal payTotalServiceFee = BigDecimal.ZERO;
-        BigDecimal payTotalPunishAmount = BigDecimal.ZERO;
-
-        BigDecimal earlyPayCostAmount = BigDecimal.ZERO;
-        long millTimeNow = System.currentTimeMillis();
         List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(orderId);
-        for (BorrowRepayment repayment : repaymentList) {
-            if (repayment.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()) {
-                payTotalCapitalAmount = payTotalCapitalAmount.add(repayment.getCapitalAmount());
-                long brTime = repayment.getBrTime().getTime();
-                if (brTime < millTimeNow) {
-                    payTotalInterestAmount = payTotalInterestAmount.add(repayment.getInterestAmount());
-                    payTotalServiceFee = payTotalServiceFee.add(repayment.getServiceFee());
-                    payTotalPunishAmount = payTotalPunishAmount.add(repayment.getPunishAmount());
-                }else {
-                    earlyPayCostAmount = earlyPayCostAmount.add(
-                            repayment.getCapitalAmount().multiply(earlyPayRate));
-                    earlyPayCostAmount = earlyPayCostAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
-                BorrowRepayment repay = new BorrowRepayment();
-                repay.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
-                repay.setRepayType(RepayTypeEnum.PAY_UP.getCode());
-                repay.setBrRepayTime(new Date());
-                borrowOrderDao.upBoPayExpectCount(orderId);
-                borrowRepaymentDao.updateBoRepayment(repayment.getRepayId(),repay);
-            }
-        }
-        payTotalAmount = payTotalAmount.add(payTotalCapitalAmount).add(payTotalInterestAmount)
-                .add(payTotalServiceFee).add(earlyPayCostAmount).add(payTotalPunishAmount);
+        //TODO 调用理财端 提前还款接口
 
-        BigDecimal payPrice = BigDecimal.ZERO;
-        if (orderUpRepayReq.getUpPayType().equals(String.valueOf(UpRepayTEnum.MANUAL_PAY_AMOUNT.getCode()))) {
-            payPrice = orderUpRepayReq.getPayAmount();
-        }else {
-            payPrice = payTotalAmount;
+//        XMap thirdParamMap = new XMap();
+//        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(orderId));
+//        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStrddHHmmss(new Date()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD, String.valueOf(repayment.getRepayExpect()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStr(repayment.getBrTime()));
+//        thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT, repayment.getCapitalAmount().toString());
+//        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
+//        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
+//        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
+//        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+//        if (!responseResult.isSucceed()) {
+//            return responseResult;
+//        }
+
+        OrderUpRepayCalRes repayCalRes = repaCal(orderId);
+        List<BorrowRepayment> noRepay = repaymentList.stream()
+                .filter(repayment -> repayment.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()).collect(Collectors.toList());
+        for (BorrowRepayment br : noRepay) {
+            BorrowRepayment repay = new BorrowRepayment();
+            repay.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
+            repay.setRepayType(RepayTypeEnum.PAY_UP.getCode());
+            repay.setBrRepayTime(new Date());
+            borrowOrderDao.upBoPayExpectCount(orderId);
+            borrowRepaymentDao.updateBoRepayment(br.getRepayId(), repay);
         }
-        BoOrderPayRecord boOrder  = new BoOrderPayRecord();
+
+        BoOrderPayRecord boOrder = new BoOrderPayRecord();
         boOrder.setUuid(UUIDProvider.uuid());
         boOrder.setOrderId(orderId);
         boOrder.setOrderPayId(idProvider.genId());
         boOrder.setPayType(RepayTypeEnum.PAY_UP.getCode());
         boOrder.setPayTime(new Date());
-        boOrder.setPayPrice(payPrice);
-        boOrder.setPayTypeDesc(UpRepayTEnum.getName(Integer.valueOf(orderUpRepayReq.getUpPayType())));
+        boOrder.setPayPrice(BigDecimal.valueOf(Double.valueOf(repayCalRes.getPayTotalAmount())));
+        boOrder.setPayTypeDesc(UpRepayTEnum.UP_AUTO_PAY_AMOUNT.getName());
         boOrderPayRecordDao.insertPayOrder(boOrder);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 
     @Override
@@ -460,36 +484,36 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         if (repayment == null) {
             logger.error("orderRepaySurety:repayId is not exist");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         if (repayment.getRepayAmount().compareTo(BigDecimal.ZERO) <= 0) {
             logger.error("orderRepaySurety:RepayAmount is 0");
             return ResponseResult.error(ExceptionCode.AMOUNT_FAIL_ZREO.getErrorCode()
-                    ,ExceptionCode.AMOUNT_FAIL_ZREO.getErrorMessage());
+                    , ExceptionCode.AMOUNT_FAIL_ZREO.getErrorMessage());
         }
         if (!orderPayOverReq.getOrderId().equals(repayment.getOrderId().toString())) {
             logger.error("orderRepaySurety:orderId is not exist");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
-        if(repayment.getRepayStatus() == RepayStatusEnum.PAY_YES.getCode()
+        if (repayment.getRepayStatus() == RepayStatusEnum.PAY_YES.getCode()
                 || repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode()) {
             logger.error("orderRepaySurety:repaystatus is 2");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         if (repayment.getBrTime().getTime() > new Date().getTime()) {
             logger.error("orderRepaySurety:time is error");
             return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode()
-                    ,ExceptionCode.PARAM_ERROR.getErrorMessage());
+                    , ExceptionCode.PARAM_ERROR.getErrorMessage());
         }
         List<BorrowRepayment> repayments = borrowRepaymentDao.selByOrderId(repayment.getOrderId());
-        for (BorrowRepayment bre :repayments) {
+        for (BorrowRepayment bre : repayments) {
             if (bre.getRepayExpect() < repayment.getRepayExpect()) {
                 if (bre.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()) {
                     logger.error("orderRepaySurety repayexpect is error : repayId={},repayStatus={}");
                     return ResponseResult.error(ExceptionCode.EXPECT_ERROR.getErrorCode()
-                            ,ExceptionCode.EXPECT_ERROR.getErrorMessage());
+                            , ExceptionCode.EXPECT_ERROR.getErrorMessage());
                 }
             }
         }
@@ -510,7 +534,7 @@ public class OrderRepayServcieImpl  implements OrderRepayServcie{
         BorrowRepayment repay = new BorrowRepayment();
         repay.setSuretyStatus(SuretyStatusEnum.SURETY_STATUS_YES.getCode());
         repay.setSuretyTime(new Date());
-        borrowRepaymentDao.updateBoRepayment(repayId,repay);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        borrowRepaymentDao.updateBoRepayment(repayId, repay);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 }

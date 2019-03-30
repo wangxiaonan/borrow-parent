@@ -7,10 +7,7 @@ import org.apache.commons.lang.time.DateUtils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,6 +43,12 @@ public class Utility {
         return days;
 
     }
+    public static LocalDate dateToLocalDate(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+        return localDateTime.toLocalDate();
+    }
 
     public static  long getUnixTime() {
 
@@ -67,22 +70,27 @@ public class Utility {
         return DateFormatUtils.format(date,"yyyyMMddHHmmssSSS");
     }
 
-    public static void main(String[] args) {
-        System.out.println(PasswordHelper.encryptPassword("123456"));
-        for (int i = 0; i< 7 ;i++) {
-            System.out.println(UUIDProvider.uuid());
-        }
+    public static  String dateStrddHHmmss(Date date){
+        return DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss");
+    }
 
-        System.out.println(DateFormatUtils.format(new Date(),"yyyyMMddHHmmssSSS"));
-        LocalDateTime localDateTime = LocalDateTime.now();
-        StringBuffer str = new StringBuffer();
-        int year = localDateTime.getYear();
-        int month = localDateTime.getMonthValue();
-        int day = localDateTime.getDayOfMonth();
-        int hour = localDateTime.getHour();
-        int minute = localDateTime.getMinute();
-        int second = localDateTime.getSecond();
-        int nano = localDateTime.getNano();
+    public static void main(String[] args) {
+        System.out.println(dateStrddHHmmss(new Date()));
+//        System.out.println(PasswordHelper.encryptPassword("123456"));
+//        for (int i = 0; i< 7 ;i++) {
+//            System.out.println(UUIDProvider.uuid());
+//        }
+//
+//        System.out.println(DateFormatUtils.format(new Date(),"yyyyMMddHHmmssSSS"));
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        StringBuffer str = new StringBuffer();
+//        int year = localDateTime.getYear();
+//        int month = localDateTime.getMonthValue();
+//        int day = localDateTime.getDayOfMonth();
+//        int hour = localDateTime.getHour();
+//        int minute = localDateTime.getMinute();
+//        int second = localDateTime.getSecond();
+//        int nano = localDateTime.getNano();
 
 //        System.out.println(getBrTime(5));
 //        Date brTime = null;
@@ -95,8 +103,6 @@ public class Utility {
 //        System.out.println(getOverdueDay(brTime));
 //        System.out.println(getUnixTime());
     }
-
-
 
 
 }

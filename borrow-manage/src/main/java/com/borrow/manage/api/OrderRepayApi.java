@@ -134,9 +134,9 @@ public class OrderRepayApi {
         ResponseResult res = null;
 
         if (StringUtils.isEmpty(orderUpRepayReq.getOrderId())
-                || !UpRepayTEnum.isExist(Integer.valueOf(orderUpRepayReq.getUpPayType()))
-                ||(Integer.valueOf(orderUpRepayReq.getUpPayType()) ==UpRepayTEnum.MANUAL_PAY_AMOUNT.getCode()
-                && orderUpRepayReq.getPayAmount() ==null)
+//                || !UpRepayTEnum.isExist(Integer.valueOf(orderUpRepayReq.getUpPayType()))
+//                ||(Integer.valueOf(orderUpRepayReq.getUpPayType()) ==UpRepayTEnum.MANUAL_PAY_AMOUNT.getCode()
+//                && orderUpRepayReq.getPayAmount() ==null)
                 )
 
             res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(), ExceptionCode.PARAM_ERROR.getErrorMessage());

@@ -174,9 +174,41 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-input-block inputBox" id="inputBox">
-                    <p><input type="radio" name="upPayType" title="自动计算提前还款额" value="1" checked/><span id="payTotalAmount"></span></p>
-                    <p><span id="repatDetail" style="color:red;"></span></p>
-                    <p><input type="radio" name="upPayType" title="手工填写提前还款额" value="2"/>：<input id="payAmount" class="repayNum" type="text" /></p>
+
+                    <table  class="layui-table text-center" lay-even>
+                        <thead>
+                        <tr>
+                            <th>用户姓名</th>
+                            <th>借款期数</th>
+                            <th>截止目前应还期数</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="duserName"></td>
+                            <td id="dexpectTotal"></td>
+                            <td id="dpayExpect"></td>
+                        </tr>
+                        </tbody>
+                        <thead>
+                        <tr>
+                            <th>截止目前实际还款期数</th>
+                            <th>提前还款应还金额累计</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="dfinishExpect"></td>
+                            <td id="dpayTotalAmount"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--<p><input type="radio" name="upPayType" title="自动计算提前还款额" value="1" checked/><span id="payTotalAmount"></span></p>-->
+                    <!--<p><span id="repatDetail" style="color:red;"></span></p>-->
+                    <!--<p><input type="radio" name="upPayType" title="手工填写提前还款额" value="2"/>：<input id="payAmount" class="repayNum" type="text" /></p>-->
                 </div>
             </div>
         </form>

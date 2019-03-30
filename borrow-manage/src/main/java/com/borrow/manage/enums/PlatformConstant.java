@@ -78,10 +78,23 @@ public  interface PlatformConstant {
         String PENALTY_FEE = "penaltyFee";
         //罚息
         String PENALTY_INTEREST = "penaltyInterest";
-
-
-
-
+        //总期数
+        String TOTAL_PERIODS = "totalPeriods";
+        //应还期数
+        String MUST_PERIODS = "mustPeriods";
+        //已还期数
+        String ACTUAL_PERIODS = "actualPeriods";
+        //总还款金额
+        String TOTAL_AMOUNT = "totalAmount";
+        //
+        String REPAYMENTS = "REPAYMENTS";
+        String REPAYID = "repayId";
+        String REPAYDATE = "repayDate";
+        String CORPUS = "corpus";
+        String ISCOMPENSATION = "isCompensation";
+        String SERVICEFEE = "serviceFee";
+        String PENALTYFEE = "penaltyFee";
+        String PENALTYINTEREST = "penaltyInterest";
 
     }
 
@@ -97,6 +110,10 @@ public  interface PlatformConstant {
         String COMPENSATORY_REPAY_REQUEST = "compensatoryRepayRequest";
         //逾期还款
         String LOANER_OVERDUE_REPAY_REQUEST = "loanerOverdueRepayRequest";
+        //提前还款接口
+        String LOANER_EARLY_REPAYREQUEST = "loanerEarlyRepayRequest";
+
+
 
     }
 

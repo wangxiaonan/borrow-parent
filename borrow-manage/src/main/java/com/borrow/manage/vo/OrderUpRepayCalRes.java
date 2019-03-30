@@ -6,12 +6,47 @@ package com.borrow.manage.vo;
 public class OrderUpRepayCalRes {
 
     private String payTotalAmount;
-    private String payTotalCapitalAmount;
-    private String payTotalInterestAmount;
 
-    private String payTotalServiceFee;
+    private String userName;
 
-    private String earlyPayCostAmount;
+    private String expectTotal;
+
+    private String payExpect;
+
+    private String finishExpect;
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getExpectTotal() {
+        return expectTotal;
+    }
+
+    public void setExpectTotal(String expectTotal) {
+        this.expectTotal = expectTotal;
+    }
+
+    public String getPayExpect() {
+        return payExpect;
+    }
+
+    public void setPayExpect(String payExpect) {
+        this.payExpect = payExpect;
+    }
+
+    public String getFinishExpect() {
+        return finishExpect;
+    }
+
+    public void setFinishExpect(String finishExpect) {
+        this.finishExpect = finishExpect;
+    }
 
     public String getPayTotalAmount() {
         return payTotalAmount;
@@ -21,35 +56,4 @@ public class OrderUpRepayCalRes {
         this.payTotalAmount = payTotalAmount;
     }
 
-    public String getPayTotalCapitalAmount() {
-        return payTotalCapitalAmount;
-    }
-
-    public void setPayTotalCapitalAmount(String payTotalCapitalAmount) {
-        this.payTotalCapitalAmount = payTotalCapitalAmount;
-    }
-
-    public String getPayTotalInterestAmount() {
-        return payTotalInterestAmount;
-    }
-
-    public void setPayTotalInterestAmount(String payTotalInterestAmount) {
-        this.payTotalInterestAmount = payTotalInterestAmount;
-    }
-
-    public String getPayTotalServiceFee() {
-        return payTotalServiceFee;
-    }
-
-    public void setPayTotalServiceFee(String payTotalServiceFee) {
-        this.payTotalServiceFee = payTotalServiceFee;
-    }
-
-    public String getEarlyPayCostAmount() {
-        return earlyPayCostAmount;
-    }
-
-    public void setEarlyPayCostAmount(String earlyPayCostAmount) {
-        this.earlyPayCostAmount = earlyPayCostAmount;
-    }
 }
