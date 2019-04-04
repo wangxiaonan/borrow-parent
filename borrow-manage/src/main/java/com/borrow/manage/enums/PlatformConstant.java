@@ -87,7 +87,7 @@ public  interface PlatformConstant {
         //总还款金额
         String TOTAL_AMOUNT = "totalAmount";
         //
-        String REPAYMENTS = "REPAYMENTS";
+        String REPAYMENTS = "repayments";
         String REPAYID = "repayId";
         String REPAYDATE = "repayDate";
         String CORPUS = "corpus";
@@ -95,6 +95,8 @@ public  interface PlatformConstant {
         String SERVICEFEE = "serviceFee";
         String PENALTYFEE = "penaltyFee";
         String PENALTYINTEREST = "penaltyInterest";
+
+
 
     }
 
@@ -111,7 +113,7 @@ public  interface PlatformConstant {
         //逾期还款
         String LOANER_OVERDUE_REPAY_REQUEST = "loanerOverdueRepayRequest";
         //提前还款接口
-        String LOANER_EARLY_REPAYREQUEST = "loanerEarlyRepayRequest";
+        String LOANER_EARLY_REPAY_REQUEST = "loanerEarlyRepayRequest";
 
 
 

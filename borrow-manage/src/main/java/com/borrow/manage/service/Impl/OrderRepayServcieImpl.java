@@ -1,8 +1,10 @@
 package com.borrow.manage.service.Impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
+import com.borrow.manage.exception.RemoteException;
 import com.borrow.manage.factory.CarRepayPlanFactory;
 import com.borrow.manage.model.XMap;
 import com.borrow.manage.model.dto.*;
@@ -436,26 +438,36 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             logger.error("orderUpRepayCal:orderId is not exist");
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
+        if (borrowOrder.getBoIsState() == BoIsStateEnum.PAY_OVER.getCode()) {
+            logger.error("orderUpRepayCal:orderId is not exist");
+            throw new BorrowException(ExceptionCode.ORDER_ERROR);
+        }
         List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(orderId);
-        //TODO 调用理财端 提前还款接口
-
-//        XMap thirdParamMap = new XMap();
-//        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(orderId));
-//        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStrddHHmmss(new Date()));
-//        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD, String.valueOf(repayment.getRepayExpect()));
-//        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStr(repayment.getBrTime()));
-//        thirdParamMap.put(PlatformConstant.FundsParam.AMOUNT, repayment.getCapitalAmount().toString());
-//        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
-//        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
-//        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
-//        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
-//        if (!responseResult.isSucceed()) {
-//            return responseResult;
-//        }
 
         OrderUpRepayCalRes repayCalRes = repaCal(orderId);
         List<BorrowRepayment> noRepay = repaymentList.stream()
                 .filter(repayment -> repayment.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()).collect(Collectors.toList());
+
+        //TODO 调用理财端 提前还款接口
+
+        XMap thirdParamMap = new XMap();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(orderId));
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStrddHHmmss(new Date()));
+        thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_PERIODS, borrowOrder.getBoExpect());
+        thirdParamMap.put(PlatformConstant.FundsParam.MUST_PERIODS, borrowOrder.getBoPayExpect()+1);
+        thirdParamMap.put(PlatformConstant.FundsParam.ACTUAL_PERIODS, borrowOrder.getBoPayExpect());
+        thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_AMOUNT, repayCalRes.getPayTotalAmount());
+
+        XMap repaymentsMap = new XMap();
+
+//        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
+//        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
+//        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
+        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        if (!responseResult.isSucceed()) {
+            return responseResult;
+        }
+
         for (BorrowRepayment br : noRepay) {
             BorrowRepayment repay = new BorrowRepayment();
             repay.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
@@ -474,6 +486,10 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         boOrder.setPayPrice(BigDecimal.valueOf(Double.valueOf(repayCalRes.getPayTotalAmount())));
         boOrder.setPayTypeDesc(UpRepayTEnum.UP_AUTO_PAY_AMOUNT.getName());
         boOrderPayRecordDao.insertPayOrder(boOrder);
+
+
+
+
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 
