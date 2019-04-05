@@ -88,13 +88,8 @@ public  interface PlatformConstant {
         String TOTAL_AMOUNT = "totalAmount";
         //
         String REPAYMENTS = "repayments";
-        String REPAYID = "repayId";
-        String REPAYDATE = "repayDate";
         String CORPUS = "corpus";
         String ISCOMPENSATION = "isCompensation";
-        String SERVICEFEE = "serviceFee";
-        String PENALTYFEE = "penaltyFee";
-        String PENALTYINTEREST = "penaltyInterest";
 
 
 

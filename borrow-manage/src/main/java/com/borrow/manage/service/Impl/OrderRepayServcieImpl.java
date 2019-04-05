@@ -452,22 +452,33 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
 
         XMap thirdParamMap = new XMap();
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(orderId));
-        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE, Utility.dateStrddHHmmss(new Date()));
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE,Utility.dateStrddHHmmss(new Date()));
         thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_PERIODS, borrowOrder.getBoExpect());
         thirdParamMap.put(PlatformConstant.FundsParam.MUST_PERIODS, borrowOrder.getBoPayExpect()+1);
         thirdParamMap.put(PlatformConstant.FundsParam.ACTUAL_PERIODS, borrowOrder.getBoPayExpect());
         thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_AMOUNT, repayCalRes.getPayTotalAmount());
 
-        XMap repaymentsMap = new XMap();
-
-//        thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
-//        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
-//        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
+        List<XMap> list = new ArrayList<>();
+        for(BorrowRepayment repayment : noRepay) {
+            XMap repaymentsMap = new XMap();
+            repaymentsMap.put(PlatformConstant.FundsParam.REPAY_ID, repayment.getRepayId());
+            repaymentsMap.put(PlatformConstant.FundsParam.REPAY_DATE,Utility.dateStrddHHmmss(repayment.getBrTime()));
+            repaymentsMap.put(PlatformConstant.FundsParam.PERIOD,repayment.getRepayExpect());
+            repaymentsMap.put(PlatformConstant.FundsParam.CORPUS,repayment.getCapitalAmount());
+            repaymentsMap.put(PlatformConstant.FundsParam.INTEREST,repayment.getInterestAmount());
+            repaymentsMap.put(PlatformConstant.FundsParam.ISCOMPENSATION
+                    ,repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode() ? true : false);
+            repaymentsMap.put(PlatformConstant.FundsParam.SERVICE_FEE,repayment.getServiceFee());
+            repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_FEE,repayment.getPunishAmount());
+            repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST,repayment.getEarlyPayFee());
+            list.add(repaymentsMap);
+        }
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAYMENTS,thirdParamMap);
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_EARLY_REPAY_REQUEST.getUrlType());
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
             return responseResult;
         }
-
         for (BorrowRepayment br : noRepay) {
             BorrowRepayment repay = new BorrowRepayment();
             repay.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
@@ -486,8 +497,6 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         boOrder.setPayPrice(BigDecimal.valueOf(Double.valueOf(repayCalRes.getPayTotalAmount())));
         boOrder.setPayTypeDesc(UpRepayTEnum.UP_AUTO_PAY_AMOUNT.getName());
         boOrderPayRecordDao.insertPayOrder(boOrder);
-
-
 
 
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
