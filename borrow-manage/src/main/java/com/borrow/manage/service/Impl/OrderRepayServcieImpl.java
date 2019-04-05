@@ -473,7 +473,7 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST,repayment.getEarlyPayFee());
             list.add(repaymentsMap);
         }
-        thirdParamMap.put(PlatformConstant.FundsParam.REPAYMENTS,thirdParamMap);
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAYMENTS,list);
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_EARLY_REPAY_REQUEST.getUrlType());
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
