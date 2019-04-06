@@ -1,16 +1,15 @@
 package com.borrow.manage.service.Impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
-import com.borrow.manage.exception.RemoteException;
 import com.borrow.manage.factory.CarRepayPlanFactory;
 import com.borrow.manage.model.XMap;
 import com.borrow.manage.model.dto.*;
 import com.borrow.manage.provider.AbstractCarRepayPlan;
 import com.borrow.manage.provider.RemoteDataCollector;
 import com.borrow.manage.service.OrderRepayServcie;
+import com.borrow.manage.service.ProductService;
 import com.borrow.manage.utils.ExcelData;
 import com.borrow.manage.utils.ExportExcelUtils;
 import com.borrow.manage.utils.UUIDProvider;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,6 +55,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
     private IdProvider idProvider;
     @Autowired
     RemoteDataCollector remoteDataCollectorService;
+
+    @Autowired
+    ProductService productService;
 
 
     @Override
@@ -346,14 +347,8 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         String payTotalAmount;
         String payExpect;
         String finishExpect;
-        List<BoProductRate> rateList = boProductRateDao.selProductRateByPUid(borrowOrder.getProductUid());
-        BigDecimal earlyPayRate = BigDecimal.ZERO;
-        for (BoProductRate productRate : rateList) {
-            if (productRate.getRateKey().equals(ProductRateEnum.EARLY_PAY_RATE.getRateKey())) {
-                earlyPayRate = BigDecimal.valueOf(Double.valueOf(productRate.getRateValue()));
-                break;
-            }
-        }
+        List<BorrowRepayment> calculateOver= new ArrayList<>();
+        BigDecimal earlyPayRate = productService.getRate(ProductRateEnum.EARLY_PAY_RATE,borrowOrder.getProductUid());
         List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(orderId);
 
         List<BorrowRepayment> yesRepay = repaymentList.stream()
@@ -371,6 +366,10 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         }
         List<BorrowRepayment> overdueRepay = noRepay.stream()
                 .filter(bt -> bt.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()).collect(Collectors.toList());
+        long count = overdueRepay.stream().filter(b-> b.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_NO.getCode()).count();
+        if (count > 0L) {
+            throw new BorrowException(ExceptionCode.OVERDUE_NO_SURETY);
+        }
         if (overdueRepay.isEmpty()) {
             noRepay.sort(new Comparator<BorrowRepayment>() {
                 @Override
@@ -385,40 +384,83 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
                     .add(currRepayment.getPunishAmount())
                     .add(currRepayment.getFineAmount())
                     .add(currRepayment.getCapitalAmount());
+            currRepayment.setRepayFinishAmount(currTotalAmount);
+            currRepayment.setRepayType(RepayTypeEnum.PAY_NORMA.getCode());
 
             BigDecimal noPaycapAmount = BigDecimal.valueOf(noRepayCopy.stream()
                     .mapToDouble(b -> b.getCapitalAmount().doubleValue()).sum())
                     .setScale(2, BigDecimal.ROUND_HALF_UP);
-            BigDecimal earlyPayRateAmount = noPaycapAmount.multiply(earlyPayRate);
+            BigDecimal earlyPayRateAmount = BigDecimal.ZERO;
+            for (BorrowRepayment repayment : noRepayCopy) {
+                repayment.setEarlyPayFee(repayment.getCapitalAmount()
+                        .multiply(earlyPayRate).setScale(2, BigDecimal.ROUND_HALF_UP));
+                earlyPayRateAmount = earlyPayRateAmount.add(repayment.getEarlyPayFee());
+                repayment.setRepayFinishAmount(repayment.getCapitalAmount().add(repayment.getEarlyPayFee()));
+                repayment.setRepayType(RepayTypeEnum.PAY_UP.getCode());
+
+            }
             payTotalAmount = currTotalAmount
                     .add(noPaycapAmount)
                     .add(earlyPayRateAmount)
                     .setScale(2, BigDecimal.ROUND_HALF_UP).toString();
             finishExpect = yesRepay.isEmpty() ? "0" : yesRepay.get(0).getRepayExpect().toString();
             payExpect = currRepayment.getRepayExpect().toString();
+            calculateOver.add(currRepayment);
+            calculateOver.addAll(noRepayCopy);
         }else {
-            BigDecimal currTotalAmount =
+            BigDecimal overTotalAmount =
                     BigDecimal.valueOf(overdueRepay.stream().mapToDouble(currRepayment-> currRepayment.getInterestAmount()
                     .add(currRepayment.getServiceFee())
                     .add(currRepayment.getPunishAmount())
                     .add(currRepayment.getFineAmount())
                     .add(currRepayment.getCapitalAmount()).doubleValue()).sum());
+
             List<BorrowRepayment> noRepayCopy = new ArrayList<>(noRepay);
             noRepayCopy.removeAll(overdueRepay);
+            for (BorrowRepayment repayment : overdueRepay) {
+                repayment.setRepayFinishAmount(
+                        repayment.getInterestAmount()
+                                .add(repayment.getServiceFee())
+                                .add(repayment.getPunishAmount())
+                                .add(repayment.getFineAmount())
+                                .add(repayment.getCapitalAmount())
+
+                );
+                repayment.setRepayType(RepayTypeEnum.OVERDUE.getCode());
+            }
+            BorrowRepayment currRepayment = noRepayCopy.remove(0);
+            BigDecimal currTotalAmount = currRepayment.getInterestAmount()
+                    .add(currRepayment.getServiceFee())
+                    .add(currRepayment.getPunishAmount())
+                    .add(currRepayment.getFineAmount())
+                    .add(currRepayment.getCapitalAmount());
+            currRepayment.setRepayFinishAmount(currTotalAmount);
+            currRepayment.setRepayType(RepayTypeEnum.PAY_NORMA.getCode());
+
             BigDecimal noPaycapAmount  = BigDecimal.valueOf(noRepayCopy.stream()
                     .mapToDouble(r-> r.getCapitalAmount().doubleValue()).sum());
-            BigDecimal earlyPayRateAmount = noPaycapAmount.multiply(earlyPayRate);
-            payTotalAmount = currTotalAmount.add(noPaycapAmount).add(earlyPayRateAmount)
+            BigDecimal earlyPayRateAmount = BigDecimal.ZERO;
+            for (BorrowRepayment repayment : noRepayCopy) {
+                repayment.setEarlyPayFee(repayment.getCapitalAmount()
+                        .multiply(earlyPayRate).setScale(2, BigDecimal.ROUND_HALF_UP));
+                earlyPayRateAmount = earlyPayRateAmount.add(repayment.getEarlyPayFee());
+                repayment.setRepayFinishAmount(repayment.getCapitalAmount().add(earlyPayRateAmount));
+                repayment.setRepayType(RepayTypeEnum.PAY_UP.getCode());
+            }
+            payTotalAmount = overTotalAmount.add(currTotalAmount).add(noPaycapAmount).add(earlyPayRateAmount)
                     .setScale(2, BigDecimal.ROUND_HALF_UP).toString();
             finishExpect = yesRepay.isEmpty() ? "0" : yesRepay.get(0).getRepayExpect().toString();
             payExpect = noRepay.get(0).getRepayExpect().toString();
+            calculateOver.addAll(overdueRepay);
+            calculateOver.add(currRepayment);
+            calculateOver.addAll(noRepayCopy);
         }
         repayCalRes.setPayTotalAmount(payTotalAmount);
         repayCalRes.setPayExpect(payExpect);
         repayCalRes.setFinishExpect(finishExpect);
         repayCalRes.setExpectTotal(borrowOrder.getBoExpect().toString());
         repayCalRes.setUserName(userInfo.getUserName());
-
+        repayCalRes.setCalculateOver(calculateOver);
 
         return repayCalRes;
     }
@@ -442,13 +484,10 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             logger.error("orderUpRepayCal:orderId is not exist");
             throw new BorrowException(ExceptionCode.ORDER_ERROR);
         }
-        List<BorrowRepayment> repaymentList = borrowRepaymentDao.selByOrderId(orderId);
-
         OrderUpRepayCalRes repayCalRes = repaCal(orderId);
-        List<BorrowRepayment> noRepay = repaymentList.stream()
-                .filter(repayment -> repayment.getRepayStatus() == RepayStatusEnum.PAY_NO.getCode()).collect(Collectors.toList());
+        List<BorrowRepayment> noRepay = repayCalRes.getCalculateOver();
 
-        //TODO 调用理财端 提前还款接口
+        //TODO 调用理财端提前还款
 
         XMap thirdParamMap = new XMap();
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(orderId));
@@ -464,13 +503,26 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             repaymentsMap.put(PlatformConstant.FundsParam.REPAY_ID, repayment.getRepayId());
             repaymentsMap.put(PlatformConstant.FundsParam.REPAY_DATE,Utility.dateStrddHHmmss(repayment.getBrTime()));
             repaymentsMap.put(PlatformConstant.FundsParam.PERIOD,repayment.getRepayExpect());
-            repaymentsMap.put(PlatformConstant.FundsParam.CORPUS,repayment.getCapitalAmount());
-            repaymentsMap.put(PlatformConstant.FundsParam.INTEREST,repayment.getInterestAmount());
             repaymentsMap.put(PlatformConstant.FundsParam.ISCOMPENSATION
                     ,repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode() ? true : false);
+            repaymentsMap.put(PlatformConstant.FundsParam.CORPUS,repayment.getCapitalAmount());
+            repaymentsMap.put(PlatformConstant.FundsParam.INTEREST,repayment.getInterestAmount());
             repaymentsMap.put(PlatformConstant.FundsParam.SERVICE_FEE,repayment.getServiceFee());
             repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_FEE,repayment.getPunishAmount());
-            repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST,repayment.getEarlyPayFee());
+            repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST,repayment.getFineAmount());
+            repaymentsMap.put(PlatformConstant.FundsParam.EARLY_PENALTY_FEE,repayment.getEarlyPayFee());
+            if (repayment.getRepayType().equals(RepayTypeEnum.PAY_UP.getCode())) {
+                repaymentsMap.put(PlatformConstant.FundsParam.REPAY_TYPE,PlatformConstant.FundsParam.TQ);
+                repaymentsMap.put(PlatformConstant.FundsParam.INTEREST,BigDecimal.ZERO);
+                repaymentsMap.put(PlatformConstant.FundsParam.SERVICE_FEE,BigDecimal.ZERO);
+                repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_FEE,BigDecimal.ZERO);
+                repaymentsMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST,BigDecimal.ZERO);
+            }else if (repayment.getRepayType().equals(RepayTypeEnum.PAY_NORMA.getCode())){
+                repaymentsMap.put(PlatformConstant.FundsParam.REPAY_TYPE,PlatformConstant.FundsParam.ZC);
+            }else if (repayment.getRepayType().equals(RepayTypeEnum.OVERDUE.getCode())) {
+                repaymentsMap.put(PlatformConstant.FundsParam.REPAY_TYPE,PlatformConstant.FundsParam.YQ);
+
+            }
             list.add(repaymentsMap);
         }
         thirdParamMap.put(PlatformConstant.FundsParam.REPAYMENTS,list);
@@ -480,14 +532,11 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             return responseResult;
         }
         for (BorrowRepayment br : noRepay) {
-            BorrowRepayment repay = new BorrowRepayment();
-            repay.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
-            repay.setRepayType(RepayTypeEnum.PAY_UP.getCode());
-            repay.setBrRepayTime(new Date());
+            br.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
+            br.setBrRepayTime(new Date());
             borrowOrderDao.upBoPayExpectCount(orderId);
-            borrowRepaymentDao.updateBoRepayment(br.getRepayId(), repay);
+            borrowRepaymentDao.updateBoRepayment(br.getRepayId(), br);
         }
-
         BoOrderPayRecord boOrder = new BoOrderPayRecord();
         boOrder.setUuid(UUIDProvider.uuid());
         boOrder.setOrderId(orderId);
@@ -498,9 +547,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         boOrder.setPayTypeDesc(UpRepayTEnum.UP_AUTO_PAY_AMOUNT.getName());
         boOrderPayRecordDao.insertPayOrder(boOrder);
 
-
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
+
 
     @Override
     public ResponseResult orderRepaySurety(OrderPayOverReq orderPayOverReq) {

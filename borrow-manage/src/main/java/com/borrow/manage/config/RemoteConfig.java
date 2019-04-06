@@ -12,7 +12,8 @@ public class RemoteConfig {
     @Value("${funds.base.url}")
     public String fundsBaseUrl;
 
-
+    @Value("${funds.flag}")
+    public int fundsFlag = 0;
 
 
 

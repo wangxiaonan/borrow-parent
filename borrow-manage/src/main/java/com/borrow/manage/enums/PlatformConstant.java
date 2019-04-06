@@ -88,9 +88,20 @@ public  interface PlatformConstant {
         String TOTAL_AMOUNT = "totalAmount";
         //
         String REPAYMENTS = "repayments";
+        //本金（元）
         String CORPUS = "corpus";
+        //是否发生代偿
         String ISCOMPENSATION = "isCompensation";
-
+        //提前还款违约金
+        String EARLY_PENALTY_FEE = "earlyPenaltyFee";
+        //还款类型
+        String REPAY_TYPE = "repayType";
+        //逾期
+        String YQ = "YQ";
+        //正常
+        String ZC = "ZC";
+        //提前
+        String TQ = "TQ";
 
 
     }

@@ -12,6 +12,7 @@ import com.borrow.manage.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,5 +59,18 @@ public class ProductServiceImpl implements ProductService{
 
         });
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),listRes);
+    }
+
+    @Override
+    public BigDecimal getRate(ProductRateEnum productRateEnum,String pUid ) {
+        List<BoProductRate> rateList = boProductRateDao.selProductRateByPUid(pUid);
+        BigDecimal earlyPayRate = BigDecimal.ZERO;
+        for (BoProductRate productRate : rateList) {
+            if (productRate.getRateKey().equals(productRateEnum.getRateKey())) {
+                earlyPayRate = BigDecimal.valueOf(Double.valueOf(productRate.getRateValue()));
+                break;
+            }
+        }
+        return earlyPayRate;
     }
 }

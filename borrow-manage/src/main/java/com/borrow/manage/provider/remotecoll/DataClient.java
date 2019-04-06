@@ -46,6 +46,10 @@ public abstract class DataClient {
     protected  abstract String getUrlType();
 
     protected String doSendRequest(String reqParam) {
+        if (remoteConfig.fundsFlag == 1) {
+            logger.info("******远端开关关闭******");
+            return "{\"code\":\"0000\"}";
+        }
         HashMap signatureMap = new HashMap();
         reqParam = ThreeDES.encrypt(reqParam, Properties.THREE_DES_BASE64_KEY,Properties.THREE_DES_IV,Properties.THREE_DES_ALGORITHM);
         signatureMap.put(PlatformConstant.FundsParam.SIGNATURE,reqParam);

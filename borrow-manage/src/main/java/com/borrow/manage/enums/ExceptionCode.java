@@ -24,6 +24,7 @@ public enum ExceptionCode {
     SYS_TOKEN_FAIL("2010006","请重新登录"),
     AMOUNT_FAIL_ZREO("2010007","金额为0"),
     UP_REPAY_CHECK("2010008","确认是否需要提前还款"),
+    OVERDUE_NO_SURETY("2010009","确认逾期代偿订单"),
 
 
     // 3 远端服务调用异常 01 是理财
