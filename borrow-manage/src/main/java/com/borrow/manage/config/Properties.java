@@ -14,7 +14,7 @@ public class Properties {
     public static String THREE_DES_IV;
 
     public static String THREE_DES_ALGORITHM;
-
+    public static String IMAGE_URL;
 
     @Value("${three_des_base64_key}")
     public void setCephAccessKey(String threeDesBase64Key) {
@@ -30,5 +30,10 @@ public class Properties {
     public void setCephEndpoint(String threeDesAlgorithm) {
         THREE_DES_ALGORITHM = threeDesAlgorithm;
     }
+    @Value("${image.url}")
+    public void setImageUrl(String imageUrl) {
+        IMAGE_URL = imageUrl;
+    }
+
 
 }

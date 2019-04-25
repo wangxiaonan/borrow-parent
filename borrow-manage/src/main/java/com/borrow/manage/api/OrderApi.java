@@ -4,26 +4,36 @@ import com.alibaba.fastjson.JSON;
 import com.borrow.manage.enums.ExceptionCode;
 import com.borrow.manage.enums.OrderAuditEnum;
 import com.borrow.manage.service.OrderServcie;
+import com.borrow.manage.service.UploadService;
 import com.borrow.manage.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wxn on 2018/9/12
  */
 @RestController
+@MultipartConfig
 public class OrderApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     OrderServcie  orderServcie;
+
 
     @RequestMapping(value = "/borrow/order/add", method = RequestMethod.POST)
     public ResponseResult addOrder(@RequestBody OrderCreateReq orderCreateReq) {
@@ -125,7 +135,6 @@ public class OrderApi {
         logger.info("<====orderCancel():res={}",res);
         return res;
     }
-
 
 
 

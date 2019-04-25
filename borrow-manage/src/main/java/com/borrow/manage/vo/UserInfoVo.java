@@ -15,6 +15,7 @@ public class UserInfoVo {
     private String workNature;
     private String userEarns;
 
+
     public String getUserName() {
         return userName;
     }
