@@ -17,16 +17,24 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
         ext: 'jpg|png|gif',
         name:"file",
         before:function(input){
-            tempImg = $(input).parents('.layui-input-inline').find('img');
+            tempImg = $(input).parents('.layui-input-inline').find('label');
 
             // //模拟上传成功，线上请删除
             // $(tempImg).attr('src','../../images/user.png');
             // $(tempImg).show();
         },
         success:function (res) {
-            console.log(res);
-            $(tempImg).attr('src',res.src);
-            $(tempImg).show();
+            console.log(res.data);
+            $(tempImg).text(res.data);
+            $('#uploadIdcard').text();
+
+            var url = $('#uploadIdcard').text();
+            aler(url)
+            top.layer.success("上传成功");
+            // console.log(res);
+            // $(tempImg).attr('src',res.src);
+            // $(tempImg).show();
+
         }
     });
 

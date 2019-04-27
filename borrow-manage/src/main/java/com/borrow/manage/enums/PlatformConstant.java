@@ -120,6 +120,8 @@ public  interface PlatformConstant {
         String LOANER_OVERDUE_REPAY_REQUEST = "loanerOverdueRepayRequest";
         //提前还款接口
         String LOANER_EARLY_REPAY_REQUEST = "loanerEarlyRepayRequest";
+        //还款计划
+        String LOANER_GENERATE_REPAY_REQUEST = "loanerGenerateRepayRequest";
 
 
 

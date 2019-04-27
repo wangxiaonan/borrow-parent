@@ -2,11 +2,13 @@ package com.borrow.manage.service.Impl;
 
 import com.borrow.manage.config.Properties;
 import com.borrow.manage.service.UploadService;
+import com.borrow.manage.utils.UUIDProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.UUID;
 
 /**
  * Created by wxn
@@ -18,11 +20,13 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public String upload(MultipartFile multipartFile, String fileName, HttpServletRequest request) throws IOException {
         String path = Properties.IMAGE_URL;
-        File file = new File(path);
+        String savePath = "image" +File.separator+UUIDProvider.uuid();
+        String basePath = path+File.separator+savePath;
+        File file = new File(basePath);
         if (!file.exists()) {//如果文件不存在
             file.mkdirs();
         }
-        String baseUrl = path + File.separator + fileName;
+        String baseUrl =basePath + File.separator + fileName;
         FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(baseUrl));
         byte[] bs = new byte[1024];
@@ -32,7 +36,7 @@ public class UploadServiceImpl implements UploadService {
         }
         bos.flush();
         bos.close();
-        return baseUrl;
+        return Properties.PROJECT_URL+File.separator+savePath+File.separator+fileName;
     }
 
 
