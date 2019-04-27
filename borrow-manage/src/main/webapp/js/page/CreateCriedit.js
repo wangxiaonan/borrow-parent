@@ -11,25 +11,30 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
 
 
     var tempImg = null;
+    var tempImgkey = null;
+
+    var fileNames = {};
 
     layui.upload({
         url:ma.host+"/uploadFile",
         ext: 'jpg|png|gif',
         name:"file",
         before:function(input){
-            tempImg = $(input).parents('.layui-input-inline').find('label');
+            tempImg = $(input).parents('.layui-input-inline').find('img');
+            tempImgkey = $(input).data("key");
 
             // //模拟上传成功，线上请删除
             // $(tempImg).attr('src','../../images/user.png');
             // $(tempImg).show();
         },
         success:function (res) {
-            console.log(res.data);
-            $(tempImg).text(res.data);
-            $('#uploadIdcard').text();
+            $(tempImg).attr({"src":res.data});
+            fileNames[tempImgkey] = res.data;
+            console.log(fileNames);
+            // $('#uploadIdcard').text();
 
-            var url = $('#uploadIdcard').text();
-            aler(url)
+            // var url = $('#uploadIdcard').text();
+            // aler(url)
             top.layer.success("上传成功");
             // console.log(res);
             // $(tempImg).attr('src',res.src);
@@ -41,10 +46,13 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
 
     form.on('submit(orderAdd)', function(data) {
         var formData=data.field;
-        var auditkeys = [];
+        var auditkeys = {};
         for(i in formData){
             if(i.indexOf('auditkeys')>-1){
-                auditkeys.push(formData[i])
+                let key = formData[i];
+                // let data = {};
+                auditkeys[key] = fileNames[key];
+
             }
         };
         var SubmitData={
@@ -65,7 +73,12 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "salesMobile": formData.salesMobile
             },
             "userCar": {
-                "plateNumber": formData.plateNumber
+                "plateNumber": formData.plateNumber,
+                "signTime": formData.signTime,
+                "carModel": formData.carModel,
+                "carColor": formData.carColor,
+                "assessmentPrice": formData.carPrice,
+                "mileageDesc": formData.carKM,
             },
             "borrowOrder": {
                 "boPrice": formData.boPrice,

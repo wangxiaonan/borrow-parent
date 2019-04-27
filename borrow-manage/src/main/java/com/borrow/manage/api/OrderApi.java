@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by wxn on 2018/9/12
@@ -40,7 +41,8 @@ public class OrderApi {
         ResponseResult res = null;
         logger.info("====>addOrder():req={}", orderCreateReq);
 
-        if (checkAddParams(orderCreateReq)) {
+//        if (checkAddParams(orderCreateReq)) {
+        if (true) {
             res= orderServcie.orderAdd(orderCreateReq);
         }else {
             res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
@@ -151,8 +153,8 @@ public class OrderApi {
             return checkStatus;
         }
         if (
-                StringUtils.isEmpty(orderCreateReq.getUserInfo().getCreditDec())
-                || StringUtils.isEmpty(orderCreateReq.getUserInfo().getIdcard())
+//                StringUtils.isEmpty(orderCreateReq.getUserInfo().getCreditDec())||
+                StringUtils.isEmpty(orderCreateReq.getUserInfo().getIdcard())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getIndustry())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getMobile())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getUserEarns())
@@ -190,7 +192,7 @@ public class OrderApi {
         {
             return checkStatus;
         }
-        List<String> authKeys = orderCreateReq.getOrderAudit().getAuditkeys();
+        Set<String> authKeys = orderCreateReq.getOrderAudit().getAuditkeys().keySet();
         for (String s: authKeys) {
             if (StringUtils.isEmpty(OrderAuditEnum.getAuthNameByKey(s))) {
                 return checkStatus;

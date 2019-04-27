@@ -1,20 +1,19 @@
 package com.borrow.manage.vo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by wxn on 2018/9/12
  */
 public class OrderAuditVo {
 
-    private List<String> auditkeys = new ArrayList<>();
+    private Map<String,String> auditkeys = new LinkedHashMap<>();
 
-    public List<String> getAuditkeys() {
+    public Map<String,String> getAuditkeys() {
         return auditkeys;
     }
 
-    public void setAuditkeys(List<String> auditkeys) {
+    public void setAuditkeys(Map<String,String> auditkeys) {
         this.auditkeys = auditkeys;
     }
 }

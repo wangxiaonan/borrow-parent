@@ -18,6 +18,7 @@ import com.borrow.manage.utils.id.IdProvider;
 import com.borrow.manage.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,15 +86,18 @@ public class OrderServcieImpl implements OrderServcie {
         }
         XMap xMapRes = xMapResponseResult.getData();
         String data = xMapRes.getString("data");
-        XMap p = JSON.parseObject(data,XMap.class);
-        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
-        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
-        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
-            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
-        }
-        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
-            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
-        }
+//        XMap p = JSON.parseObject(data,XMap.class);
+//        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
+//        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
+//        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
+//            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
+//        }
+//        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
+//            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
+//        }
+
+
+
         UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
         if (userInfo == null) {
             userInfo = convertUserInfoVo(userInfoVo);
@@ -111,6 +115,8 @@ public class OrderServcieImpl implements OrderServcie {
             borrowSalesman = convertBorrowSalesmanVo(borrowSalesmanVo);
             borrowSalesmanDao.insertBorrowSalesman(borrowSalesman);
         }
+
+
         BorrowOrder borrowOrder = new BorrowOrder();
         borrowOrder.setUuid(UUIDProvider.uuid());
         borrowOrder.setOrderId(idProvider.genId());
@@ -457,9 +463,9 @@ public class OrderServcieImpl implements OrderServcie {
 
     private UserCar convertUserCarVo(UserCarVo userCarVo,String userUid){
         UserCar userCarNew = new UserCar();
+        BeanUtils.copyProperties(userCarVo, userCarNew);
         userCarNew.setUuid(UUIDProvider.uuid());
         userCarNew.setUserUid(userUid);
-        userCarNew.setPlateNumber(userCarVo.getPlateNumber());
         return userCarNew;
     }
     private BorrowSalesman convertBorrowSalesmanVo(BorrowSalesmanVo borrowSalesmanVo) {
@@ -472,7 +478,7 @@ public class OrderServcieImpl implements OrderServcie {
 
     private List<BoOrderAudit> convertOrderAudit(OrderAuditVo orderAuditVo, long orderId){
         List<BoOrderAudit> boOrderAudits = new ArrayList<>();
-        orderAuditVo.getAuditkeys().stream().forEach( s -> {
+        orderAuditVo.getAuditkeys().forEach((s, v) -> {
             BoOrderAudit boOrderAudit = new BoOrderAudit();
             boOrderAudit.setUuid(UUIDProvider.uuid());
             boOrderAudit.setOrderId(orderId);
@@ -480,6 +486,7 @@ public class OrderServcieImpl implements OrderServcie {
             boOrderAudit.setAuditKey(s);
             boOrderAudit.setAuthName(OrderAuditEnum.getAuthNameByKey(s));
             boOrderAudit.setAuditValue(OrderAuditEnum.getAuthCodeByKey(s));
+            boOrderAudit.setAuditFileUrl(v);
             boOrderAudits.add(boOrderAudit);
         });
         return boOrderAudits;
