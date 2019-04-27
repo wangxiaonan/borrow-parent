@@ -27,7 +27,6 @@ import java.util.Map;
  * Created by wxn on 2018/9/12
  */
 @RestController
-@MultipartConfig
 public class OrderApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
