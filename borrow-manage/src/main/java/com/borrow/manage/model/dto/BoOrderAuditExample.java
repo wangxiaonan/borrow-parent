@@ -1084,6 +1084,76 @@ public class BoOrderAuditExample {
             addCriterion("audit_time not between", value1, value2, "auditTime");
             return (Criteria) this;
         }
+
+        public Criteria andAuditFileUrlIsNull() {
+            addCriterion("audit_file_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlIsNotNull() {
+            addCriterion("audit_file_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlEqualTo(String value) {
+            addCriterion("audit_file_url =", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlNotEqualTo(String value) {
+            addCriterion("audit_file_url <>", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlGreaterThan(String value) {
+            addCriterion("audit_file_url >", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("audit_file_url >=", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlLessThan(String value) {
+            addCriterion("audit_file_url <", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlLessThanOrEqualTo(String value) {
+            addCriterion("audit_file_url <=", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlLike(String value) {
+            addCriterion("audit_file_url like", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlNotLike(String value) {
+            addCriterion("audit_file_url not like", value, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlIn(List<String> values) {
+            addCriterion("audit_file_url in", values, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlNotIn(List<String> values) {
+            addCriterion("audit_file_url not in", values, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlBetween(String value1, String value2) {
+            addCriterion("audit_file_url between", value1, value2, "auditFileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditFileUrlNotBetween(String value1, String value2) {
+            addCriterion("audit_file_url not between", value1, value2, "auditFileUrl");
+            return (Criteria) this;
+        }
     }
 
     /**
