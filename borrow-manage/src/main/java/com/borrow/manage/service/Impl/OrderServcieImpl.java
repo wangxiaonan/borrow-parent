@@ -377,14 +377,17 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO,loanCarInfoMap);
         //图片添加
         List<LoanPicInfoVo> picInfoVos = new ArrayList<>();
-        LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-        loanPicInfo.setName(PlatformConstant.FundsParam.ICARD_DESC);
-        loanPicInfo.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_IDARD.getAuthKey()).toString());
-        picInfoVos.add(loanPicInfo);
-        LoanPicInfoVo loanPicInfo2 = new LoanPicInfoVo();
-        loanPicInfo2.setName(PlatformConstant.FundsParam.VEHICLE_LICENSE);
-        loanPicInfo2.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()).toString());
-        picInfoVos.add(loanPicInfo2);
+        if (auditsUrlkeys.get(OrderAuditEnum.AUTH_IDARD.getAuthKey()) != null) {
+            LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+            loanPicInfo.setName(PlatformConstant.FundsParam.ICARD_DESC);
+            loanPicInfo.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_IDARD.getAuthKey()).toString());
+            picInfoVos.add(loanPicInfo);
+        }
+        if(auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()) != null) {
+            LoanPicInfoVo loanPicInfo2 = new LoanPicInfoVo();
+            loanPicInfo2.setName(PlatformConstant.FundsParam.VEHICLE_LICENSE);
+            loanPicInfo2.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()).toString());
+        }
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO,picInfoVos);
 
         XMap borrowerInfoMap = new XMap();

@@ -1,8 +1,10 @@
 package com.borrow.manage.factory;
 
 import com.borrow.manage.enums.DataClientEnum;
+import com.borrow.manage.provider.remotecoll.CompensatoryRepayDataClient;
 import com.borrow.manage.provider.remotecoll.DataClient;
 import com.borrow.manage.provider.remotecoll.LoanerEarlyRepayRequestClient;
+import com.borrow.manage.provider.remotecoll.LoanerGenerateRepayRequestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +25,9 @@ public class DataClientFactory {
     @Autowired
     DataClient overdueRepayRequestClient;
     @Autowired
-    LoanerEarlyRepayRequestClient loanerEarlyRepayRequestClient;
+    DataClient loanerEarlyRepayRequestClient;
+    @Autowired
+    DataClient loanerGenerateRepayRequestClient;
 
     public DataClient  getDataClient(String urlType){
         DataClientEnum dataClientEnum = DataClientEnum.getEnum(urlType);
@@ -40,6 +44,8 @@ public class DataClientFactory {
                 return this.overdueRepayRequestClient;
             case LOANER_EARLY_REPAY_REQUEST:
                 return this.loanerEarlyRepayRequestClient;
+            case LOANER_GENERATE_REPAY_REQUEST:
+                return this.loanerGenerateRepayRequestClient;
 
         }
         return null;

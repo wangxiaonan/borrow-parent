@@ -19,13 +19,12 @@ import java.util.UUID;
 public class UploadServiceImpl implements UploadService {
     @Override
     public String upload(MultipartFile multipartFile, String fileName, HttpServletRequest request) throws IOException {
-        String path = Properties.IMAGE_URL;
-        String savePath = "image" +File.separator+UUIDProvider.uuid();
-        String basePath = path+File.separator+savePath;
+        String basePath = Properties.IMAGE_URL;
         File file = new File(basePath);
         if (!file.exists()) {//如果文件不存在
             file.mkdirs();
         }
+        fileName = UUIDProvider.uuid()+"—"+fileName;
         String baseUrl =basePath + File.separator + fileName;
         FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(baseUrl));
@@ -36,7 +35,7 @@ public class UploadServiceImpl implements UploadService {
         }
         bos.flush();
         bos.close();
-        return Properties.PROJECT_URL+File.separator+savePath+File.separator+fileName;
+        return Properties.PROJECT_URL+File.separator+fileName;
     }
 
 
