@@ -103,6 +103,7 @@ public  interface PlatformConstant {
         //提前
         String TQ = "TQ";
 
+        String BORROWER_INFO = "borrowerInfo";
         String LOAN_CAR_INFO = "loanCarInfo";
         String LOAN_PIC_INFO = "loanPicInfo";
         String LOAN_HUOSE_INFO = "loanHuoseInfo";
@@ -116,6 +117,15 @@ public  interface PlatformConstant {
 
         String ICARD_DESC = "身份证";
         String VEHICLE_LICENSE = "驾驶证";
+
+        String MARRIAGE_STATUS ="marriageStatus";
+
+        String CHILDREN_DESC ="childrenDesc";
+        String DEBT_DESC ="debtDesc";
+        String GURANTEE ="gurantee";
+        String FIRSTREPAY ="firstRepay";
+        String OTHERINFO ="otherInfo";
+
 
     }
 

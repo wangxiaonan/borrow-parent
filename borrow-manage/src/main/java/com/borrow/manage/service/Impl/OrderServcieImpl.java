@@ -353,6 +353,10 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.GUARANTEE_INFO_DESC,borrowOrder.getBoPaySource());
 
         List<BoOrderAudit> boOrderAudits = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
+        Map auditsUrlkeys = new HashMap();
+        boOrderAudits.stream().forEach( orderAudit -> {
+            auditsUrlkeys.put(orderAudit.getAuditKey(),orderAudit.getAuditFileUrl());
+        });
         List<AuditStatusVo> mapList = new ArrayList<>();
         boOrderAudits.stream().forEach(boOrderAudit -> {
             AuditStatusVo statusVo = new AuditStatusVo();
@@ -360,11 +364,36 @@ public class OrderServcieImpl implements OrderServcie {
             statusVo.setAudit(OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
             mapList.add(statusVo);
         });
+        thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
+
         UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(),borrowOrder.getPlateNumber());
         XMap loanCarInfoMap = new XMap();
-//        loanCarInfoMap.put();
+        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MODEL,userCar.getCarModel());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.COLOR,userCar.getCarColor());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.REGISTTIME,userCar.getSignTime());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.ESTIMATEVALUE,userCar.getAssessmentPrice());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER,userCar.getPlateNumber());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE,userCar.getMileageDesc());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO,loanCarInfoMap);
 
-        thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
+        XMap loanPicInfoMap = new XMap();
+        loanPicInfoMap.put(PlatformConstant.FundsParam.ICARD_DESC,auditsUrlkeys.get(OrderAuditEnum.AUTH_IDARD.getAuthKey()));
+        loanPicInfoMap.put(PlatformConstant.FundsParam.VEHICLE_LICENSE,auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO,loanPicInfoMap);
+
+        XMap borrowerInfoMap = new XMap();
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME,userInfo.getUserName());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_PHONE,userInfo.getMobile());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY,userInfo.getIndustry());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.JOB_DESC,userInfo.getWorkNature());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.INCOMING_DESC,userInfo.getUserEarns());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.MARRIAGE_STATUS,userInfo.getMarriageStatus());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.CHILDREN_DESC,userInfo.getChildrenDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.DEBT_DESC,userInfo.getLiabilitiesDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.GURANTEE,userInfo.getGuaranteeDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.FIRSTREPAY,borrowOrder.getBoPaySource());
+        thirdParamMap.put(PlatformConstant.FundsParam.BORROWER_INFO,borrowerInfoMap);
 
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
         //TODO 筹标

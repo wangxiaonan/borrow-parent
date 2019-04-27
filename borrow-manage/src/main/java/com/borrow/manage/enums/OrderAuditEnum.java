@@ -20,7 +20,7 @@ public enum  OrderAuditEnum {
     CAR_MOTOR("车辆发动机照片","CAR_MOTOR","11"),
     CAR_NUMBER("铭牌照片","CAR_NUMBER","12"),
     AUTH_OTHER("其它审核资料","AUTH_OTHER","14"),
-    AUTH_MORTGAGE("抵押手续办理","MORTGAGE","5")
+    AUTH_MORTGAGE("抵押手续办理","MORTGAGE","15")
 
     ;
 
