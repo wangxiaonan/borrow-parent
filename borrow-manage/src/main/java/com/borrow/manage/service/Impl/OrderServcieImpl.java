@@ -1,6 +1,5 @@
 package com.borrow.manage.service.Impl;
 
-import com.alibaba.fastjson.JSON;
 import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
@@ -414,21 +413,34 @@ public class OrderServcieImpl implements OrderServcie {
         if (borrowOrder == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        UserInfo userInfo = userInfoDao.selInfoByUid(borrowOrder.getUserUid());
+        String userUid = borrowOrder.getUserUid();
+        UserInfo userInfo = userInfoDao.selInfoByUid(userUid);
+        UserCar userCar = userCarDao.selByPlateNO(userUid, borrowOrder.getPlateNumber());
         if (userInfo == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
         List<BoOrderAudit> auditList = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
-        List<String> auditkeys = new ArrayList<>();
+        Map<String, String> auditkeys = new LinkedHashMap<>();
         auditList.stream().forEach(boOrderAudit -> {
-            auditkeys.add(boOrderAudit.getAuditKey());
+            auditkeys.put(boOrderAudit.getAuditKey(), boOrderAudit.getAuditFileUrl());
         });
-        OrderDetailRes detailRes = new OrderDetailRes();
+         OrderDetailRes detailRes = new OrderDetailRes();
+        userInfo.getChildrenDesc();
+        userInfo.getWorkNature();
+        userInfo.getUserEarns();
+        userInfo.getLiabilitiesDesc();
+        userInfo.getGuaranteeDesc();
         detailRes.setBoPaySource(borrowOrder.getBoPaySource());
-        detailRes.setIndustry(userInfo.getIndustry());
-        detailRes.setUserEarns(userInfo.getUserEarns());
-        detailRes.setWorkNature(userInfo.getWorkNature());
-        detailRes.setCreditDec(userInfo.getCreditDec());
+        BeanUtils.copyProperties(userInfo, detailRes);
+        BeanUtils.copyProperties(userCar,detailRes);
+
+
+//        $('#carModel').html(res.data.carModel);
+//        $('#carColor').html(res.data.carColor);
+//        $('#signTime').html(res.data.signTime);
+//        $('#assessmentPrice').html(res.data.assessmentPrice);
+//        $('#plateNumber').html(res.data.plateNumber);
+//        $('#mileageDesc').html(res.data.mileageDesc);
         detailRes.setAuditkeys(auditkeys);
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),detailRes);
     }
@@ -487,10 +499,19 @@ public class OrderServcieImpl implements OrderServcie {
         userNew.setIdcard(userInfoVo.getIdcard());
         userNew.setMobile(userInfoVo.getMobile());
         userNew.setCreditStatus(0);
-        userNew.setCreditDec(userInfoVo.getCreditDec());
-        userNew.setIndustry(userInfoVo.getIndustry());
         userNew.setWorkNature(userInfoVo.getWorkNature());
         userNew.setUserEarns(userInfoVo.getUserEarns());
+        userNew.setSex(userInfoVo.getSex());
+//        `user_earns` varchar(50) NOT NULL DEFAULT '' COMMENT '收入',
+//                `sex` int(11) NOT NULL DEFAULT '1' COMMENT '性别 1男 2女',
+//                `marriage_status` int(3) NOT NULL DEFAULT '3' COMMENT '1 未婚 2已婚 3其他',
+//                `children_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '子女情况',
+//                `liabilities_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '负债情况',
+//                `guarantee_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '担保措施',
+        userNew.setMarriageStatus(userInfoVo.getMarriage());
+        userNew.setChildrenDesc(userInfoVo.getChildren());
+        userNew.setLiabilitiesDesc(userInfoVo.getUserDebts());
+        userNew.setGuaranteeDesc(userInfoVo.getUserAssure());
         return userNew;
     }
 
