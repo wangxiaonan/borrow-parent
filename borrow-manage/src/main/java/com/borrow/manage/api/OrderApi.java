@@ -40,8 +40,7 @@ public class OrderApi {
         ResponseResult res = null;
         logger.info("====>addOrder():req={}", orderCreateReq);
 
-//        if (checkAddParams(orderCreateReq)) {
-        if (true) {
+        if (checkAddParams(orderCreateReq)) {
             res= orderServcie.orderAdd(orderCreateReq);
         }else {
             res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
@@ -157,7 +156,7 @@ public class OrderApi {
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getMobile())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getUserEarns())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getUserName())
-                || StringUtils.isEmpty(orderCreateReq.getUserInfo().getWorkNature())
+//                || StringUtils.isEmpty(orderCreateReq.getUserInfo().getWorkNature())
                 )
         {
             return checkStatus;

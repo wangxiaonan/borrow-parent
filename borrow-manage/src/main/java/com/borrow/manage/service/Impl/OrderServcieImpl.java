@@ -1,5 +1,6 @@
 package com.borrow.manage.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
@@ -85,15 +86,15 @@ public class OrderServcieImpl implements OrderServcie {
         }
         XMap xMapRes = xMapResponseResult.getData();
         String data = xMapRes.getString("data");
-//        XMap p = JSON.parseObject(data,XMap.class);
-//        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
-//        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
-//        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
-//            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
-//        }
-//        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
-//            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
-//        }
+        XMap p = JSON.parseObject(data,XMap.class);
+        String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
+        String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
+        if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
+            throw new BorrowException(ExceptionCode.USER_CHECK_OPEN);
+        }
+        if (!PlatformConstant.FundsParam.USER_TYPE_LOAN.equals(userType)) {
+            throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
+        }
 
 
 
@@ -374,11 +375,17 @@ public class OrderServcieImpl implements OrderServcie {
         loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER,userCar.getPlateNumber());
         loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE,userCar.getMileageDesc());
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO,loanCarInfoMap);
-
-        XMap loanPicInfoMap = new XMap();
-        loanPicInfoMap.put(PlatformConstant.FundsParam.ICARD_DESC,auditsUrlkeys.get(OrderAuditEnum.AUTH_IDARD.getAuthKey()));
-        loanPicInfoMap.put(PlatformConstant.FundsParam.VEHICLE_LICENSE,auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO,loanPicInfoMap);
+        //图片添加
+        List<LoanPicInfoVo> picInfoVos = new ArrayList<>();
+        LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+        loanPicInfo.setName(PlatformConstant.FundsParam.ICARD_DESC);
+        loanPicInfo.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_IDARD.getAuthKey()).toString());
+        picInfoVos.add(loanPicInfo);
+        LoanPicInfoVo loanPicInfo2 = new LoanPicInfoVo();
+        loanPicInfo2.setName(PlatformConstant.FundsParam.VEHICLE_LICENSE);
+        loanPicInfo2.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()).toString());
+        picInfoVos.add(loanPicInfo2);
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO,picInfoVos);
 
         XMap borrowerInfoMap = new XMap();
         borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME,userInfo.getUserName());
@@ -393,6 +400,9 @@ public class OrderServcieImpl implements OrderServcie {
         borrowerInfoMap.put(PlatformConstant.FundsParam.GURANTEE,userInfo.getGuaranteeDesc());
         borrowerInfoMap.put(PlatformConstant.FundsParam.FIRSTREPAY,borrowOrder.getBoPaySource());
         thirdParamMap.put(PlatformConstant.FundsParam.BORROWER_INFO,borrowerInfoMap);
+        //房产信息
+        XMap loanHuoseInfo = new XMap();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO,loanHuoseInfo);
 
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
         //TODO 筹标

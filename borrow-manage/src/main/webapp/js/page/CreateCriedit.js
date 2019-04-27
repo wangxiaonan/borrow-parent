@@ -86,8 +86,8 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "signTime": formData.signTime,
                 "carModel": formData.carModel,
                 "carColor": formData.carColor,
-                "assessmentPrice": formData.carPrice,
-                "mileageDesc": formData.carKM,
+                "assessmentPrice": formData.assessmentPrice,
+                "mileageDesc": formData.mileageDesc,
             },
             "borrowOrder": {
                 "boPrice": formData.boPrice,
@@ -115,20 +115,20 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
         ma.ajax(addUser);
         return false;
     });
-
-    form.on('select(inputType)',function (data) {
-        var code = data.value;
-
-        //车贷产品
-        if(code == '0003'||code == '0004'||code == '0005'||code == '0006'||code == '0007'||code == '0008'){
-            $('#inputType').val('carInput');
-            changeInputType('car');
-        }else {
-            //房贷产品
-            $('#inputType').val('houseInput');
-            changeInputType('house');
-        }
-    });
+    // 切换房贷
+    // form.on('select(inputType)',function (data) {
+    //     var code = data.value;
+    //
+    //     //车贷产品
+    //     if(code == '0003'||code == '0004'||code == '0005'||code == '0006'||code == '0007'||code == '0008'){
+    //         $('#inputType').val('carInput');
+    //         changeInputType('car');
+    //     }else {
+    //         //房贷产品
+    //         $('#inputType').val('houseInput');
+    //         changeInputType('house');
+    //     }
+    // });
 
     $("#addPlanSubmit").click(function() {
         var pCode = $('#productCode').val();

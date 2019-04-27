@@ -174,8 +174,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
         for (j in auditkeysArr) {
             if (arr[auditkeysArr[j]] != undefined) {
                 $('#' + auditkeysArr[j]).prop("checked", true);
-                images += "<label>" + $('#' + auditkeysArr[j]).attr("title") + "</label>" +
-                    "<image src = " + arr[auditkeysArr[j]] + "></image>";
+                // images += "<label>" + $('#' + auditkeysArr[j]).attr("title") + "</label>" +
+                //     "<image src = " + arr[auditkeysArr[j]] + "></image>";
+                images +="<image src = " + arr[auditkeysArr[j]] + "></image>";
             }
             // if (flag) {
             // }else {
@@ -184,7 +185,6 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
             $("#images").html(images);
             form.render("checkbox");
         }
-
 
     }
 
