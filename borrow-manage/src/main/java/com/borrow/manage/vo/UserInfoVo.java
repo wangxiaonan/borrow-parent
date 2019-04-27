@@ -5,23 +5,23 @@ package com.borrow.manage.vo;
  */
 public class UserInfoVo {
 
-
-    private String userName;
+    private String userEarns;
     private String idcard;
     private String mobile;
-
-    private String creditDec;
-    private String industry;
+    private int sex;
+    private String userName;
+    private int marriage;
+    private String children;
     private String workNature;
-    private String userEarns;
+    private String userDebts;
+    private String userAssure;
 
-
-    public String getUserName() {
-        return userName;
+    public String getUserEarns() {
+        return userEarns;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserEarns(String userEarns) {
+        this.userEarns = userEarns;
     }
 
     public String getIdcard() {
@@ -40,20 +40,36 @@ public class UserInfoVo {
         this.mobile = mobile;
     }
 
-    public String getCreditDec() {
-        return creditDec;
+    public int getSex() {
+        return sex;
     }
 
-    public void setCreditDec(String creditDec) {
-        this.creditDec = creditDec;
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 
-    public String getIndustry() {
-        return industry;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setIndustry(String industry) {
-        this.industry = industry;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getMarriage() {
+        return marriage;
+    }
+
+    public void setMarriage(int marriage) {
+        this.marriage = marriage;
+    }
+
+    public String getChildren() {
+        return children;
+    }
+
+    public void setChildren(String children) {
+        this.children = children;
     }
 
     public String getWorkNature() {
@@ -64,11 +80,19 @@ public class UserInfoVo {
         this.workNature = workNature;
     }
 
-    public String getUserEarns() {
-        return userEarns;
+    public String getUserDebts() {
+        return userDebts;
     }
 
-    public void setUserEarns(String userEarns) {
-        this.userEarns = userEarns;
+    public void setUserDebts(String userDebts) {
+        this.userDebts = userDebts;
+    }
+
+    public String getUserAssure() {
+        return userAssure;
+    }
+
+    public void setUserAssure(String userAssure) {
+        this.userAssure = userAssure;
     }
 }

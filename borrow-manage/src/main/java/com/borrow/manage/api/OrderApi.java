@@ -154,7 +154,6 @@ public class OrderApi {
         if (
 //                StringUtils.isEmpty(orderCreateReq.getUserInfo().getCreditDec())||
                 StringUtils.isEmpty(orderCreateReq.getUserInfo().getIdcard())
-                || StringUtils.isEmpty(orderCreateReq.getUserInfo().getIndustry())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getMobile())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getUserEarns())
                 || StringUtils.isEmpty(orderCreateReq.getUserInfo().getUserName())

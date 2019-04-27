@@ -47,11 +47,16 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
     form.on('submit(orderAdd)', function(data) {
         var formData=data.field;
         var auditkeys = {};
+        debugger;
         for(i in formData){
             if(i.indexOf('auditkeys')>-1){
                 let key = formData[i];
                 // let data = {};
-                auditkeys[key] = fileNames[key];
+                if (!fileNames[key]) {
+                    auditkeys[key] = "";
+                } else {
+                    auditkeys[key] = fileNames[key];
+                }
 
             }
         };
@@ -60,10 +65,14 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "userEarns": formData.userEarns,
                 "idcard": formData.idcard,
                 "mobile": formData.mobile,
-                "industry": formData.industry,
+                "industry": formData.sex,
                 "userName": formData.userName,
-                "creditDec": formData.creditDec,
-                "workNature": formData.workNature
+                "marriage": formData.marriage,
+                "children": formData.children,
+                "workNature": formData.workNature,
+                "userEarns": formData.userEarns,
+                "userDebts": formData.userDebts,
+                "userAssure": formData.userAssure,
             },
             "orderAudit": {
                 "auditkeys": auditkeys

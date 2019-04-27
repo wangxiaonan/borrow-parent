@@ -9,251 +9,307 @@
     <script src="../../js/lib/layui/layui.js"></script>
     <script src="../../js/local/common.js"></script>
     <style type="text/css">
-        .borderNone{
+        .borderNone {
         }
-        .checkboxSpan span{
+
+        .checkboxSpan span {
             padding: 0 20px;
         }
     </style>
 </head>
 <body>
-    <div class="layui-page">
-        <form class="layui-form">
-            <div class="layui-form-item">
-                <label class="layui-form-label">客户姓名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="userName"  placeholder="请输入客户姓名" autocomplete="off" class="layui-input">
-                </div>
-                <label class="layui-form-label">客户手机号</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="mobile" placeholder="请输入客户手机号" autocomplete="off" class="layui-input">
-                </div>
-                <label class="layui-form-label">车牌号</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="plateNumber"  placeholder="请输入车牌号" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <!--<div class="layui-inline">-->
-                    <label class="layui-form-label">申请时间</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="createTimeStart" id="createTimeStart" placeholder="起始时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="createTimeEnd" id="createTimeEnd" placeholder="结束时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" autocomplete="off" class="layui-input">
-                    </div>
-                <!--</div>-->
-                <!--<div class="layui-inline">-->
-                    <label class="layui-form-label">放款时间</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="boFinishTimeStart" id="boFinishTimeStart" placeholder="起始时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="boFinishTimeEnd" id="boFinishTimeEnd" placeholder="结束时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" autocomplete="off" class="layui-input">
-                    </div>
-                <!--</div>-->
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">借款产品</label>
-                <div class="layui-input-inline">
-                    <select name="pCode" id="pCode">
-                        <option value=""></option>
-                        <!--<option value="0003">车贷3期-4%-2%</option>-->
-                        <!--<option value="0004">车贷6期-7.5%-4.5%</option>-->
-                        <!--<option value="0005">车贷6期-7%-5%</option>-->
-                        <!--<option value="0006">车贷12期-12%-12%</option>-->
-                        <!--<option value="0007">车贷12期-10.4%-13.6%</option>-->
-                        <!--<option value="0008">车贷3期-等额本息</option>-->
-
-                    </select>
-                </div>
-                <label class="layui-form-label">借款状态</label>
-                <div class="layui-input-inline">
-                    <select name="boIsState" >
-                        <option value=""></option>
-                        <option value="1">待筹标</option>
-                        <option value="2">筹标中</option>
-                        <option value="3">已流标</option>
-                        <option value="4">已放款</option>
-                        <option value="5">还款中</option>
-                        <option value="6">已还款</option>
-
-                    </select>
-                </div>
-                <div class="layui-inline">
-                    <button uitype="reset" class="layui-btn lay-btn-normal" lay-submit lay-filter="searchCredit"  id="searchCreditSubmit">查询</button>
-                    <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="searchCreditExport">导出</button>
-                </div>
-            </div>
-        </form>
-        <!-- 表格dom结构 -->
-        <script id="view" type="text/html">
-            <table  class="layui-table text-center" lay-even>
-                <thead>
-                    <tr>
-                        <th>借款ID</th>
-                        <th>申请时间</th>
-                        <th>客户姓名</th>
-                        <th>身份证号</th>
-                        <th>手机号</th>
-                        <th>车牌号</th>
-                        <th>销售人员</th>
-                        <th>销售手机号</th>
-                        <th>借款金额</th>
-                        <th>借款产品名称</th>
-                        <th>期数</th>
-                        <th>状态</th>
-                        <th>放款时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{# layui.each(d.rows,function(index,item){ }}
-                    <tr>
-                        <td class="text-center">{{item.orderId}}</td>
-                        <!--<td><a class="link">{{item.createTime?ma.format(item.createTime,'yyyy-MM-dd HH:mm:ss'):''}}</a></td>-->
-                        <td><a class="link">{{item.createTime}}</a></td>
-                        <td><a class="link">{{item.userName}}</a></td>
-                        <td>{{item.idcard}}</td>
-                        <td>{{item.mobile}}</td>
-                        <td><a class="link">{{item.plateNumber}}</a></td>
-                        <td>{{item.salesName}}</td>
-
-                        <td>{{item.salesMobile}}</td>
-                        <td><a class="link">{{item.boPrice}}</a></td>
-                        <td>{{item.productName}}</td>
-                        <td>{{item.boExpect}}</td>
-                        <td>
-                            {{#if(item.boIsState==1){ }}
-                            <span style="color:#FF5722">待筹标</span>
-                            {{#}else if(item.boIsState==2){}}
-                            <span>筹标中</span>
-                            {{#}else if(item.boIsState==3){}}
-                            <span>已流标</span>
-                            {{#}else if(item.boIsState==4){}}
-                            <span>已放款</span>
-                            {{#}else if(item.boIsState==5){}}
-                            <span>还款中</span>
-                            {{#}else if(item.boIsState==6){}}
-                            <span>已还款</span>
-                            {{# }else{  }}
-                            <span></span>
-                            {{#};}}
-                        </td>
-                        <td><a class="link">{{item.boFinishTime}}</a></td>
-                        <td>
-                            {{# if(item.boIsState==2 || item.boIsState==3){}}
-                            <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
-                            {{#}else if(item.boIsState==1){}}
-                            <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
-                            <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.confirm()">确认筹标</a>
-                            <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.cancel()">取消</a>
-                            {{#}else{}}
-                            <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
-                            <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.plan()">还款计划</a>
-                            {{#};}}
-                        </td>
-                    </tr>
-                    {{# }); }}
-                </tbody>
-            </table>
-        </script>
-        <div id="creditTable" style="width:100%;"></div>
-        <div id='laypage'></div>
-    </div>
-    <!-- 弹框详情dom结构 -->
-    <div id='dialog1' class="hide">
-        <table class="layui-table layui-form" lay-skin="line">
-            <thead>
-            <tr>
-                <th>所属行业</th>
-                <th>工作性质</th>
-                <th>收入情况</th>
-                <th>征信情况</th>
-                <th>还款来源</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td id="industry"></td>
-                <td id="workNature"></td>
-                <td id="userEarns"></td>
-                <td id="creditDec"></td>
-                <td id="boPaySource"></td>
-            </tr>
-            </tbody>
-        </table>
+<div class="layui-page">
+    <form class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">审核通过包括</label>
-            <div class="layui-form">
-                <input type="checkbox" name='AUTH_IDCARD' id="AUTH_IDCARD" value="AUTH_IDCARD" lay-skin="primary"  title="二代身份证" >
-                <input type="checkbox" name='AUTH_CARPHOTO' id="AUTH_CARPHOTO" value="AUTH_CARPHOTO" lay-skin="primary" title="人车合照">
-                <input type="checkbox" name='VEHICLE_LICENSE'id="VEHICLE_LICENSE" value="VEHICLE_LICENSE" lay-skin="primary" title="行驶证">
-                <input type="checkbox" name='APPLY_TABLE' id="APPLY_TABLE" value="APPLY_TABLE" lay-skin="primary" title="申请表">
-                <input type="checkbox" name='MORTGAGE' id="MORTGAGE" value="MORTGAGE" lay-skin="primary" title="抵押手续办理">
-                <input type="checkbox" name='AUTH_OTHER' id="AUTH_OTHER" value="AUTH_OTHER" lay-skin="primary" title="其它审核资料">
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="userName" placeholder="请输入客户姓名" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">客户手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" placeholder="请输入客户手机号" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">车牌号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="plateNumber" placeholder="请输入车牌号" autocomplete="off" class="layui-input">
             </div>
         </div>
-    </div>
+        <div class="layui-form-item">
+            <!--<div class="layui-inline">-->
+            <label class="layui-form-label">申请时间</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="createTimeStart" id="createTimeStart" placeholder="起始时间"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="createTimeEnd" id="createTimeEnd" placeholder="结束时间"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <!--</div>-->
+            <!--<div class="layui-inline">-->
+            <label class="layui-form-label">放款时间</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="boFinishTimeStart" id="boFinishTimeStart" placeholder="起始时间"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="boFinishTimeEnd" id="boFinishTimeEnd" placeholder="结束时间"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <!--</div>-->
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">借款产品</label>
+            <div class="layui-input-inline">
+                <select name="pCode" id="pCode">
+                    <option value=""></option>
+                    <!--<option value="0003">车贷3期-4%-2%</option>-->
+                    <!--<option value="0004">车贷6期-7.5%-4.5%</option>-->
+                    <!--<option value="0005">车贷6期-7%-5%</option>-->
+                    <!--<option value="0006">车贷12期-12%-12%</option>-->
+                    <!--<option value="0007">车贷12期-10.4%-13.6%</option>-->
+                    <!--<option value="0008">车贷3期-等额本息</option>-->
 
-    <!-- 弹框还款计划dom结构 -->
-    <div id='dialog' class="hide">
-        <table class="layui-table layui-form" lay-skin="line">
-            <thead>
-            <tr>
-                <th>借款金额</th>
-                <th>期限</th>
-                <th>GPRS费</th>
-                <th>前期服务费</th>
-                <th>到账金额</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td id="boPrice"></td>
-                <td id="boExpect"></td>
-                <td id="gpsCost"></td>
-                <td id="earlyServiceRate"></td>
-                <td id="boFinishPrice"></td>
-            </tr>
+                </select>
+            </div>
+            <label class="layui-form-label">借款状态</label>
+            <div class="layui-input-inline">
+                <select name="boIsState">
+                    <option value=""></option>
+                    <option value="1">待筹标</option>
+                    <option value="2">筹标中</option>
+                    <option value="3">已流标</option>
+                    <option value="4">已放款</option>
+                    <option value="5">还款中</option>
+                    <option value="6">已还款</option>
 
-            </tbody>
-        </table>
-        <div id="planTable" style="width:100%;"></div>
-</div>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button uitype="reset" class="layui-btn lay-btn-normal" lay-submit lay-filter="searchCredit"
+                        id="searchCreditSubmit">查询
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="searchCreditExport">导出
+                </button>
+            </div>
+        </div>
+    </form>
     <!-- 表格dom结构 -->
-    <script id="planView" type="text/html">
-        <table  class="layui-table text-center" lay-even>
+    <script id="view" type="text/html">
+        <table class="layui-table text-center" lay-even>
             <thead>
             <tr>
+                <th>借款ID</th>
+                <th>申请时间</th>
+                <th>客户姓名</th>
+                <th>身份证号</th>
+                <th>手机号</th>
+                <th>车牌号</th>
+                <th>销售人员</th>
+                <th>销售手机号</th>
+                <th>借款金额</th>
+                <th>借款产品名称</th>
                 <th>期数</th>
-                <th>日期</th>
-                <th>月供</th>
-                <th>本金</th>
-                <th>利息</th>
-                <th>服务费</th>
+                <th>状态</th>
+                <th>放款时间</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
             {{# layui.each(d.rows,function(index,item){ }}
             <tr>
-                <td class="text-center">{{item.repayExpect}}</td>
-                <td><a class="link">{{item.brTime?ma.format(item.brTime,'yyyy-MM-dd'):''}}</a></td>
-                <td>{{item.repayAmount}}</td>
-                <td>{{item.capitalAmount}}</td>
-                <td><a class="link">{{item.interestAmount}}</a></td>
-                <td><a class="link">{{item.serviceFee}}</a></td>
+                <td class="text-center">{{item.orderId}}</td>
+                <!--<td><a class="link">{{item.createTime?ma.format(item.createTime,'yyyy-MM-dd HH:mm:ss'):''}}</a></td>-->
+                <td><a class="link">{{item.createTime}}</a></td>
+                <td><a class="link">{{item.userName}}</a></td>
+                <td>{{item.idcard}}</td>
+                <td>{{item.mobile}}</td>
+                <td><a class="link">{{item.plateNumber}}</a></td>
+                <td>{{item.salesName}}</td>
+
+                <td>{{item.salesMobile}}</td>
+                <td><a class="link">{{item.boPrice}}</a></td>
+                <td>{{item.productName}}</td>
+                <td>{{item.boExpect}}</td>
+                <td>
+                    {{#if(item.boIsState==1){ }}
+                    <span style="color:#FF5722">待筹标</span>
+                    {{#}else if(item.boIsState==2){}}
+                    <span>筹标中</span>
+                    {{#}else if(item.boIsState==3){}}
+                    <span>已流标</span>
+                    {{#}else if(item.boIsState==4){}}
+                    <span>已放款</span>
+                    {{#}else if(item.boIsState==5){}}
+                    <span>还款中</span>
+                    {{#}else if(item.boIsState==6){}}
+                    <span>已还款</span>
+                    {{# }else{ }}
+                    <span></span>
+                    {{#};}}
+                </td>
+                <td><a class="link">{{item.boFinishTime}}</a></td>
+                <td>
+                    {{# if(item.boIsState==2 || item.boIsState==3){}}
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
+                    {{#}else if(item.boIsState==1){}}
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
+                    <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.confirm()">确认筹标</a>
+                    <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.cancel()">取消</a>
+                    {{#}else{}}
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>
+                    <a class="layui-btn layui-btn-small layui-btn-danger" href="javascript:fn.plan()">还款计划</a>
+                    {{#};}}
+                </td>
             </tr>
             {{# }); }}
             </tbody>
         </table>
     </script>
+    <div id="creditTable" style="width:100%;"></div>
+    <div id='laypage'></div>
+</div>
+<!-- 弹框详情dom结构 -->
+<div id='dialog1' class="hide">
+    <table class="layui-table layui-form" lay-skin="line">
+        <thead>
+        <tr>
+            <th>子女情况</th>
+            <th>工作性质</th>
+            <th>收入情况</th>
+            <th>负债情况</th>
+            <th>担保措施</th>
+            <th>还款来源</th>
+            <!--<th>借款用途</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td id="childrenDesc"></td>
+            <td id="workNature"></td>
+            <td id="userEarns"></td>
+            <td id="liabilitiesDesc"></td>
+            <td id="guaranteeDesc"></td>
+            <td id="boPaySource"></td>
+            <!--<td id="BO_SOURCE"></td>-->
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="layui-table layui-form" lay-skin="line">
+        <thead>
+        <tr>
+            <th>车辆型号</th>
+            <th>车身颜色</th>
+            <th>登记时间</th>
+            <th>评估价格</th>
+            <th>车牌号</th>
+            <th>行驶公里(公里)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td id="carModel"></td>
+            <td id="carColor"></td>
+            <td id="signTime"></td>
+            <td id="assessmentPrice"></td>
+            <td id="plateNumber"></td>
+            <td id="mileageDesc"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核通过包括</label>
+        <div class="layui-form">
+            <!--<input type="checkbox" name='AUTH_IDCARD' id="AUTH_IDCARD" value="AUTH_IDCARD" lay-skin="primary"  title="二代身份证" >-->
+            <!--<input type="checkbox" name='AUTH_CARPHOTO' id="AUTH_CARPHOTO" value="AUTH_CARPHOTO" lay-skin="primary" title="人车合照">-->
+            <!--<input type="checkbox" name='VEHICLE_LICENSE'id="VEHICLE_LICENSE" value="VEHICLE_LICENSE" lay-skin="primary" title="行驶证">-->
+            <!--<input type="checkbox" name='APPLY_TABLE' id="APPLY_TABLE" value="APPLY_TABLE" lay-skin="primary" title="申请表">-->
+            <!--<input type="checkbox" name='MORTGAGE' id="MORTGAGE" value="MORTGAGE" lay-skin="primary" title="抵押手续办理">-->
+            <!--<input type="checkbox" name='AUTH_OTHER' id="AUTH_OTHER" value="AUTH_OTHER" lay-skin="primary" title="其它审核资料">-->
+
+
+            <input type="checkbox" id="AUTH_IDCARD" value="AUTH_IDCARD" lay-skin="primary" title="身份证">
+            <input type="checkbox" id="AUTH_CARPHOTO" value="AUTH_CARPHOTO" lay-skin="primary" title="人车合照">
+            <input type="checkbox" id="VEHICLE_LICENSE" value="VEHICLE_LICENSE" lay-skin="primary" title="行驶证">
+            <input type="checkbox" id="POLLING_LICENSE" value="POLLING_LICENSE" lay-skin="primary" title="登记证">
+            <input type="checkbox" id="INSURANCE_POLICY" value="INSURANCE_POLICY" lay-skin="primary" title="保单">
+            <input type="checkbox" id="LETTER_COMMITMENT" value="LETTER_COMMITMENT" lay-skin="primary" title="信批承诺函">
+            <input type="checkbox" id="VIOLATION_RECORD" value="VIOLATION_RECORD" lay-skin="primary" title="违章信息">
+            <input type="checkbox" id="ADDRESS_LICENSE" value="ADDRESS_LICENSE" lay-skin="primary" title="住址证明">
+            <input type="checkbox" id="CAR_SKIN" value="CAR_SKIN" lay-skin="primary" title="车辆外观照片">
+            <input type="checkbox" id="CAR_MILEAGE" value="CAR_MILEAGE" lay-skin="primary" title="车辆行驶里程照片">
+            <input type="checkbox" id="CAR_MOTOR" value="CAR_MOTOR" lay-skin="primary" title="车辆发动机照片">
+            <input type="checkbox" id="CAR_NUMBER" value="CAR_NUMBER" lay-skin="primary" title="铭牌照片">
+            <input type="checkbox" id="APPLY_TABLE" value="APPLY_TABLE" lay-skin="primary" title="申请表">
+            <input type="checkbox" id="AUTH_OTHER" value="AUTH_OTHER" lay-skin="primary" title="其它审核资料">
+        </div>
+        <div id="images">
+
+        </div>
+    </div>
+</div>
+
+<!-- 弹框还款计划dom结构 -->
+<div id='dialog' class="hide">
+    <table class="layui-table layui-form" lay-skin="line">
+        <thead>
+        <tr>
+            <th>借款金额</th>
+            <th>期限</th>
+            <th>GPRS费</th>
+            <th>前期服务费</th>
+            <th>到账金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td id="boPrice"></td>
+            <td id="boExpect"></td>
+            <td id="gpsCost"></td>
+            <td id="earlyServiceRate"></td>
+            <td id="boFinishPrice"></td>
+        </tr>
+
+        </tbody>
+    </table>
+    <div id="planTable" style="width:100%;"></div>
+</div>
+<!-- 表格dom结构 -->
+<script id="planView" type="text/html">
+    <table class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>期数</th>
+            <th>日期</th>
+            <th>月供</th>
+            <th>本金</th>
+            <th>利息</th>
+            <th>服务费</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.rows,function(index,item){ }}
+        <tr>
+            <td class="text-center">{{item.repayExpect}}</td>
+            <td><a class="link">{{item.brTime?ma.format(item.brTime,'yyyy-MM-dd'):''}}</a></td>
+            <td>{{item.repayAmount}}</td>
+            <td>{{item.capitalAmount}}</td>
+            <td><a class="link">{{item.interestAmount}}</a></td>
+            <td><a class="link">{{item.serviceFee}}</a></td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
 <script>
     layui.config({
-       base: '../../js/page/'
-   }).use('SearchCredit');
+        base: '../../js/page/'
+    }).use('SearchCredit');
 </script>
 </body>
 </html>
