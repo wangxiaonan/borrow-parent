@@ -360,6 +360,10 @@ public class OrderServcieImpl implements OrderServcie {
             statusVo.setAudit(OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
             mapList.add(statusVo);
         });
+        UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(),borrowOrder.getPlateNumber());
+        XMap loanCarInfoMap = new XMap();
+//        loanCarInfoMap.put();
+
         thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
 
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());

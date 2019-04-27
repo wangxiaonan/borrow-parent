@@ -103,6 +103,19 @@ public  interface PlatformConstant {
         //提前
         String TQ = "TQ";
 
+        String LOAN_CAR_INFO = "loanCarInfo";
+        String LOAN_PIC_INFO = "loanPicInfo";
+        String LOAN_HUOSE_INFO = "loanHuoseInfo";
+
+        String CAR_MODEL = "carModel";
+        String COLOR = "color";
+        String REGISTTIME = "registTime";
+        String ESTIMATEVALUE = "estimateValue";
+        String CAR_NUMBER = "carNumber";
+        String CAR_MILEAGE = "carMileage";
+
+        String ICARD_DESC = "身份证";
+        String VEHICLE_LICENSE = "驾驶证";
 
     }
 
