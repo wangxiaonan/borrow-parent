@@ -1,5 +1,6 @@
 package com.borrow.manage.model.dto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -902,6 +903,336 @@ public class UserCarExample {
 
         public Criteria andUserUidNotBetween(String value1, String value2) {
             addCriterion("user_uid not between", value1, value2, "userUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelIsNull() {
+            addCriterion("car_model is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelIsNotNull() {
+            addCriterion("car_model is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelEqualTo(String value) {
+            addCriterion("car_model =", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelNotEqualTo(String value) {
+            addCriterion("car_model <>", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelGreaterThan(String value) {
+            addCriterion("car_model >", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelGreaterThanOrEqualTo(String value) {
+            addCriterion("car_model >=", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelLessThan(String value) {
+            addCriterion("car_model <", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelLessThanOrEqualTo(String value) {
+            addCriterion("car_model <=", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelLike(String value) {
+            addCriterion("car_model like", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelNotLike(String value) {
+            addCriterion("car_model not like", value, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelIn(List<String> values) {
+            addCriterion("car_model in", values, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelNotIn(List<String> values) {
+            addCriterion("car_model not in", values, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelBetween(String value1, String value2) {
+            addCriterion("car_model between", value1, value2, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarModelNotBetween(String value1, String value2) {
+            addCriterion("car_model not between", value1, value2, "carModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorIsNull() {
+            addCriterion("car_color is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorIsNotNull() {
+            addCriterion("car_color is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorEqualTo(String value) {
+            addCriterion("car_color =", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorNotEqualTo(String value) {
+            addCriterion("car_color <>", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorGreaterThan(String value) {
+            addCriterion("car_color >", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorGreaterThanOrEqualTo(String value) {
+            addCriterion("car_color >=", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorLessThan(String value) {
+            addCriterion("car_color <", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorLessThanOrEqualTo(String value) {
+            addCriterion("car_color <=", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorLike(String value) {
+            addCriterion("car_color like", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorNotLike(String value) {
+            addCriterion("car_color not like", value, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorIn(List<String> values) {
+            addCriterion("car_color in", values, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorNotIn(List<String> values) {
+            addCriterion("car_color not in", values, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorBetween(String value1, String value2) {
+            addCriterion("car_color between", value1, value2, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarColorNotBetween(String value1, String value2) {
+            addCriterion("car_color not between", value1, value2, "carColor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeIsNull() {
+            addCriterion("sign_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeIsNotNull() {
+            addCriterion("sign_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeEqualTo(Date value) {
+            addCriterion("sign_time =", value, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeNotEqualTo(Date value) {
+            addCriterion("sign_time <>", value, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeGreaterThan(Date value) {
+            addCriterion("sign_time >", value, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("sign_time >=", value, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeLessThan(Date value) {
+            addCriterion("sign_time <", value, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeLessThanOrEqualTo(Date value) {
+            addCriterion("sign_time <=", value, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeIn(List<Date> values) {
+            addCriterion("sign_time in", values, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeNotIn(List<Date> values) {
+            addCriterion("sign_time not in", values, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeBetween(Date value1, Date value2) {
+            addCriterion("sign_time between", value1, value2, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignTimeNotBetween(Date value1, Date value2) {
+            addCriterion("sign_time not between", value1, value2, "signTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceIsNull() {
+            addCriterion("assessment_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceIsNotNull() {
+            addCriterion("assessment_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceEqualTo(BigDecimal value) {
+            addCriterion("assessment_price =", value, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceNotEqualTo(BigDecimal value) {
+            addCriterion("assessment_price <>", value, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceGreaterThan(BigDecimal value) {
+            addCriterion("assessment_price >", value, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("assessment_price >=", value, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceLessThan(BigDecimal value) {
+            addCriterion("assessment_price <", value, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("assessment_price <=", value, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceIn(List<BigDecimal> values) {
+            addCriterion("assessment_price in", values, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceNotIn(List<BigDecimal> values) {
+            addCriterion("assessment_price not in", values, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("assessment_price between", value1, value2, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssessmentPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("assessment_price not between", value1, value2, "assessmentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescIsNull() {
+            addCriterion("mileage_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescIsNotNull() {
+            addCriterion("mileage_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescEqualTo(String value) {
+            addCriterion("mileage_desc =", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescNotEqualTo(String value) {
+            addCriterion("mileage_desc <>", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescGreaterThan(String value) {
+            addCriterion("mileage_desc >", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescGreaterThanOrEqualTo(String value) {
+            addCriterion("mileage_desc >=", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescLessThan(String value) {
+            addCriterion("mileage_desc <", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescLessThanOrEqualTo(String value) {
+            addCriterion("mileage_desc <=", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescLike(String value) {
+            addCriterion("mileage_desc like", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescNotLike(String value) {
+            addCriterion("mileage_desc not like", value, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescIn(List<String> values) {
+            addCriterion("mileage_desc in", values, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescNotIn(List<String> values) {
+            addCriterion("mileage_desc not in", values, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescBetween(String value1, String value2) {
+            addCriterion("mileage_desc between", value1, value2, "mileageDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMileageDescNotBetween(String value1, String value2) {
+            addCriterion("mileage_desc not between", value1, value2, "mileageDesc");
             return (Criteria) this;
         }
     }
