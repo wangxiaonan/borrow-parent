@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by wxn on 2018/9/17
  */
 public class ProductListRes {
-
+    private String pType;
     private String productCode;
     private String productName;
     private String productExpect;
@@ -29,6 +29,13 @@ public class ProductListRes {
 
     private String fineServiceRate;
 
+    public String getpType() {
+        return pType;
+    }
+
+    public void setpType(String pType) {
+        this.pType = pType;
+    }
 
     public String getpPayTypeName() {
         return ProductPayTypeEnum.getProductPayType(Integer.valueOf(pPayType)).getName();

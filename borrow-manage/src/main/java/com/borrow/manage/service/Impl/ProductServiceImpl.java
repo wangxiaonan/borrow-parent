@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService{
             res.setProductCode(borrowProduct.getpCode());
             res.setProductName(borrowProduct.getpName());
             res.setProductExpect(String.valueOf(borrowProduct.getpExpect()));
-
+            res.setpType(borrowProduct.getpType().toString());
             res.setEarlyServiceRate(stringMap.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
             res.setMonthServiceRate(stringMap.get(ProductRateEnum.MONTH_SERVICE_RATE.getRateKey()));
             res.setMonthAccrualRate(stringMap.get(ProductRateEnum.MONTH_ACCRUAL_RATE.getRateKey()));
