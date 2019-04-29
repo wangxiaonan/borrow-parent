@@ -27,7 +27,7 @@ public class Test {
 //        for (int i = 0;i<8;i++) {
 //            System.out.println(UUIDProvider.uuid());
 //        }
-        System.out.println(PasswordHelper.encryptPassword("111111"));
+        System.out.println(PasswordHelper.encryptPassword("123456"));
 
 //        System.out.println(PasswordHelper.encryptPassword("123456"));
 

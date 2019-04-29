@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService{
             res.setServiceViolateRate(stringMap.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
             res.setEarlyPayRate(stringMap.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
             res.setFineServiceRate(stringMap.get(ProductRateEnum.FINE_SERVICE_RATE.getRateKey()));
-
+            res.setBussType(borrowProduct.getBussType().toString());
             res.setpPayType(String.valueOf(borrowProduct.getpPayType()));
             res.setCreateTime(borrowProduct.getCreateTime());
             listRes.add(res);

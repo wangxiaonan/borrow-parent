@@ -25,9 +25,20 @@ public class ProductListRes {
 
     private String pPayType;
 
+    private String bussType;
+
+
     private String pPayTypeName;
 
     private String fineServiceRate;
+
+    public String getBussType() {
+        return bussType;
+    }
+
+    public void setBussType(String bussType) {
+        this.bussType = bussType;
+    }
 
     public String getpType() {
         return pType;

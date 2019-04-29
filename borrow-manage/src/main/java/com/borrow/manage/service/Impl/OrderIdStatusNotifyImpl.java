@@ -69,7 +69,7 @@ public class OrderIdStatusNotifyImpl implements FundsNotifyService {
 
                 //调用理财端还款计划
                 XMap thirdParamMap = new XMap();
-                thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID,order.getId());
+                thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID,order.getOrderId());
                 thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_PERIODS,order.getBoExpect());
                 thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_AMOUNT,order.getBoPrice());
                 List<XMap> list = new ArrayList<>();
