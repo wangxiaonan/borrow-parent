@@ -38,14 +38,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-inline">
-                <input type="radio" name="sex" value="1" checked title="男">
+                <input type="radio" name="sex" value="1" title="男">
                 <input type="radio" name="sex" value="2" title="女">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">婚姻情况</label>
             <div class="layui-input-block">
-                <input type="radio" name="marriage" checked value="1" title="已婚">
+                <input type="radio" name="marriage" value="1" title="已婚">
                 <input type="radio" name="marriage" value="2" title="未婚">
                 <input type="radio" name="marriage" value="3" title="其他">
             </div>
@@ -53,49 +53,49 @@
         <div class="layui-form-item">
             <label class="layui-form-label">子女情况</label>
             <div class="layui-input-inline">
-                <input type="text" name="children" required lay-verify="required" placeholder="请输入子女情况"
+                <input type="text" name="children" required lay-verify="myrequired" placeholder="请输入子女情况"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">工作性质</label>
             <div class="layui-input-inline">
-                <input type="text" name="workNature" required lay-verify="required" placeholder="请输入工作性质"
+                <input type="text" name="workNature" required lay-verify="myrequired" placeholder="请输入工作性质"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">收入情况</label>
             <div class="layui-input-inline">
-                <input type="text" name="userEarns" required lay-verify="required" placeholder="请输入收入情况"
+                <input type="text" name="userEarns" required lay-verify="myrequired" placeholder="请输入收入情况"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">负债情况</label>
             <div class="layui-input-inline">
-                <input type="text" name="userDebts" required lay-verify="required" placeholder="请输入负债情况"
+                <input type="text" name="userDebts" required lay-verify="myrequired" placeholder="请输入负债情况"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">担保措施</label>
             <div class="layui-input-inline">
-                <input type="text" name="userAssure" required lay-verify="required" placeholder="请输入担保措施"
+                <input type="text" name="userAssure" required lay-verify="myrequired" placeholder="请输入担保措施"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">第一划款来源</label>
             <div class="layui-input-inline">
-                <input type="text" name="boPaySource" required lay-verify="required" placeholder="请输入第一划款来源"
+                <input type="text" name="boPaySource" required lay-verify="myrequired" placeholder="请输入第一划款来源"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">销售人员</label>
             <div class="layui-input-inline">
-                <input type="text" name="salesName" required lay-verify="required" placeholder="请输入销售人员姓名"
+                <input type="text" name="salesName" required lay-verify="myrequired" placeholder="请输入销售人员姓名"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -110,14 +110,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">借款金额</label>
             <div class="layui-input-inline">
-                <input type="text" id="boPrice" name="boPrice" required lay-verify="required" placeholder="请输入借款金额"
+                <input type="text" id="boPrice" name="boPrice" required lay-verify="myrequired" placeholder="请输入借款金额"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">借款产品</label>
             <div class="layui-input-inline">
-                <select id="productCode" name="productCode" required lay-verify="required" lay-filter="inputType">
+                <select id="productCode" name="productCode" required lay-verify="myrequired" lay-filter="inputType">
                     <option value="">选择</option>
                     <!--<option value="0003">车贷3期-4%-2%</option>-->
                     <!--<option value="0004">车贷6期-7.5%-4.5%</option>-->
@@ -137,105 +137,109 @@
         <div class="layui-form-item">
             <label class="layui-form-label">借款用途</label>
             <div class="layui-input-inline">
-                <input type="text" name="boSource" required lay-verify="required" placeholder="请输入借款用途"
+                <input type="text" name="boSource" required lay-verify="myrequired" placeholder="请输入借款用途"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">房产权利人</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="houseName" required lay-verify="required" placeholder="请输入房产权利人"-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">共有人情况</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="housePart" required lay-verify="required" placeholder="请输入共有人情况"-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">房产权利人</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseName" required lay-verify="myrequired" placeholder="请输入房产权利人"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">共有人情况</label>
+            <div class="layui-input-inline">
+                <input type="text" name="housePart" required lay-verify="myrequired" placeholder="请输入共有人情况"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">房产证号</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="houseNum" required lay-verify="required" placeholder="请输入房产证号"-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">房产证号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseNum" required lay-verify="myrequired" placeholder="请输入房产证号"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">房产面积</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="houseArea" required lay-verify="required" placeholder="请输入房产面积"-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">房产面积</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseArea" required lay-verify="myrequired" placeholder="请输入房产面积"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">房产性质</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="houseAttr" required lay-verify="required" placeholder="请输入房产性质"-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">房产性质</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseAttr" required lay-verify="myrequired" placeholder="请输入房产性质"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">房产地址</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<select name="province" id="province">-->
-                    <!--<option value="0">北京市</option>-->
-                    <!--<option value="1">上海市</option>-->
-                <!--</select>-->
-            <!--</div>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<select name="city" id="city">-->
-                    <!--<option value="0">北京市</option>-->
-                    <!--<option value="1">上海市</option>-->
-                <!--</select>-->
-            <!--</div>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<select name="area" id="area">-->
-                    <!--<option value="0">东城区</option>-->
-                    <!--<option value="1">徐汇区</option>-->
-                <!--</select>-->
-            <!--</div>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="houseAddress" required lay-verify="required" placeholder=""-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">房产地址</label>
+            <div class="layui-input-inline">
+                <select name="province" id="province">
+                    <option value="0">北京市</option>
+                    <option value="1">上海市</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="city" id="city">
+                    <option value="0">北京市</option>
+                    <option value="1">上海市</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="area" id="area">
+                    <option value="0">东城区</option>
+                    <option value="1">徐汇区</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="houseAddress" required lay-verify="myrequired" placeholder=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">登记时间</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="houseDate" id="houseDate" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" placeholder="登记时间" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">登记时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseDate" id="houseDate" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" placeholder="登记时间" class="layui-input">
+            </div>
+        </div>
 
-        <!--<div class="layui-form-item form-house">-->
-            <!--<label class="layui-form-label">评估价格</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" name="housePrice" required lay-verify="required" placeholder="请输入评估价格"-->
-                       <!--autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layui-form-item form-house">
+            <label class="layui-form-label">评估价格</label>
+            <div class="layui-input-inline">
+                <input type="text" name="housePrice" required lay-verify="myrequired" placeholder="请输入评估价格"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
         <div class="layui-form-item form-car">
             <label class="layui-form-label">车辆型号</label>
             <div class="layui-input-inline">
-                <input type="text" name="carModel" required lay-verify="required" placeholder="请输入车辆型号"
+                <input type="text" name="carModel" required lay-verify="myrequired" placeholder="请输入车辆型号"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item form-car">
             <label class="layui-form-label">车身颜色</label>
             <div class="layui-input-inline">
-                <select id="carColor" name="carColor" required lay-verify="required">
+                <select id="carColor" name="carColor" required lay-verify="myrequired">
                     <option value="黑色">黑色</option>
+                    <option value="银色">银色</option>
                     <option value="白色">白色</option>
                     <option value="红色">红色</option>
-                    <option value="绿色">绿色</option>
+                    <option value="黄色">黄色</option>
+                    <option value="橙色">橙色</option>
+                    <option value="蓝色">蓝色</option>
+                    <option value="其他">其他</option>
                 </select>
             </div>
         </div>
@@ -248,21 +252,21 @@
         <div class="layui-form-item form-car">
             <label class="layui-form-label">评估价格</label>
             <div class="layui-input-inline">
-                <input type="text" name="assessmentPrice" required lay-verify="required" placeholder="请输入评估价格"
+                <input type="text" name="assessmentPrice" required lay-verify="myrequired" placeholder="请输入评估价格"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item form-car">
             <label class="layui-form-label">车牌号</label>
             <div class="layui-input-inline">
-                <input type="text" name="plateNumber" required lay-verify="required" placeholder="车牌号"
+                <input type="text" name="plateNumber" required lay-verify="myrequired" placeholder="车牌号"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item form-car">
             <label class="layui-form-label">行驶公里(公里)</label>
             <div class="layui-input-inline">
-                <input type="text" name="mileageDesc" required lay-verify="required" placeholder="行驶公里"
+                <input type="text" name="mileageDesc" required lay-verify="myrequired" placeholder="行驶公里"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -288,31 +292,38 @@
         <div class="layui-form-item form-car">
             <label class="layui-form-label">上传资料图片</label>
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img name = "uploadIdcard" hidden class="layui-form-label"></img>
+                <img name = "uploadIdcard" hidden class="layui-form-label"/>
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <input type="file" name="upload-images" data-key="AUTH_IDCARD" class="layui-upload-file" lay-title="上传身份证">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="VEHICLE_LICENSE" class="layui-upload-file" lay-title="上传行驶证">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
 
                 <input type="file" name="upload-images" data-key="POLLING_LICENSE" class="layui-upload-file" lay-title="上传登记证">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="CAR_SKIN" class="layui-upload-file" lay-title="上传车辆外观照片">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="INSURANCE_POLICY" class="layui-upload-file" lay-title="上传保单">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="LETTER_COMMITMENT" class="layui-upload-file" lay-title="上传信批承诺函">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="AUTH_OTHER" class="layui-upload-file" lay-title="上传其他补充材料">
             </div>
@@ -320,32 +331,37 @@
         <div class="layui-form-item form-house">
             <label class="layui-form-label">上传资料图片</label>
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img src="" style="width: 200px;height: 200px;display: none;margin: 10px 0;" title="身份证">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
+                <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传身份证">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img src="" style="width: 200px;height: 200px;display: none;margin: 10px 0;" title="房产证">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
+                <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传房产证">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img src="" style="width: 200px;height: 200px;display: none;margin: 10px 0;"  title="他项权证">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
+                <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传他项权证">
             </div>
 
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img src="" style="width: 200px;height: 200px;display: none;margin: 10px 0;" title="担保函">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
+                <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传担保函">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img src="" style="width: 200px;height: 200px;display: none;margin: 10px 0;"  title="信批承诺函">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
+                <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传信批承诺函">
             </div>
             <div class="layui-input-inline" style="padding-right: 10px">
-                <img src="" style="width: 200px;height: 200px;display: none;margin: 10px 0;"  title="其他补充材料">
+                <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
+                <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传其他补充材料">
             </div>
         </div>
-        <input type="text" id="inputType" name="inputType" hidden value="carInput">
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn hide" lay-submit lay-filter="orderAdd" id="orderAddSubmit">创建借款申请</button>
@@ -353,6 +369,12 @@
         </div>
     </form>
 </div>
+
+<div id="bigPic" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;bottom: 0;display: none;z-index: 22;">
+    <div class="bg" style="position: fixed;width: 100%;height: 100%;left: 0;top: 0;background-color: #000;opacity: .5;z-index: 24;"></div>
+    <img src="" style="max-width: 80%; display: block;z-index: 666;position: absolute;top: 5%;left: 10%;">
+</div>
+
 <script>
     layui.config({
         base: '../../js/page/'

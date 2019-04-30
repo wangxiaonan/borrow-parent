@@ -126,12 +126,12 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
                 //         <td id="guaranteeDesc"></td>
                 //         <td id="boPaySource"></td>
                 //         <td id="BO_SOURCE"></td>
-            // <td id="carModel"></td>
-            //         <td id="carColor"></td>
-            //         <td id="signTime"></td>
-            //         <td id="assessmentPrice"></td>
-            //         <td id="plateNumber"></td>
-            //         <td id="mileageDesc"></td>
+                // <td id="carModel"></td>
+                //         <td id="carColor"></td>
+                //         <td id="signTime"></td>
+                //         <td id="assessmentPrice"></td>
+                //         <td id="plateNumber"></td>
+                //         <td id="mileageDesc"></td>
                 $('#childrenDesc').html(res.data.childrenDesc);
                 $('#workNature').html(res.data.workNature);
                 $('#userEarns').html(res.data.userEarns);
