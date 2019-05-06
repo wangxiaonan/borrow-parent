@@ -48,16 +48,11 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 bigPic = $(this).attr('src');
                 viewBigPic(bigPic);
             });
-
-            // $('#uploadIdcard').text();
-
-            // var url = $('#uploadIdcard').text();
-            // aler(url)
             top.layer.success("上传成功");
-            // console.log(res);
-            // $(tempImg).attr('src',res.src);
-            // $(tempImg).show();
-
+        },
+        fail: function(re) {
+            layer.error(re.errorMessage);
+            layer.hideLoad();
         }
     });
 

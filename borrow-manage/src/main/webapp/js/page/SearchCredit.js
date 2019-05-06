@@ -170,7 +170,7 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
             "CAR_MOTOR",
             "CAR_NUMBER",
             "AUTH_OTHER",
-            "MORTGAGE",]
+            "LETTER_COMMITMENT",]
         for (j in auditkeysArr) {
             if (arr[auditkeysArr[j]] != undefined) {
                 $('#' + auditkeysArr[j]).prop("checked", true);
