@@ -41,7 +41,7 @@ public class OrderApi {
         ResponseResult res = null;
         logger.info("====>addOrder():req={}", orderCreateReq);
 
-        if (checkAddParams(orderCreateReq)) {
+        if (true) {
             res= orderServcie.orderAdd(orderCreateReq);
         }else {
             res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());

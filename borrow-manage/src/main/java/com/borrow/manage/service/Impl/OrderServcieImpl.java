@@ -500,6 +500,7 @@ public class OrderServcieImpl implements OrderServcie {
             LoanPicInfoVo loanPicInfo2 = new LoanPicInfoVo();
             loanPicInfo2.setName(PlatformConstant.FundsParam.VEHICLE_LICENSE);
             loanPicInfo2.setUrl(auditsUrlkeys.get(OrderAuditEnum.AUTH_VEHICLE_LICENSE.getAuthKey()).toString());
+            picInfoVos.add(loanPicInfo2);
         }
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO,picInfoVos);
 
