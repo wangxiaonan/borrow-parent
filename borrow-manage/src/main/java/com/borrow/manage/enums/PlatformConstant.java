@@ -126,6 +126,12 @@ public  interface PlatformConstant {
         String FIRSTREPAY ="firstRepay";
         String OTHERINFO ="otherInfo";
 
+        String OWNER = "owner";
+        String COOWNER = "coOwner";
+        String HUOSENO = "huoseNo";
+        String HUOSEAREA = "huoseArea";
+        String HUOSETYPE = "huoseType";
+        String HUOSEADDRESS = "huoseAddress";
 
     }
 

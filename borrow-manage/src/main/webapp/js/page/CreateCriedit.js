@@ -77,7 +77,6 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
     form.on('submit(orderAdd)', function(data) {
         var formData=data.field;
         var auditkeys = {};
-        debugger;
         for(i in formData){
             if(i.indexOf('auditkeys')>-1){
                 let key = formData[i];

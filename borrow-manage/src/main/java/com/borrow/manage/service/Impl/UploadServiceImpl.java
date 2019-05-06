@@ -24,7 +24,7 @@ public class UploadServiceImpl implements UploadService {
         if (!file.exists()) {//如果文件不存在
             file.mkdirs();
         }
-        fileName = UUIDProvider.uuid()+"—"+fileName;
+        fileName = UUIDProvider.uuid()+"-"+fileName;
         String baseUrl =basePath + File.separator + fileName;
         FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(baseUrl));

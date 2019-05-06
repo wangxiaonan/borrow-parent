@@ -5,6 +5,7 @@ package com.borrow.manage.vo;
  */
 public class OrderCreateReq extends BaseReq{
 
+    private int bussType;
 
     private UserInfoVo userInfo;
 
@@ -17,6 +18,24 @@ public class OrderCreateReq extends BaseReq{
     private OrderAuditVo orderAudit;
 
     private BoOrderItemVo boOrderItem;
+
+    private UserHouseInfoVo userHouseInfo;
+
+    public int getBussType() {
+        return bussType;
+    }
+
+    public void setBussType(int bussType) {
+        this.bussType = bussType;
+    }
+
+    public UserHouseInfoVo getUserHouseInfo() {
+        return userHouseInfo;
+    }
+
+    public void setUserHouseInfo(UserHouseInfoVo userHouseInfo) {
+        this.userHouseInfo = userHouseInfo;
+    }
 
     public BoOrderItemVo getBoOrderItem() {
         return boOrderItem;

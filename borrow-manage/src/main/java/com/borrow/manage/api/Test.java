@@ -98,48 +98,58 @@ public class Test {
 
 
 //        ---------------------
-//        OrderCreateReq orderCreateReq = new OrderCreateReq();
-//
-//        UserInfoVo userInfo = new UserInfoVo();
-//        userInfo.setIdcard("220724199007085354");
-//        userInfo.setMobile("15143020432");
-//        userInfo.setUserName("李四");
-//        userInfo.setCreditDec("征信良好");
-//        userInfo.setIndustry("技术");
-//        userInfo.setUserEarns("900000");
-//        userInfo.setWorkNature("程序员");
-//        orderCreateReq.setUserInfo(userInfo);
-//
-//        UserCarVo userCar = new UserCarVo();
-////        userCar.setCarName("宝马车");
-//        userCar.setPlateNumber("123456");
-//        orderCreateReq.setUserCar(userCar);
-//
-//        BorrowSalesmanVo borrowSalesman = new BorrowSalesmanVo();
-//        borrowSalesman.setSalesMobile("15143020432");
-//        borrowSalesman.setSalesName("王五");
-//        orderCreateReq.setBorrowSalesman(borrowSalesman);
-//
-//        BorrowOrderVo borrowOrder = new BorrowOrderVo();
-//        borrowOrder.setProductCode("0001");
-//        borrowOrder.setBoPrice(BigDecimal.valueOf(10000));
-//        borrowOrder.setBoPaySource("工资");
-//        orderCreateReq.setBorrowOrder(borrowOrder);
-//
-//        OrderAuditVo orderAudit = new OrderAuditVo();
-//        List auditkeys = new ArrayList();
-//        auditkeys.add("AUTH_IDCARD");
-//        auditkeys.add("AUTH_CARPHOTO");
-//        auditkeys.add("VEHICLE_LICENSE");
-//        auditkeys.add("APPLY_TABLE");
-//        auditkeys.add("MORTGAGE");
-//        orderAudit.setAuditkeys(auditkeys);
-//        orderCreateReq.setOrderAudit(orderAudit);
-//
-//        System.out.println(JSON.toJSON(orderCreateReq));
+        OrderCreateReq orderCreateReq = new OrderCreateReq();
 
+        UserInfoVo userInfo = new UserInfoVo();
+        userInfo.setIdcard("220724199007085354");
+        userInfo.setMobile("15143020432");
+        userInfo.setUserName("李四");
+        userInfo.setUserEarns("900000");
+        userInfo.setWorkNature("程序员");
+        orderCreateReq.setUserInfo(userInfo);
 
+        UserCarVo userCar = new UserCarVo();
+//        userCar.setCarName("宝马车");
+        userCar.setPlateNumber("123456");
+        orderCreateReq.setUserCar(userCar);
 
+        BorrowSalesmanVo borrowSalesman = new BorrowSalesmanVo();
+        borrowSalesman.setSalesMobile("15143020432");
+        borrowSalesman.setSalesName("王五");
+        orderCreateReq.setBorrowSalesman(borrowSalesman);
+
+        BorrowOrderVo borrowOrder = new BorrowOrderVo();
+        borrowOrder.setProductCode("0001");
+        borrowOrder.setBoPrice(BigDecimal.valueOf(10000));
+        borrowOrder.setBoPaySource("工资");
+        orderCreateReq.setBorrowOrder(borrowOrder);
+
+        OrderAuditVo orderAudit = new OrderAuditVo();
+        HashMap<String,String> auditkeys = new HashMap();
+        auditkeys.put("AUTH_IDCARD","picUrl");
+        auditkeys.put("AUTH_CARPHOTO","picUrl");
+        auditkeys.put("VEHICLE_LICENSE","");
+        auditkeys.put("APPLY_TABLE","");
+        auditkeys.put("MORTGAGE","");
+        orderAudit.setAuditkeys(auditkeys);
+        orderCreateReq.setOrderAudit(orderAudit);
+        UserHouseInfoVo userHouseInfo = new UserHouseInfoVo();
+
+        userHouseInfo.setHouseName("房产权利人");
+        userHouseInfo.setHousePart("共有人情况");
+        userHouseInfo.setHouseNum("房产证号");
+        userHouseInfo.setHouseAttr("房产性质");
+        userHouseInfo.setHouseAddress("房产地址");
+        userHouseInfo.setHouseDate("登记时间");
+        userHouseInfo.setHousePrice("评估价格");
+        userHouseInfo.setHouseidcardPicUrl("身份证图片url");
+        userHouseInfo.setHousePicUrl("房产证url");
+        userHouseInfo.setHouseAuthorityCardPicUrl("他项权证url");
+        userHouseInfo.setHouseGuaranteePicUrl("担保函url");
+        userHouseInfo.setHouseLetterCommitmentPicUrl("信批承诺函");
+        userHouseInfo.setHouseAuthOtherPicurl("其他补充材料");
+        orderCreateReq.setUserHouseInfo(userHouseInfo);
+        System.out.println(JSON.toJSON(orderCreateReq));
 
     }
 }

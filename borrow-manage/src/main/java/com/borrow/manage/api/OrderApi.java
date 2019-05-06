@@ -35,6 +35,7 @@ public class OrderApi {
     OrderServcie  orderServcie;
 
 
+
     @RequestMapping(value = "/borrow/order/add", method = RequestMethod.POST)
     public ResponseResult addOrder(@RequestBody OrderCreateReq orderCreateReq) {
         ResponseResult res = null;
@@ -140,7 +141,8 @@ public class OrderApi {
 
 
     private boolean checkAddParams(OrderCreateReq orderCreateReq) {
-        boolean checkStatus =false;
+        //不错任何校验
+        boolean checkStatus =true;
         if (    orderCreateReq == null
                 || orderCreateReq.getUserInfo() == null
                 || orderCreateReq.getUserCar() == null
