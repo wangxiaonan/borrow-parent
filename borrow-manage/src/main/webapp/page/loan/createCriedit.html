@@ -8,6 +8,23 @@
     <script src="../../js/lib/jquery.min.js"></script>
     <script src="../../js/lib/layui/layui.js"></script>
     <script src="../../js/local/common.js"></script>
+    <script src="../../js/lib/cxSelect/jquery.cxselect.min.js"></script>
+    <style>
+        .form-house img.layui-form-label{
+            display: none;
+            margin-right: 30px;
+        }
+        .form-house .layui-input-block{
+            height: 110px;
+        }
+        .form-car img.layui-form-label{
+            display: none;
+            margin-right: 30px;
+        }
+        .form-car .layui-input-block{
+            height: 110px;
+        }
+    </style>
 </head>
 <body>
 <div class="layui-page">
@@ -180,25 +197,16 @@
             </div>
         </div>
 
-        <div class="layui-form-item form-house">
+        <div class="layui-form-item form-house" id="selectAdd">
             <label class="layui-form-label">房产地址</label>
             <div class="layui-input-inline">
-                <select name="province" id="province">
-                    <option value="0">北京市</option>
-                    <option value="1">上海市</option>
-                </select>
+                <select name="province" class="province"  data-value="浙江省" data-first-title="选择省" lay-filter="province" disabled></select>
             </div>
             <div class="layui-input-inline">
-                <select name="city" id="city">
-                    <option value="0">北京市</option>
-                    <option value="1">上海市</option>
-                </select>
+                <select name="city" class="city" data-value="杭州市" data-first-title="选择市" lay-filter="city" disabled></select>
             </div>
             <div class="layui-input-inline">
-                <select name="area" id="area">
-                    <option value="0">东城区</option>
-                    <option value="1">徐汇区</option>
-                </select>
+                <select name="area" class="area" data-value="西湖区" data-first-title="选择地区" lay-filter="area" disabled></select>
             </div>
             <div class="layui-input-inline">
                 <input type="text" name="houseAddress" required lay-verify="myrequired" placeholder=""
@@ -291,38 +299,38 @@
         </div>
         <div class="layui-form-item form-car">
             <label class="layui-form-label">上传资料图片</label>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <img name = "uploadIdcard" hidden class="layui-form-label"/>
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <input type="file" name="upload-images" data-key="AUTH_IDCARD" class="layui-upload-file" lay-title="上传身份证">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="VEHICLE_LICENSE" class="layui-upload-file" lay-title="上传行驶证">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
 
                 <input type="file" name="upload-images" data-key="POLLING_LICENSE" class="layui-upload-file" lay-title="上传登记证">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="CAR_SKIN" class="layui-upload-file" lay-title="上传车辆外观照片">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="INSURANCE_POLICY" class="layui-upload-file" lay-title="上传保单">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="LETTER_COMMITMENT" class="layui-upload-file" lay-title="上传信批承诺函">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label"></img>
                 <input type="file" name="upload-images" data-key="AUTH_OTHER" class="layui-upload-file" lay-title="上传其他补充材料">
@@ -330,33 +338,33 @@
         </div>
         <div class="layui-form-item form-house">
             <label class="layui-form-label">上传资料图片</label>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传身份证">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传房产证">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传他项权证">
             </div>
 
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传担保函">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传信批承诺函">
             </div>
-            <div class="layui-input-inline" style="padding-right: 10px">
+            <div class="layui-input-block" style="padding-right: 10px">
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img name = "uploadIdcard" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" lay-title="上传其他补充材料">
@@ -370,9 +378,9 @@
     </form>
 </div>
 
-<div id="bigPic" style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;bottom: 0;display: none;z-index: 22;">
+<div id="bigPic" style="position: fixed;width: 100%;height: 100%;top: 0;left: 0;bottom: 0;display: none;z-index: 22;">
     <div class="bg" style="position: fixed;width: 100%;height: 100%;left: 0;top: 0;background-color: #000;opacity: .5;z-index: 24;"></div>
-    <img src="" style="max-width: 80%; display: block;z-index: 666;position: absolute;top: 5%;left: 10%;">
+    <img src="" style="max-width: 80%;max-height: 90%; display: block;z-index: 666;position: absolute;top: 5%;left: 10%;">
 </div>
 
 <script>

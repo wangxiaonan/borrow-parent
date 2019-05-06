@@ -4,6 +4,19 @@
  *usermanege && pass modify  page
  *
  **/
+
+$.cxSelect.defaults.url ='../../js/lib/cxSelect/cityData.min.json';
+var cxSelectApi;
+
+$('#selectAdd').cxSelect({
+    selects: ['province', 'city', 'area'],
+    nodata: 'none',
+    required:false
+}, function(api) {
+    cxSelectApi = api;
+});
+
+
 layui.use(["form", "layer", "element","laydate","upload"], function() {
     var layer = layui.layer,
 
@@ -18,23 +31,36 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
 
     var bussType = 1;   //默认车贷
 
+
+    form.on('select(province)', function(data){
+        $(".area").val("").siblings().find(".layui-unselect").val("").parent().siblings().html("");
+        cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
+        form.render('select');
+    });
+    //第二个选中的是初始化数据
+    form.on('select(city)', function(data){
+        cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
+
+        form.render('select');
+    });
+
     layui.upload({
         url:ma.host+"/uploadFile",
         ext: 'jpg|png|gif',
         name:"file",
         before:function(input){
-            tempImg = $(input).parents('.layui-input-inline').find('img');
+            tempImg = $(input).parents('.layui-input-block').find('img');
             tempImgkey = $(input).data("key");
-            tempClose = $(input).parents('.layui-input-inline').find('.close');
+            tempClose = $(input).parents('.layui-input-block').find('.close');
             $(tempClose).show();
 
-            //预览大图
+            // 预览大图
             // $(tempImg).click(function () {
             //     bigPic = $(this).attr('src');
             //     viewBigPic(bigPic);
             // });
 
-            // //模拟上传成功，线上请删除
+            //模拟上传成功，线上请删除
             // $(tempImg).attr('src','../../images/user.png');
             // $(tempImg).show();
         },
@@ -48,11 +74,16 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 bigPic = $(this).attr('src');
                 viewBigPic(bigPic);
             });
+
+            // $('#uploadIdcard').text();
+
+            // var url = $('#uploadIdcard').text();
+            // aler(url)
             top.layer.success("上传成功");
-        },
-        fail: function(re) {
-            layer.error(re.errorMessage);
-            layer.hideLoad();
+            // console.log(res);
+            // $(tempImg).attr('src',res.src);
+            $(tempImg).show();  //上传成功要显示
+
         }
     });
 
@@ -72,6 +103,7 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
     form.on('submit(orderAdd)', function(data) {
         var formData=data.field;
         var auditkeys = {};
+        debugger;
         for(i in formData){
             if(i.indexOf('auditkeys')>-1){
                 let key = formData[i];
@@ -143,10 +175,11 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
 
     //图片删除
     $('.close').click(function () {
-        var key = $(this).parents('.layui-input-inline').find('input').data('key');
+        var key = $(this).parents('.layui-input-block').find('input').data('key');
         delete fileNames[key];
         $(this).hide();
-        $(this).parents('.layui-input-inline').find('img').attr('src','');
+        $(this).parents('.layui-input-block').find('img').attr('src','');
+        $(this).parents('.layui-input-block').find('img').hide();
     });
 
     //获取选择状态
@@ -230,3 +263,4 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
         ma.ajax(produ);
     }
 });
+
