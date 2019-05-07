@@ -164,11 +164,11 @@ public class OrderServcieImpl implements OrderServcie {
         UserHouseInfoVo houseInfoVo = orderCreateReq.getUserHouseInfo();
         if (orderCreateReq.getBussType() == BussTypeEnum.HOUSE.getCode() ) {
             BoOrderItem boOrderName = new BoOrderItem();
-            boOrderItem.setUuid(UUIDProvider.uuid());
-            boOrderItem.setOrderId(borrowOrder.getOrderId());
-            boOrderItem.setItemKey(BoOrderHouseItem.HOUSE_NAME.getItemKey());
-            boOrderItem.setItemValue(houseInfoVo.getHouseName());
-            boOrderItem.setItemDesc(BoOrderHouseItem.HOUSE_NAME.getItemDesc());
+            boOrderName.setUuid(UUIDProvider.uuid());
+            boOrderName.setOrderId(borrowOrder.getOrderId());
+            boOrderName.setItemKey(BoOrderHouseItem.HOUSE_NAME.getItemKey());
+            boOrderName.setItemValue(houseInfoVo.getHouseName());
+            boOrderName.setItemDesc(BoOrderHouseItem.HOUSE_NAME.getItemDesc());
             boOrderItemDao.insertItem(boOrderName);
             BoOrderItem boHousePart = new BoOrderItem();
             boHousePart.setUuid(UUIDProvider.uuid());
@@ -487,16 +487,17 @@ public class OrderServcieImpl implements OrderServcie {
             mapList.add(statusVo);
         });
         thirdParamMap.put(PlatformConstant.FundsParam.AUDIT, mapList);
-        UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(), borrowOrder.getPlateNumber());
         XMap loanCarInfoMap = new XMap();
-        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MODEL, userCar.getCarModel());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.COLOR, userCar.getCarColor());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.REGISTTIME, userCar.getSignTime());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.ESTIMATEVALUE, userCar.getAssessmentPrice());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER, userCar.getPlateNumber());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE, userCar.getMileageDesc());
+        if (borrowProduct.getBussType()  == BussTypeEnum.CARD.getCode()) {
+            UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(), borrowOrder.getPlateNumber());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MODEL, userCar.getCarModel());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.COLOR, userCar.getCarColor());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.REGISTTIME, userCar.getSignTime());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.ESTIMATEVALUE, userCar.getAssessmentPrice());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER, userCar.getPlateNumber());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE, userCar.getMileageDesc());
+        }
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO, loanCarInfoMap);
-
         XMap borrowerInfoMap = new XMap();
         borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo.getUserName());
         borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo.getMobile());
@@ -512,65 +513,105 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.BORROWER_INFO, borrowerInfoMap);
         //房产信息
         XMap loanHuoseInfo = new XMap();
-        loanHuoseInfo.put(PlatformConstant.FundsParam.OWNER, itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.COOWNER, itemkeys.get(BoOrderHouseItem.HOUSE_PART.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSENO, itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEAREA, itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSETYPE, itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.REGISTTIME, itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.ESTIMATEVALUE, itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
-
-
+        if (borrowProduct.getBussType()  == BussTypeEnum.HOUSE.getCode()) {
+            loanHuoseInfo.put(PlatformConstant.FundsParam.OWNER, itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.COOWNER, itemkeys.get(BoOrderHouseItem.HOUSE_PART.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSENO, itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEAREA, itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSETYPE, itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.REGISTTIME, itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.ESTIMATEVALUE, itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
+        }
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO, loanHuoseInfo);
         //图片添加 车贷
         List<LoanPicInfoVo> picInfoVos = new ArrayList<>();
-        boOrderAudits.stream().forEach(boOrderAudit -> {
-            if (StringUtils.isNotEmpty(boOrderAudit.getAuditFileUrl())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderAudit.getAuthName());
-                loanPicInfo.setUrl(boOrderAudit.getAuditFileUrl());
-                picInfoVos.add(loanPicInfo);
-            }
-        });
-        boOrderItems.stream().forEach(boOrderItem -> {
-            if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderItem.getItemDesc());
-                loanPicInfo.setUrl(boOrderItem.getItemValue());
-                picInfoVos.add(loanPicInfo);
-            }
-            if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderItem.getItemDesc());
-                loanPicInfo.setUrl(boOrderItem.getItemValue());
-                picInfoVos.add(loanPicInfo);
-            }
-            if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderItem.getItemDesc());
-                loanPicInfo.setUrl(boOrderItem.getItemValue());
-                picInfoVos.add(loanPicInfo);
-            }
-            if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderItem.getItemDesc());
-                loanPicInfo.setUrl(boOrderItem.getItemValue());
-                picInfoVos.add(loanPicInfo);
-            }
-            if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderItem.getItemDesc());
-                loanPicInfo.setUrl(boOrderItem.getItemValue());
-                picInfoVos.add(loanPicInfo);
-            }
-            if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey())) {
-                LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
-                loanPicInfo.setName(boOrderItem.getItemDesc());
-                loanPicInfo.setUrl(boOrderItem.getItemValue());
-                picInfoVos.add(loanPicInfo);
-            }
-        });
+        if (borrowProduct.getBussType()  == BussTypeEnum.CARD.getCode()) {
+            boOrderItems.stream().forEach(boOrderItem -> {
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_IDARD.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_VEHICLE_LICENSE.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.POLLING_LICENSE.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.CAR_MILEAGE.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.INSURANCE_POLICY.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.LETTER_COMMITMENT.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_OTHER.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+            });
+        }
+        if (borrowProduct.getBussType()  == BussTypeEnum.HOUSE.getCode()) {
+            boOrderItems.stream().forEach(boOrderItem -> {
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+            });
+        }
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO, picInfoVos);
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO, loanHuoseInfo);
 
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
         //TODO 筹标
