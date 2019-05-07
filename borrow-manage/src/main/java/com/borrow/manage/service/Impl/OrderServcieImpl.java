@@ -73,19 +73,19 @@ public class OrderServcieImpl implements OrderServcie {
         if (borrowProduct == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        UserInfoVo userInfoVo =  orderCreateReq.getUserInfo();
+        UserInfoVo userInfoVo = orderCreateReq.getUserInfo();
         //TODO
         // 判断是否是开户 和是否借款用户
         XMap xMap = new XMap();
-        xMap.put(PlatformConstant.FundsParam.IDCARD,userInfoVo.getIdcard());
-        xMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.USER_CHECK_DATA.getUrlType());
+        xMap.put(PlatformConstant.FundsParam.IDCARD, userInfoVo.getIdcard());
+        xMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.USER_CHECK_DATA.getUrlType());
         ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
-        if(!xMapResponseResult.isSucceed()) {
+        if (!xMapResponseResult.isSucceed()) {
             return xMapResponseResult;
         }
         XMap xMapRes = xMapResponseResult.getData();
         String data = xMapRes.getString("data");
-        XMap p = JSON.parseObject(data,XMap.class);
+        XMap p = JSON.parseObject(data, XMap.class);
         String isOpen = p.getString(PlatformConstant.FundsParam.ISOPEN);
         String userType = p.getString(PlatformConstant.FundsParam.USER_TYPE);
         if (!PlatformConstant.FundsParam.ISOPEN_YES.equals(isOpen)) {
@@ -106,169 +106,184 @@ public class OrderServcieImpl implements OrderServcie {
             borrowSalesman = convertBorrowSalesmanVo(borrowSalesmanVo);
             borrowSalesmanDao.insertBorrowSalesman(borrowSalesman);
         }
-            UserCarVo userCarVo = orderCreateReq.getUserCar();
-            UserCar userCar = null;
-            if (userCarVo != null) {
-                 userCar = userCarDao.selByPlateNO(userInfo.getUuid(),userCarVo.getPlateNumber());
-                if (userCar == null) {
-                    userCar = convertUserCarVo(userCarVo,userInfo.getUuid());
-                    userCarDao.insertUserCar(userCar);
-                }
+        UserCarVo userCarVo = orderCreateReq.getUserCar();
+        UserCar userCar = null;
+        if (userCarVo != null) {
+            userCar = userCarDao.selByPlateNO(userInfo.getUuid(), userCarVo.getPlateNumber());
+            if (userCar == null) {
+                userCar = convertUserCarVo(userCarVo, userInfo.getUuid());
+                userCarDao.insertUserCar(userCar);
             }
-            BorrowOrder borrowOrder = new BorrowOrder();
-            borrowOrder.setUuid(UUIDProvider.uuid());
-            borrowOrder.setOrderId(idProvider.genId());
-            borrowOrder.setBuesType(1);
-            borrowOrder.setUserUid(userInfo.getUuid());
-            borrowOrder.setProductUid(borrowProduct.getUuid());
-            borrowOrder.setProductName(borrowProduct.getpName());
-            borrowOrder.setpCode(borrowProduct.getpCode());
-            borrowOrder.setbCarUid(userCar == null ?"":userCar.getUuid());
-            borrowOrder.setPlateNumber(userCar == null?"":userCar.getPlateNumber());
-            borrowOrder.setSalesmanUid(borrowSalesman.getUuid());
-            borrowOrder.setSignTime(new Date());
-            borrowOrder.setBoPrice(borrowOrderVo.getBoPrice());
-            borrowOrder.setBoExpect(borrowProduct.getpExpect());
-            borrowOrder.setBoExpectUnit(borrowProduct.getpExpectUnit());
-            borrowOrder.setBoPaytype(borrowProduct.getpPayType());
-            borrowOrder.setBoIsState(BoIsStateEnum.WAITING.getCode());
-            borrowOrder.setBoPaySource(borrowOrderVo.getBoPaySource());
-            borrowOrder.setBoPayState(BoRepayStatusEnum.NORMAL.getCode());
-            borrowOrderDao.insertBorrowOrder(borrowOrder);
-            OrderAuditVo orderAuditVo = orderCreateReq.getOrderAudit();
-            //TODO 可以用批量插入
-            List<BoOrderAudit> boOrderAudits = convertOrderAudit(orderAuditVo, borrowOrder.getOrderId());
-            boOrderAudits.stream().forEach(boOrderAudit -> {
-                boOrderAuditDao.insertOrderAudit(boOrderAudit);
-            });
+        }
+        BorrowOrder borrowOrder = new BorrowOrder();
+        borrowOrder.setUuid(UUIDProvider.uuid());
+        borrowOrder.setOrderId(idProvider.genId());
+        borrowOrder.setBuesType(1);
+        borrowOrder.setUserUid(userInfo.getUuid());
+        borrowOrder.setProductUid(borrowProduct.getUuid());
+        borrowOrder.setProductName(borrowProduct.getpName());
+        borrowOrder.setpCode(borrowProduct.getpCode());
+        borrowOrder.setbCarUid(userCar == null ? "" : userCar.getUuid());
+        borrowOrder.setPlateNumber(userCar == null ? "" : userCar.getPlateNumber());
+        borrowOrder.setSalesmanUid(borrowSalesman.getUuid());
+        borrowOrder.setSignTime(new Date());
+        borrowOrder.setBoPrice(borrowOrderVo.getBoPrice());
+        borrowOrder.setBoExpect(borrowProduct.getpExpect());
+        borrowOrder.setBoExpectUnit(borrowProduct.getpExpectUnit());
+        borrowOrder.setBoPaytype(borrowProduct.getpPayType());
+        borrowOrder.setBoIsState(BoIsStateEnum.WAITING.getCode());
+        borrowOrder.setBoPaySource(borrowOrderVo.getBoPaySource());
+        borrowOrder.setBoPayState(BoRepayStatusEnum.NORMAL.getCode());
+        borrowOrderDao.insertBorrowOrder(borrowOrder);
+        OrderAuditVo orderAuditVo = orderCreateReq.getOrderAudit();
+        //TODO 可以用批量插入
+        List<BoOrderAudit> boOrderAudits = convertOrderAudit(orderAuditVo, borrowOrder.getOrderId());
+        boOrderAudits.stream().forEach(boOrderAudit -> {
+            boOrderAuditDao.insertOrderAudit(boOrderAudit);
+        });
 
-            BoOrderItem  boOrderItem = new BoOrderItem();
+        BoOrderItem boOrderItem = new BoOrderItem();
+        boOrderItem.setUuid(UUIDProvider.uuid());
+        boOrderItem.setOrderId(borrowOrder.getOrderId());
+        boOrderItem.setItemKey(BoOrderItemEnum.BO_SOURCE.getItemKey());
+        boOrderItem.setItemValue(orderCreateReq.getBoOrderItem().getBoSource());
+        boOrderItem.setItemDesc(BoOrderItemEnum.BO_SOURCE.getItemDesc());
+        Map<String, String> imageUrl = orderCreateReq.getBoOrderItem().getImageUrl();
+        boOrderItemDao.insertItem(boOrderItem);
+
+        if (imageUrl != null) {
+            imageUrl.forEach((k, v) -> {
+                String s = BoOrderCarItem.gettemDesc(k);
+                BoOrderItem boOrderItemTemp = new BoOrderItem();
+                boOrderItemTemp.setUuid(UUIDProvider.uuid());
+                boOrderItemTemp.setOrderId(borrowOrder.getOrderId());
+                boOrderItemTemp.setItemKey(k);
+                boOrderItemTemp.setItemValue(v);
+                boOrderItemTemp.setItemDesc(s);
+                boOrderItemDao.insertItem(boOrderItemTemp);
+
+            });
+        }
+        UserHouseInfoVo houseInfoVo = orderCreateReq.getUserHouseInfo();
+        if (houseInfoVo != null) {
+            BoOrderItem boOrderName = new BoOrderItem();
             boOrderItem.setUuid(UUIDProvider.uuid());
             boOrderItem.setOrderId(borrowOrder.getOrderId());
-            boOrderItem.setItemKey(BoOrderItemEnum.BO_SOURCE.getItemKey());
-            boOrderItem.setItemValue(orderCreateReq.getBoOrderItem().getBoSource());
-            boOrderItem.setItemDesc(BoOrderItemEnum.BO_SOURCE.getItemDesc());
-            boOrderItemDao.insertItem(boOrderItem);
-        UserHouseInfoVo houseInfoVo = orderCreateReq.getUserHouseInfo();
-            if (houseInfoVo != null) {
-                BoOrderItem  boOrderName = new BoOrderItem();
-                boOrderItem.setUuid(UUIDProvider.uuid());
-                boOrderItem.setOrderId(borrowOrder.getOrderId());
-                boOrderItem.setItemKey(BoOrderHouseItem.HOUSE_NAME.getItemKey());
-                boOrderItem.setItemValue(houseInfoVo.getHouseName());
-                boOrderItem.setItemDesc(BoOrderHouseItem.HOUSE_NAME.getItemDesc());
-                boOrderItemDao.insertItem(boOrderName);
-                BoOrderItem  boHousePart = new BoOrderItem();
-                boHousePart.setUuid(UUIDProvider.uuid());
-                boHousePart.setOrderId(borrowOrder.getOrderId());
-                boHousePart.setItemKey(BoOrderHouseItem.HOUSE_PART.getItemKey());
-                boHousePart.setItemValue(houseInfoVo.getHouseName());
-                boHousePart.setItemDesc(BoOrderHouseItem.HOUSE_PART.getItemDesc());
-                boOrderItemDao.insertItem(boHousePart);
-                BoOrderItem  boHouseNum = new BoOrderItem();
-                boHouseNum.setUuid(UUIDProvider.uuid());
-                boHouseNum.setOrderId(borrowOrder.getOrderId());
-                boHouseNum.setItemKey(BoOrderHouseItem.HOUSE_NUM.getItemKey());
-                boHouseNum.setItemValue(houseInfoVo.getHouseName());
-                boHouseNum.setItemDesc(BoOrderHouseItem.HOUSE_NUM.getItemDesc());
-                boOrderItemDao.insertItem(boHouseNum);
-                BoOrderItem  boHouseArea = new BoOrderItem();
-                boHouseArea.setUuid(UUIDProvider.uuid());
-                boHouseArea.setOrderId(borrowOrder.getOrderId());
-                boHouseArea.setItemKey(BoOrderHouseItem.HOUSE_AREA.getItemKey());
-                boHouseArea.setItemValue(houseInfoVo.getHouseName());
-                boHouseArea.setItemDesc(BoOrderHouseItem.HOUSE_AREA.getItemDesc());
-                boOrderItemDao.insertItem(boHouseArea);
+            boOrderItem.setItemKey(BoOrderHouseItem.HOUSE_NAME.getItemKey());
+            boOrderItem.setItemValue(houseInfoVo.getHouseName());
+            boOrderItem.setItemDesc(BoOrderHouseItem.HOUSE_NAME.getItemDesc());
+            boOrderItemDao.insertItem(boOrderName);
+            BoOrderItem boHousePart = new BoOrderItem();
+            boHousePart.setUuid(UUIDProvider.uuid());
+            boHousePart.setOrderId(borrowOrder.getOrderId());
+            boHousePart.setItemKey(BoOrderHouseItem.HOUSE_PART.getItemKey());
+            boHousePart.setItemValue(houseInfoVo.getHouseName());
+            boHousePart.setItemDesc(BoOrderHouseItem.HOUSE_PART.getItemDesc());
+            boOrderItemDao.insertItem(boHousePart);
+            BoOrderItem boHouseNum = new BoOrderItem();
+            boHouseNum.setUuid(UUIDProvider.uuid());
+            boHouseNum.setOrderId(borrowOrder.getOrderId());
+            boHouseNum.setItemKey(BoOrderHouseItem.HOUSE_NUM.getItemKey());
+            boHouseNum.setItemValue(houseInfoVo.getHouseName());
+            boHouseNum.setItemDesc(BoOrderHouseItem.HOUSE_NUM.getItemDesc());
+            boOrderItemDao.insertItem(boHouseNum);
+            BoOrderItem boHouseArea = new BoOrderItem();
+            boHouseArea.setUuid(UUIDProvider.uuid());
+            boHouseArea.setOrderId(borrowOrder.getOrderId());
+            boHouseArea.setItemKey(BoOrderHouseItem.HOUSE_AREA.getItemKey());
+            boHouseArea.setItemValue(houseInfoVo.getHouseName());
+            boHouseArea.setItemDesc(BoOrderHouseItem.HOUSE_AREA.getItemDesc());
+            boOrderItemDao.insertItem(boHouseArea);
 
-                BoOrderItem  boHouseAttr = new BoOrderItem();
-                boHouseAttr.setUuid(UUIDProvider.uuid());
-                boHouseAttr.setOrderId(borrowOrder.getOrderId());
-                boHouseAttr.setItemKey(BoOrderHouseItem.HOUSE_ATTR.getItemKey());
-                boHouseAttr.setItemValue(houseInfoVo.getHouseName());
-                boHouseAttr.setItemDesc(BoOrderHouseItem.HOUSE_ATTR.getItemDesc());
-                boOrderItemDao.insertItem(boHouseAttr);
+            BoOrderItem boHouseAttr = new BoOrderItem();
+            boHouseAttr.setUuid(UUIDProvider.uuid());
+            boHouseAttr.setOrderId(borrowOrder.getOrderId());
+            boHouseAttr.setItemKey(BoOrderHouseItem.HOUSE_ATTR.getItemKey());
+            boHouseAttr.setItemValue(houseInfoVo.getHouseName());
+            boHouseAttr.setItemDesc(BoOrderHouseItem.HOUSE_ATTR.getItemDesc());
+            boOrderItemDao.insertItem(boHouseAttr);
 
-                BoOrderItem  boHouseAddress = new BoOrderItem();
-                boHouseAddress.setUuid(UUIDProvider.uuid());
-                boHouseAddress.setOrderId(borrowOrder.getOrderId());
-                boHouseAddress.setItemKey(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey());
-                boHouseAddress.setItemValue(houseInfoVo.getHouseName());
-                boHouseAddress.setItemDesc(BoOrderHouseItem.HOUSE_ADDRESS.getItemDesc());
-                boOrderItemDao.insertItem(boHouseAddress);
+            BoOrderItem boHouseAddress = new BoOrderItem();
+            boHouseAddress.setUuid(UUIDProvider.uuid());
+            boHouseAddress.setOrderId(borrowOrder.getOrderId());
+            boHouseAddress.setItemKey(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey());
+            boHouseAddress.setItemValue(houseInfoVo.getHouseName());
+            boHouseAddress.setItemDesc(BoOrderHouseItem.HOUSE_ADDRESS.getItemDesc());
+            boOrderItemDao.insertItem(boHouseAddress);
 
-                BoOrderItem  boHouseDate = new BoOrderItem();
-                boHouseDate.setUuid(UUIDProvider.uuid());
-                boHouseDate.setOrderId(borrowOrder.getOrderId());
-                boHouseDate.setItemKey(BoOrderHouseItem.HOUSE_DATE.getItemKey());
-                boHouseDate.setItemValue(houseInfoVo.getHouseName());
-                boHouseDate.setItemDesc(BoOrderHouseItem.HOUSE_DATE.getItemDesc());
-                boOrderItemDao.insertItem(boHouseAddress);
+            BoOrderItem boHouseDate = new BoOrderItem();
+            boHouseDate.setUuid(UUIDProvider.uuid());
+            boHouseDate.setOrderId(borrowOrder.getOrderId());
+            boHouseDate.setItemKey(BoOrderHouseItem.HOUSE_DATE.getItemKey());
+            boHouseDate.setItemValue(houseInfoVo.getHouseName());
+            boHouseDate.setItemDesc(BoOrderHouseItem.HOUSE_DATE.getItemDesc());
+            boOrderItemDao.insertItem(boHouseAddress);
 
-                BoOrderItem  boHousePrice = new BoOrderItem();
-                boHousePrice.setUuid(UUIDProvider.uuid());
-                boHousePrice.setOrderId(borrowOrder.getOrderId());
-                boHousePrice.setItemKey(BoOrderHouseItem.HOUSE_PRICE.getItemKey());
-                boHousePrice.setItemValue(houseInfoVo.getHouseName());
-                boHousePrice.setItemDesc(BoOrderHouseItem.HOUSE_PRICE.getItemDesc());
-                boOrderItemDao.insertItem(boHousePrice);
+            BoOrderItem boHousePrice = new BoOrderItem();
+            boHousePrice.setUuid(UUIDProvider.uuid());
+            boHousePrice.setOrderId(borrowOrder.getOrderId());
+            boHousePrice.setItemKey(BoOrderHouseItem.HOUSE_PRICE.getItemKey());
+            boHousePrice.setItemValue(houseInfoVo.getHouseName());
+            boHousePrice.setItemDesc(BoOrderHouseItem.HOUSE_PRICE.getItemDesc());
+            boOrderItemDao.insertItem(boHousePrice);
 
-                BoOrderItem  boHouseidcardPicUrl = new BoOrderItem();
-                boHouseidcardPicUrl.setUuid(UUIDProvider.uuid());
-                boHouseidcardPicUrl.setOrderId(borrowOrder.getOrderId());
-                boHouseidcardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey());
-                boHouseidcardPicUrl.setItemValue(houseInfoVo.getHouseName());
-                boHouseidcardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemDesc());
-                boOrderItemDao.insertItem(boHouseidcardPicUrl);
-                BoOrderItem  boHousePicUrl = new BoOrderItem();
-                boHousePicUrl.setUuid(UUIDProvider.uuid());
-                boHousePicUrl.setOrderId(borrowOrder.getOrderId());
-                boHousePicUrl.setItemKey(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey());
-                boHousePicUrl.setItemValue(houseInfoVo.getHouseName());
-                boHousePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_PIC_URL.getItemDesc());
-                boOrderItemDao.insertItem(boHousePicUrl);
+            BoOrderItem boHouseidcardPicUrl = new BoOrderItem();
+            boHouseidcardPicUrl.setUuid(UUIDProvider.uuid());
+            boHouseidcardPicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseidcardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey());
+            boHouseidcardPicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseidcardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemDesc());
+            boOrderItemDao.insertItem(boHouseidcardPicUrl);
+            BoOrderItem boHousePicUrl = new BoOrderItem();
+            boHousePicUrl.setUuid(UUIDProvider.uuid());
+            boHousePicUrl.setOrderId(borrowOrder.getOrderId());
+            boHousePicUrl.setItemKey(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey());
+            boHousePicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHousePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_PIC_URL.getItemDesc());
+            boOrderItemDao.insertItem(boHousePicUrl);
 
-                BoOrderItem  boHouseAuthorityCardPicUrl = new BoOrderItem();
-                boHouseAuthorityCardPicUrl.setUuid(UUIDProvider.uuid());
-                boHouseAuthorityCardPicUrl.setOrderId(borrowOrder.getOrderId());
-                boHouseAuthorityCardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey());
-                boHouseAuthorityCardPicUrl.setItemValue(houseInfoVo.getHouseName());
-                boHouseAuthorityCardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemDesc());
-                boOrderItemDao.insertItem(boHousePicUrl);
+            BoOrderItem boHouseAuthorityCardPicUrl = new BoOrderItem();
+            boHouseAuthorityCardPicUrl.setUuid(UUIDProvider.uuid());
+            boHouseAuthorityCardPicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseAuthorityCardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey());
+            boHouseAuthorityCardPicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseAuthorityCardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemDesc());
+            boOrderItemDao.insertItem(boHousePicUrl);
 
-                BoOrderItem  boHouseGuaranteePicUrl = new BoOrderItem();
-                boHouseGuaranteePicUrl.setUuid(UUIDProvider.uuid());
-                boHouseGuaranteePicUrl.setOrderId(borrowOrder.getOrderId());
-                boHouseGuaranteePicUrl.setItemKey(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
-                boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseName());
-                boHouseGuaranteePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemDesc());
-                boOrderItemDao.insertItem(boHousePicUrl);
+            BoOrderItem boHouseGuaranteePicUrl = new BoOrderItem();
+            boHouseGuaranteePicUrl.setUuid(UUIDProvider.uuid());
+            boHouseGuaranteePicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseGuaranteePicUrl.setItemKey(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
+            boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseGuaranteePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemDesc());
+            boOrderItemDao.insertItem(boHousePicUrl);
 
-                BoOrderItem  boHouseLetterCommitmentPicUrl = new BoOrderItem();
-                boHouseLetterCommitmentPicUrl.setUuid(UUIDProvider.uuid());
-                boHouseLetterCommitmentPicUrl.setOrderId(borrowOrder.getOrderId());
-                boHouseLetterCommitmentPicUrl.setItemKey(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey());
-                boHouseLetterCommitmentPicUrl.setItemValue(houseInfoVo.getHouseName());
-                boHouseLetterCommitmentPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemDesc());
-                boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
+            BoOrderItem boHouseLetterCommitmentPicUrl = new BoOrderItem();
+            boHouseLetterCommitmentPicUrl.setUuid(UUIDProvider.uuid());
+            boHouseLetterCommitmentPicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseLetterCommitmentPicUrl.setItemKey(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey());
+            boHouseLetterCommitmentPicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseLetterCommitmentPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemDesc());
+            boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
 
-                BoOrderItem  boHouseAuthOtherPicurl = new BoOrderItem();
-                boHouseAuthOtherPicurl.setUuid(UUIDProvider.uuid());
-                boHouseAuthOtherPicurl.setOrderId(borrowOrder.getOrderId());
-                boHouseAuthOtherPicurl.setItemKey(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey());
-                boHouseAuthOtherPicurl.setItemValue(houseInfoVo.getHouseName());
-                boHouseAuthOtherPicurl.setItemDesc(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemDesc());
-                boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
+            BoOrderItem boHouseAuthOtherPicurl = new BoOrderItem();
+            boHouseAuthOtherPicurl.setUuid(UUIDProvider.uuid());
+            boHouseAuthOtherPicurl.setOrderId(borrowOrder.getOrderId());
+            boHouseAuthOtherPicurl.setItemKey(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey());
+            boHouseAuthOtherPicurl.setItemValue(houseInfoVo.getHouseName());
+            boHouseAuthOtherPicurl.setItemDesc(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemDesc());
+            boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
 
-            }
+        }
 
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 
     @Override
     public ResponseResult orderSelList(OrderListReq orderListReq) {
         List<OrderListRes> listRes = borrowOrderDao.selOrderListWhere(orderListReq);
         PageBaseRes pageBaseRes = new PageBaseRes<OrderListRes>(listRes);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),pageBaseRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), pageBaseRes);
 
     }
 
@@ -313,9 +328,9 @@ public class OrderServcieImpl implements OrderServcie {
         });
         data.setRows(rows);
         try {
-            ExportExcelUtils.exportExcel(response,"借款申请.xlsx",data);
+            ExportExcelUtils.exportExcel(response, "借款申请.xlsx", data);
         } catch (Exception e) {
-            logger.error("申请查询导出异常:",e);
+            logger.error("申请查询导出异常:", e);
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
     }
@@ -324,7 +339,7 @@ public class OrderServcieImpl implements OrderServcie {
     public ResponseResult orderPaySelList(OrderPayListReq orderPayListReq) {
         List<OrderPayListRes> listRes = borrowOrderDao.selOrderPayListWhere(orderPayListReq);
         PageBaseRes pageBaseRes = new PageBaseRes<OrderPayListRes>(listRes);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),pageBaseRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), pageBaseRes);
     }
 
     @Override
@@ -362,9 +377,9 @@ public class OrderServcieImpl implements OrderServcie {
         });
         data.setRows(rows);
         try {
-            ExportExcelUtils.exportExcel(response,"还款综合查询.xlsx",data);
+            ExportExcelUtils.exportExcel(response, "还款综合查询.xlsx", data);
         } catch (Exception e) {
-            logger.error("申请查询导出异常:",e);
+            logger.error("申请查询导出异常:", e);
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
     }
@@ -373,7 +388,7 @@ public class OrderServcieImpl implements OrderServcie {
     @Transactional
     public ResponseResult makeLoans(MakeLoansReq makeLoansReq) {
         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(Long.parseLong(makeLoansReq.getOrderId()));
-        if (borrowOrder ==  null) {
+        if (borrowOrder == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
         BorrowProduct borrowProduct = borrowProductDao.selByPcode(borrowOrder.getpCode());
@@ -382,8 +397,8 @@ public class OrderServcieImpl implements OrderServcie {
         repayPlanCalReq.setpCode(borrowOrder.getpCode());
         repayPlanCalReq.setBoPrice(borrowOrder.getBoPrice());
         BoCarRepayPlanRes repayPlanRes = abstractCarRepayPlan.planCal(repayPlanCalReq);
-        orderCostPlan(repayPlanRes,borrowOrder);
-        List<BorrowRepayment> repaymentsResult = orderRepaymentPlan(repayPlanRes,borrowOrder);
+        orderCostPlan(repayPlanRes, borrowOrder);
+        List<BorrowRepayment> repaymentsResult = orderRepaymentPlan(repayPlanRes, borrowOrder);
 
         BorrowOrder bo = new BorrowOrder();
         bo.setBoIsState(BoIsStateEnum.LOAN_OVER.getCode());
@@ -391,81 +406,81 @@ public class OrderServcieImpl implements OrderServcie {
         bo.setBoIsFinish(BoIsFinishEnum.FINISH_YES.getCode());
         bo.setBoFinishTime(new Date());
         bo.setFirstExpectTime(repaymentsResult.get(0).getBrTime());
-        bo.setLastExpectTime(repaymentsResult.get(repaymentsResult.size()-1).getBrTime());
-        borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),bo);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        bo.setLastExpectTime(repaymentsResult.get(repaymentsResult.size() - 1).getBrTime());
+        borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(), bo);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 
     @Override
     public ResponseResult orderCancel(OrderCancelReq orderCancelReq) {
-        borrowOrderDao.upBorrowOrderByOrderId(Long.valueOf(orderCancelReq.getOrderId()),BoIsStateEnum.LOAN_CANCEL.getCode());
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        borrowOrderDao.upBorrowOrderByOrderId(Long.valueOf(orderCancelReq.getOrderId()), BoIsStateEnum.LOAN_CANCEL.getCode());
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 
     @Override
     public ResponseResult orderLoaning(String orderId) {
-        borrowOrderDao.upBorrowOrderByOrderId(Long.valueOf(orderId),BoIsStateEnum.LOANING.getCode());
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        borrowOrderDao.upBorrowOrderByOrderId(Long.valueOf(orderId), BoIsStateEnum.LOANING.getCode());
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
 
     @Override
     public ResponseResult makeRaise(MakeLoansReq makeLoansReq) {
         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(Long.parseLong(makeLoansReq.getOrderId()));
-        if (borrowOrder ==  null) {
+        if (borrowOrder == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        XMap<String,Object> thirdParamMap = new XMap<String, Object>();
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO,borrowOrder.getOrderId().toString());
+        XMap<String, Object> thirdParamMap = new XMap<String, Object>();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO, borrowOrder.getOrderId().toString());
 
         BorrowProduct borrowProduct = borrowProductDao.selByPUid(borrowOrder.getProductUid());
-        thirdParamMap.put(PlatformConstant.FundsParam.PRODUCT_NAME,borrowProduct.getpName());
-        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_MODE,String.valueOf(borrowOrder.getBoPaytype()));
-        thirdParamMap.put(PlatformConstant.FundsParam.CLOSE_PERIOD,borrowOrder.getBoExpect().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.PRODUCT_NAME, borrowProduct.getpName());
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_MODE, String.valueOf(borrowOrder.getBoPaytype()));
+        thirdParamMap.put(PlatformConstant.FundsParam.CLOSE_PERIOD, borrowOrder.getBoExpect().toString());
 
         List<BoProductRate> boProductRates = boProductRateDao.selProductRateByPUid(borrowProduct.getUuid());
-        Map<String,String> mapRate = new HashMap();
+        Map<String, String> mapRate = new HashMap();
         boProductRates.stream().forEach(boProductRate -> {
-            mapRate.put(boProductRate.getRateKey(),boProductRate.getRateValue());
+            mapRate.put(boProductRate.getRateKey(), boProductRate.getRateValue());
         });
-        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_RATE,mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_RATE,mapRate.get(ProductRateEnum.MONTH_SERVICE_RATE.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_ACCRUAL_RATE,mapRate.get(ProductRateEnum.MONTH_ACCRUAL_RATE.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.GURANTEE_VIOLATE_RATE,mapRate.get(ProductRateEnum.GUARANTEE_VIOLATE_RATE.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_RATE,mapRate.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_PAY_RATE,mapRate.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_RATE, mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_RATE, mapRate.get(ProductRateEnum.MONTH_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_ACCRUAL_RATE, mapRate.get(ProductRateEnum.MONTH_ACCRUAL_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GURANTEE_VIOLATE_RATE, mapRate.get(ProductRateEnum.GUARANTEE_VIOLATE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_RATE, mapRate.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_PAY_RATE, mapRate.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
 
         String gpsCost = mapRate.get(ProductRateEnum.GPS_COST.getRateKey());
         BigDecimal earlyServiceRate = BigDecimal.valueOf(Double.valueOf(thirdParamMap.getString(PlatformConstant.FundsParam.EARLY_SERVICE_RATE)));
         BigDecimal earlyServiceCost = borrowOrder.getBoPrice().multiply(earlyServiceRate);
 
-        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_FEE,earlyServiceCost.toString());
-        thirdParamMap.put(PlatformConstant.FundsParam.GPS_COST,gpsCost);
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_FEE, earlyServiceCost.toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.GPS_COST, gpsCost);
 
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_TYPE,borrowOrder.getBuesType().toString());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_AMT,borrowOrder.getBoPrice().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_TYPE, borrowOrder.getBuesType().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_AMT, borrowOrder.getBoPrice().toString());
 
         UserInfo userInfo = userInfoDao.selInfoByUid(borrowOrder.getUserUid());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_ID,userInfo.getIdcard());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_NAME,userInfo.getUserName());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_PHONE,userInfo.getMobile());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY,userInfo.getIndustry());
-        thirdParamMap.put(PlatformConstant.FundsParam.JOB_DESC,userInfo.getWorkNature());
-        thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC,userInfo.getUserEarns());
-        thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_ID, userInfo.getIdcard());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo.getUserName());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo.getMobile());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getIndustry());
+        thirdParamMap.put(PlatformConstant.FundsParam.JOB_DESC, userInfo.getWorkNature());
+        thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC, userInfo.getUserEarns());
+        thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION, userInfo.getCreditDec());
 
         List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(borrowOrder.getOrderId());
-        Map<String,String> itemkeys = new HashMap();
-        boOrderItems.stream().forEach( boOrderItem -> {
-            itemkeys.put(boOrderItem.getItemKey(),boOrderItem.getItemValue());
+        Map<String, String> itemkeys = new HashMap();
+        boOrderItems.stream().forEach(boOrderItem -> {
+            itemkeys.put(boOrderItem.getItemKey(), boOrderItem.getItemValue());
         });
 
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_DESC,itemkeys.get(BoOrderItemEnum.BO_SOURCE.getItemKey()));
-        thirdParamMap.put(PlatformConstant.FundsParam.GUARANTEE_INFO_DESC,borrowOrder.getBoPaySource());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_DESC, itemkeys.get(BoOrderItemEnum.BO_SOURCE.getItemKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GUARANTEE_INFO_DESC, borrowOrder.getBoPaySource());
 
         List<BoOrderAudit> boOrderAudits = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
         Map auditsUrlkeys = new HashMap();
-        boOrderAudits.stream().forEach( orderAudit -> {
-            auditsUrlkeys.put(orderAudit.getAuditKey(),orderAudit.getAuditFileUrl());
+        boOrderAudits.stream().forEach(orderAudit -> {
+            auditsUrlkeys.put(orderAudit.getAuditKey(), orderAudit.getAuditFileUrl());
         });
         List<AuditStatusVo> mapList = new ArrayList<>();
         boOrderAudits.stream().forEach(boOrderAudit -> {
@@ -474,39 +489,39 @@ public class OrderServcieImpl implements OrderServcie {
             statusVo.setAudit(OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
             mapList.add(statusVo);
         });
-        thirdParamMap.put(PlatformConstant.FundsParam.AUDIT,mapList);
-        UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(),borrowOrder.getPlateNumber());
+        thirdParamMap.put(PlatformConstant.FundsParam.AUDIT, mapList);
+        UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(), borrowOrder.getPlateNumber());
         XMap loanCarInfoMap = new XMap();
-        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MODEL,userCar.getCarModel());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.COLOR,userCar.getCarColor());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.REGISTTIME,userCar.getSignTime());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.ESTIMATEVALUE,userCar.getAssessmentPrice());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER,userCar.getPlateNumber());
-        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE,userCar.getMileageDesc());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO,loanCarInfoMap);
+        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MODEL, userCar.getCarModel());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.COLOR, userCar.getCarColor());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.REGISTTIME, userCar.getSignTime());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.ESTIMATEVALUE, userCar.getAssessmentPrice());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER, userCar.getPlateNumber());
+        loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE, userCar.getMileageDesc());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO, loanCarInfoMap);
 
         XMap borrowerInfoMap = new XMap();
-        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME,userInfo.getUserName());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_PHONE,userInfo.getMobile());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY,userInfo.getIndustry());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.JOB_DESC,userInfo.getWorkNature());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.INCOMING_DESC,userInfo.getUserEarns());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION,userInfo.getCreditDec());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.MARRIAGE_STATUS,userInfo.getMarriageStatus());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.CHILDREN_DESC,userInfo.getChildrenDesc());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.DEBT_DESC,userInfo.getLiabilitiesDesc());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.GURANTEE,userInfo.getGuaranteeDesc());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.FIRSTREPAY,borrowOrder.getBoPaySource());
-        thirdParamMap.put(PlatformConstant.FundsParam.BORROWER_INFO,borrowerInfoMap);
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo.getUserName());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo.getMobile());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getIndustry());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.JOB_DESC, userInfo.getWorkNature());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.INCOMING_DESC, userInfo.getUserEarns());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION, userInfo.getCreditDec());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.MARRIAGE_STATUS, userInfo.getMarriageStatus());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.CHILDREN_DESC, userInfo.getChildrenDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.DEBT_DESC, userInfo.getLiabilitiesDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.GURANTEE, userInfo.getGuaranteeDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.FIRSTREPAY, borrowOrder.getBoPaySource());
+        thirdParamMap.put(PlatformConstant.FundsParam.BORROWER_INFO, borrowerInfoMap);
         //房产信息
         XMap loanHuoseInfo = new XMap();
-        loanHuoseInfo.put(PlatformConstant.FundsParam.OWNER,itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.COOWNER,itemkeys.get(BoOrderHouseItem.HOUSE_PART.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSENO,itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEAREA,itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSETYPE,itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.REGISTTIME,itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
-        loanHuoseInfo.put(PlatformConstant.FundsParam.ESTIMATEVALUE,itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.OWNER, itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.COOWNER, itemkeys.get(BoOrderHouseItem.HOUSE_PART.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSENO, itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEAREA, itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSETYPE, itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.REGISTTIME, itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
+        loanHuoseInfo.put(PlatformConstant.FundsParam.ESTIMATEVALUE, itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
 
 
         //图片添加 车贷
@@ -557,18 +572,18 @@ public class OrderServcieImpl implements OrderServcie {
                 picInfoVos.add(loanPicInfo);
             }
         });
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO,picInfoVos);
-        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO,loanHuoseInfo);
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO, picInfoVos);
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO, loanHuoseInfo);
 
-        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(),DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
         //TODO 筹标
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
-            throw  new BorrowException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
+            throw new BorrowException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
         }
         BorrowOrder borr = new BorrowOrder();
         borr.setBoIsState(BoIsStateEnum.LOANING.getCode());
-        borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),borr);
+        borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(), borr);
 //        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
         return responseResult;
     }
@@ -590,7 +605,7 @@ public class OrderServcieImpl implements OrderServcie {
         auditList.stream().forEach(boOrderAudit -> {
             auditkeys.put(boOrderAudit.getAuditKey(), boOrderAudit.getAuditFileUrl());
         });
-         OrderDetailRes detailRes = new OrderDetailRes();
+        OrderDetailRes detailRes = new OrderDetailRes();
         userInfo.getChildrenDesc();
         userInfo.getWorkNature();
         userInfo.getUserEarns();
@@ -598,7 +613,7 @@ public class OrderServcieImpl implements OrderServcie {
         userInfo.getGuaranteeDesc();
         detailRes.setBoPaySource(borrowOrder.getBoPaySource());
         BeanUtils.copyProperties(userInfo, detailRes);
-        BeanUtils.copyProperties(userCar,detailRes);
+        BeanUtils.copyProperties(userCar, detailRes);
 
 
 //        $('#carModel').html(res.data.carModel);
@@ -608,11 +623,11 @@ public class OrderServcieImpl implements OrderServcie {
 //        $('#plateNumber').html(res.data.plateNumber);
 //        $('#mileageDesc').html(res.data.mileageDesc);
         detailRes.setAuditkeys(auditkeys);
-        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),detailRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), detailRes);
     }
 
 
-    private void orderCostPlan(BoCarRepayPlanRes repayPlanRes,BorrowOrder borrowOrder){
+    private void orderCostPlan(BoCarRepayPlanRes repayPlanRes, BorrowOrder borrowOrder) {
         List<BoOrderCost> orderCosts = new ArrayList<>();
         BoOrderCost costGPS = new BoOrderCost();
         costGPS.setUuid(UUIDProvider.uuid());
@@ -635,8 +650,8 @@ public class OrderServcieImpl implements OrderServcie {
 
     }
 
-    private List<BorrowRepayment> orderRepaymentPlan(BoCarRepayPlanRes repayPlanRes,BorrowOrder borrowOrder){
-        List<BorrowRepayment> result  = new ArrayList<>();
+    private List<BorrowRepayment> orderRepaymentPlan(BoCarRepayPlanRes repayPlanRes, BorrowOrder borrowOrder) {
+        List<BorrowRepayment> result = new ArrayList<>();
         repayPlanRes.getRepayPlans().stream().forEach(carRepayPlanVo -> {
             BorrowRepayment repayment = new BorrowRepayment();
             repayment.setUuid(UUIDProvider.uuid());
@@ -658,7 +673,7 @@ public class OrderServcieImpl implements OrderServcie {
         return result;
     }
 
-    private UserInfo convertUserInfoVo(UserInfoVo userInfoVo ){
+    private UserInfo convertUserInfoVo(UserInfoVo userInfoVo) {
         UserInfo userNew = new UserInfo();
         userNew.setUuid(UUIDProvider.uuid());
         userNew.setUserName(userInfoVo.getUserName());
@@ -681,13 +696,14 @@ public class OrderServcieImpl implements OrderServcie {
         return userNew;
     }
 
-    private UserCar convertUserCarVo(UserCarVo userCarVo,String userUid){
+    private UserCar convertUserCarVo(UserCarVo userCarVo, String userUid) {
         UserCar userCarNew = new UserCar();
         BeanUtils.copyProperties(userCarVo, userCarNew);
         userCarNew.setUuid(UUIDProvider.uuid());
         userCarNew.setUserUid(userUid);
         return userCarNew;
     }
+
     private BorrowSalesman convertBorrowSalesmanVo(BorrowSalesmanVo borrowSalesmanVo) {
         BorrowSalesman borrowSalesmanNew = new BorrowSalesman();
         borrowSalesmanNew.setUuid(UUIDProvider.uuid());
@@ -696,7 +712,7 @@ public class OrderServcieImpl implements OrderServcie {
         return borrowSalesmanNew;
     }
 
-    private List<BoOrderAudit> convertOrderAudit(OrderAuditVo orderAuditVo, long orderId){
+    private List<BoOrderAudit> convertOrderAudit(OrderAuditVo orderAuditVo, long orderId) {
         List<BoOrderAudit> boOrderAudits = new ArrayList<>();
         orderAuditVo.getAuditkeys().forEach((s, v) -> {
             BoOrderAudit boOrderAudit = new BoOrderAudit();

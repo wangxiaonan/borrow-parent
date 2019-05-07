@@ -103,19 +103,19 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
     form.on('submit(orderAdd)', function(data) {
         var formData=data.field;
         var auditkeys = {};
-        debugger;
-        for(i in formData){
-            if(i.indexOf('auditkeys')>-1){
-                let key = formData[i];
-                // let data = {};
-                if (!fileNames[key]) {
-                    auditkeys[key] = "";
-                } else {
-                    auditkeys[key] = fileNames[key];
-                }
-
-            }
-        };
+        // debugger;
+        // for(i in formData){
+        //     if(i.indexOf('auditkeys')>-1){
+        //         let key = formData[i];
+        //         // let data = {};
+        //         if (!fileNames[key]) {
+        //             auditkeys[key] = "";
+        //         } else {
+        //             auditkeys[key] = fileNames[key];
+        //         }
+        //
+        //     }
+        // };
         var SubmitData={
             "userInfo": {
                 "userEarns": formData.userEarns,
@@ -151,7 +151,8 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "productCode": formData.productCode
             },
             "boOrderItem": {
-                "boSource": formData.boSource
+                "boSource": formData.boSource,
+                "imageUrl": fileNames
             }
 
         }
