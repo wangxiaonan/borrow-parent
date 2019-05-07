@@ -174,21 +174,21 @@ public class OrderServcieImpl implements OrderServcie {
             boHousePart.setUuid(UUIDProvider.uuid());
             boHousePart.setOrderId(borrowOrder.getOrderId());
             boHousePart.setItemKey(BoOrderHouseItem.HOUSE_PART.getItemKey());
-            boHousePart.setItemValue(houseInfoVo.getHouseName());
+            boHousePart.setItemValue(houseInfoVo.getHousePart());
             boHousePart.setItemDesc(BoOrderHouseItem.HOUSE_PART.getItemDesc());
             boOrderItemDao.insertItem(boHousePart);
             BoOrderItem boHouseNum = new BoOrderItem();
             boHouseNum.setUuid(UUIDProvider.uuid());
             boHouseNum.setOrderId(borrowOrder.getOrderId());
             boHouseNum.setItemKey(BoOrderHouseItem.HOUSE_NUM.getItemKey());
-            boHouseNum.setItemValue(houseInfoVo.getHouseName());
+            boHouseNum.setItemValue(houseInfoVo.getHouseNum());
             boHouseNum.setItemDesc(BoOrderHouseItem.HOUSE_NUM.getItemDesc());
             boOrderItemDao.insertItem(boHouseNum);
             BoOrderItem boHouseArea = new BoOrderItem();
             boHouseArea.setUuid(UUIDProvider.uuid());
             boHouseArea.setOrderId(borrowOrder.getOrderId());
             boHouseArea.setItemKey(BoOrderHouseItem.HOUSE_AREA.getItemKey());
-            boHouseArea.setItemValue(houseInfoVo.getHouseName());
+            boHouseArea.setItemValue(houseInfoVo.getHouseArea());
             boHouseArea.setItemDesc(BoOrderHouseItem.HOUSE_AREA.getItemDesc());
             boOrderItemDao.insertItem(boHouseArea);
 
@@ -196,7 +196,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseAttr.setUuid(UUIDProvider.uuid());
             boHouseAttr.setOrderId(borrowOrder.getOrderId());
             boHouseAttr.setItemKey(BoOrderHouseItem.HOUSE_ATTR.getItemKey());
-            boHouseAttr.setItemValue(houseInfoVo.getHouseName());
+            boHouseAttr.setItemValue(houseInfoVo.getHouseAttr());
             boHouseAttr.setItemDesc(BoOrderHouseItem.HOUSE_ATTR.getItemDesc());
             boOrderItemDao.insertItem(boHouseAttr);
 
@@ -204,7 +204,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseAddress.setUuid(UUIDProvider.uuid());
             boHouseAddress.setOrderId(borrowOrder.getOrderId());
             boHouseAddress.setItemKey(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey());
-            boHouseAddress.setItemValue(houseInfoVo.getHouseName());
+            boHouseAddress.setItemValue(houseInfoVo.getHouseAddress());
             boHouseAddress.setItemDesc(BoOrderHouseItem.HOUSE_ADDRESS.getItemDesc());
             boOrderItemDao.insertItem(boHouseAddress);
 
@@ -212,7 +212,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseDate.setUuid(UUIDProvider.uuid());
             boHouseDate.setOrderId(borrowOrder.getOrderId());
             boHouseDate.setItemKey(BoOrderHouseItem.HOUSE_DATE.getItemKey());
-            boHouseDate.setItemValue(houseInfoVo.getHouseName());
+            boHouseDate.setItemValue(houseInfoVo.getHouseDate());
             boHouseDate.setItemDesc(BoOrderHouseItem.HOUSE_DATE.getItemDesc());
             boOrderItemDao.insertItem(boHouseAddress);
 
@@ -220,7 +220,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHousePrice.setUuid(UUIDProvider.uuid());
             boHousePrice.setOrderId(borrowOrder.getOrderId());
             boHousePrice.setItemKey(BoOrderHouseItem.HOUSE_PRICE.getItemKey());
-            boHousePrice.setItemValue(houseInfoVo.getHouseName());
+            boHousePrice.setItemValue(houseInfoVo.getHousePrice());
             boHousePrice.setItemDesc(BoOrderHouseItem.HOUSE_PRICE.getItemDesc());
             boOrderItemDao.insertItem(boHousePrice);
 
@@ -228,14 +228,14 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseidcardPicUrl.setUuid(UUIDProvider.uuid());
             boHouseidcardPicUrl.setOrderId(borrowOrder.getOrderId());
             boHouseidcardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey());
-            boHouseidcardPicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseidcardPicUrl.setItemValue(houseInfoVo.getHouseidcardPicUrl());
             boHouseidcardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHouseidcardPicUrl);
             BoOrderItem boHousePicUrl = new BoOrderItem();
             boHousePicUrl.setUuid(UUIDProvider.uuid());
             boHousePicUrl.setOrderId(borrowOrder.getOrderId());
             boHousePicUrl.setItemKey(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey());
-            boHousePicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHousePicUrl.setItemValue(houseInfoVo.getHousePicUrl());
             boHousePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHousePicUrl);
 
@@ -243,7 +243,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseAuthorityCardPicUrl.setUuid(UUIDProvider.uuid());
             boHouseAuthorityCardPicUrl.setOrderId(borrowOrder.getOrderId());
             boHouseAuthorityCardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey());
-            boHouseAuthorityCardPicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseAuthorityCardPicUrl.setItemValue(houseInfoVo.getHouseAuthorityCardPicUrl());
             boHouseAuthorityCardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHousePicUrl);
 
@@ -251,7 +251,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseGuaranteePicUrl.setUuid(UUIDProvider.uuid());
             boHouseGuaranteePicUrl.setOrderId(borrowOrder.getOrderId());
             boHouseGuaranteePicUrl.setItemKey(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
-            boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseGuaranteePicUrl());
             boHouseGuaranteePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHousePicUrl);
 
@@ -259,7 +259,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseLetterCommitmentPicUrl.setUuid(UUIDProvider.uuid());
             boHouseLetterCommitmentPicUrl.setOrderId(borrowOrder.getOrderId());
             boHouseLetterCommitmentPicUrl.setItemKey(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey());
-            boHouseLetterCommitmentPicUrl.setItemValue(houseInfoVo.getHouseName());
+            boHouseLetterCommitmentPicUrl.setItemValue(houseInfoVo.getHouseLetterCommitmentPicUrl());
             boHouseLetterCommitmentPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
 
@@ -267,7 +267,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseAuthOtherPicurl.setUuid(UUIDProvider.uuid());
             boHouseAuthOtherPicurl.setOrderId(borrowOrder.getOrderId());
             boHouseAuthOtherPicurl.setItemKey(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey());
-            boHouseAuthOtherPicurl.setItemValue(houseInfoVo.getHouseName());
+            boHouseAuthOtherPicurl.setItemValue(houseInfoVo.getHouseAuthOtherPicurl());
             boHouseAuthOtherPicurl.setItemDesc(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
 
