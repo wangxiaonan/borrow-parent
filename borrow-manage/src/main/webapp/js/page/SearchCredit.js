@@ -148,11 +148,12 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
 
                 createSpan(res.data.auditkeys);
                 var images = "";
+
                 let datum = res.data["boOrderItems"];
                 if (datum && datum.length > 0) {
                     for (let temp of datum) {
                         if (temp["itemKey"] != "BO_SOURCE") {
-                            images += temp["itemDesc"]+"<image src = " + temp["itemValue"] + "></image><br>";
+                            images += "<image src = " + temp["itemValue"] + "></image><br>";
                         }
                     }
 
