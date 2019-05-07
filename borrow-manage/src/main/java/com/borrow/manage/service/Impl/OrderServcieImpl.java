@@ -156,7 +156,9 @@ public class OrderServcieImpl implements OrderServcie {
                 boOrderItemTemp.setItemKey(k);
                 boOrderItemTemp.setItemValue(v);
                 boOrderItemTemp.setItemDesc(s);
-                boOrderItemDao.insertItem(boOrderItemTemp);
+                if (StringUtils.isNotEmpty(s)) {
+                    boOrderItemDao.insertItem(boOrderItemTemp);
+                }
             });
         }
         UserHouseInfoVo houseInfoVo = orderCreateReq.getUserHouseInfo();
@@ -610,7 +612,9 @@ public class OrderServcieImpl implements OrderServcie {
         detailRes.setBoOrderItems(boOrderItems);
         detailRes.setBoPaySource(borrowOrder.getBoPaySource());
         BeanUtils.copyProperties(userInfo, detailRes);
-        BeanUtils.copyProperties(userCar, detailRes);
+        if (userCar != null) {
+            BeanUtils.copyProperties(userCar, detailRes);
+        }
 
 
 //        $('#carModel').html(res.data.carModel);
