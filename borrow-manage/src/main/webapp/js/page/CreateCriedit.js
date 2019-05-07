@@ -156,12 +156,12 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "houseAddress": formData.houseAddress,
                 "houseDate": formData.houseDate,
                 "housePrice": formData.housePrice,
-                "houseidcardPicUrl": formData.houseidcardPicUrl,
-                "housePicUrl": formData.housePicUrl,
-                "houseAuthorityCardPicUrl": formData.houseAuthorityCardPicUrl,
-                "houseGuaranteePicUrl": formData.houseGuaranteePicUrl,
-                "houseLetterCommitmentPicUrl": formData.houseLetterCommitmentPicUrl,
-                "houseAuthOtherPicurl": formData.houseAuthOtherPicurl
+                "houseidcardPicUrl": fileNames.houseidcardPicUrl,
+                "housePicUrl": fileNames.housePicUrl,
+                "houseAuthorityCardPicUrl": fileNames.houseAuthorityCardPicUrl,
+                "houseGuaranteePicUrl": fileNames.houseGuaranteePicUrl,
+                "houseLetterCommitmentPicUrl": fileNames.houseLetterCommitmentPicUrl,
+                "houseAuthOtherPicurl": fileNames.houseAuthOtherPicurl
             }
         }
         var addUser = {
