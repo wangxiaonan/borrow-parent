@@ -146,7 +146,22 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
                 $('#plateNumber').html(res.data.plateNumber);
                 $('#mileageDesc').html(res.data.mileageDesc);
 
-                createSpan(res.data.auditkeys)
+                createSpan(res.data.auditkeys);
+                var images = "";
+                let datum = res.data["boOrderItems"];
+                if (datum && datum.length > 0) {
+                    for (let temp of datum) {
+                        if (temp["itemKey"] != "BO_SOURCE") {
+                            images += temp["itemDesc"]+"<image src = " + temp["itemValue"] + "></image><br>";
+                        }
+                    }
+
+                }
+
+                $("#images").html(images);
+
+
+
             }
         }
         ma.ajax(getDetail);
@@ -154,7 +169,6 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
 
     function createSpan(arr) {
         $("#images").html("");
-        var images = "";
 
         var auditkeysArr = [
             "AUTH_IDCARD",
@@ -176,13 +190,11 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
                 $('#' + auditkeysArr[j]).prop("checked", true);
                 // images += "<label>" + $('#' + auditkeysArr[j]).attr("title") + "</label>" +
                 //     "<image src = " + arr[auditkeysArr[j]] + "></image>";
-                images +="<image src = " + arr[auditkeysArr[j]] + "></image>";
             }
             // if (flag) {
             // }else {
             //     $('#'+auditkeysArr[j]).prop("checked", false);
             // }
-            $("#images").html(images);
             form.render("checkbox");
         }
 
