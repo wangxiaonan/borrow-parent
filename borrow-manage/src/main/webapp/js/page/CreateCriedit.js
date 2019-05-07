@@ -111,6 +111,7 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
             }
         };
         var SubmitData={
+            "bussType":bussType,
             "userInfo": {
                 "userEarns": formData.userEarns,
                 "idcard": formData.idcard,
