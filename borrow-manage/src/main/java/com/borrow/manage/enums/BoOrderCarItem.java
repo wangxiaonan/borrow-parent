@@ -7,14 +7,13 @@ package com.borrow.manage.enums;
  */
 public enum BoOrderCarItem {
 
-
-    AUTH_IDARD("二代身份证","AUTH_IDCARD"),
-    AUTH_VEHICLE_LICENSE("行驶证","VEHICLE_LICENSE"),
-    POLLING_LICENSE("登记证","POLLING_LICENSE"),
-    CAR_MILEAGE("车辆外观照片","CAR_MILEAGE"),
-    INSURANCE_POLICY("担保函","INSURANCE_POLICY"),
-    LETTER_COMMITMENT("信批承诺函","LETTER_COMMITMENT"),
-    AUTH_OTHER("其他补充材料","AUTH_OTHER");
+    AUTH_IDARD("AUTH_IDCARD","二代身份证"),
+    AUTH_VEHICLE_LICENSE("VEHICLE_LICENSE","行驶证"),
+    POLLING_LICENSE("POLLING_LICENSE","登记证"),
+    CAR_MILEAGE("CAR_MILEAGE","车辆外观照片"),
+    INSURANCE_POLICY("INSURANCE_POLICY","担保函"),
+    LETTER_COMMITMENT("LETTER_COMMITMENT","信批承诺函"),
+    AUTH_OTHER("AUTH_OTHER","其他补充材料");
 
     BoOrderCarItem(String itemKey, String itemDesc){
         this.itemKey = itemKey;
