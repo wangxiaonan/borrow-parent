@@ -146,8 +146,7 @@ public class OrderServcieImpl implements OrderServcie {
         boOrderItem.setItemDesc(BoOrderItemEnum.BO_SOURCE.getItemDesc());
         Map<String, String> imageUrl = orderCreateReq.getBoOrderItem().getImageUrl();
         boOrderItemDao.insertItem(boOrderItem);
-
-        if (imageUrl != null) {
+        if (orderCreateReq.getBussType() == BussTypeEnum.CARD.getCode() && imageUrl != null) {
             imageUrl.forEach((k, v) -> {
                 String s = BoOrderCarItem.gettemDesc(k);
                 BoOrderItem boOrderItemTemp = new BoOrderItem();
