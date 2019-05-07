@@ -1,5 +1,6 @@
 package com.borrow.manage.vo;
 
+import com.borrow.manage.model.dto.BoOrderItem;
 import com.borrow.manage.utils.Utility;
 
 import java.math.BigDecimal;
@@ -29,6 +30,15 @@ public class OrderDetailRes {
     private String mileageDesc;
     private String plateNumber;
     private String boPaySource;
+    private List<BoOrderItem> boOrderItems;
+
+    public List<BoOrderItem> getBoOrderItems() {
+        return boOrderItems;
+    }
+
+    public void setBoOrderItems(List<BoOrderItem> boOrderItems) {
+        this.boOrderItems = boOrderItems;
+    }
 
     public String getSignTimeDesc() {
         return Utility.dateStrddHHmmss(signTime);

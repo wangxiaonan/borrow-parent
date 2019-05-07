@@ -611,6 +611,8 @@ public class OrderServcieImpl implements OrderServcie {
         userInfo.getUserEarns();
         userInfo.getLiabilitiesDesc();
         userInfo.getGuaranteeDesc();
+        List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(Long.parseLong(orderDetailReq.getOrderId()));
+        detailRes.setBoOrderItems(boOrderItems);
         detailRes.setBoPaySource(borrowOrder.getBoPaySource());
         BeanUtils.copyProperties(userInfo, detailRes);
         BeanUtils.copyProperties(userCar, detailRes);
