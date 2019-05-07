@@ -22,7 +22,9 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
 
         form = layui.form();
 
-
+    setTimeout(function () {
+        top.layer.closeAll();
+    },1500);
     var tempImg = null;
     var tempImgkey = null;
     var tempClose = null;  //图片关闭按钮显示
@@ -170,12 +172,13 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
             data: SubmitData,
             done: function(res) {
                 top.layer.success("添加成功");
+                layer.closeAll();
                 self.location.reload();
             },
             fail: function(re) {
                 layer.error(re.errorMessage);
                 layer.hideLoad();
-            }
+            } 
         }
         layer.showLoad();
         ma.ajax(addUser);
