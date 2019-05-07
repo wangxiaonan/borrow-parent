@@ -95,25 +95,22 @@ public class OrderServcieImpl implements OrderServcie {
             throw new BorrowException(ExceptionCode.USER_CHECK_IDENTITY);
         }
 
-        UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
-        if (userInfo == null) {
-            userInfo = convertUserInfoVo(userInfoVo);
-            userInfoDao.insertUserInfo(userInfo);
-        }
+//        UserInfo userInfo = userInfoDao.selInfoByIdcard(userInfoVo.getIdcard());
+//        if (userInfo == null) {
+        UserInfo userInfo = convertUserInfoVo(userInfoVo);
+        userInfoDao.insertUserInfo(userInfo);
+//        }
         BorrowSalesmanVo borrowSalesmanVo = orderCreateReq.getBorrowSalesman();
-        BorrowSalesman borrowSalesman = borrowSalesmanDao.selByMobile(borrowSalesmanVo.getSalesMobile());
-        if (borrowSalesman == null) {
-            borrowSalesman = convertBorrowSalesmanVo(borrowSalesmanVo);
-            borrowSalesmanDao.insertBorrowSalesman(borrowSalesman);
-        }
+//        BorrowSalesman borrowSalesman = borrowSalesmanDao.selByMobile(borrowSalesmanVo.getSalesMobile());
+//        if (borrowSalesman == null) {
+        BorrowSalesman borrowSalesman = convertBorrowSalesmanVo(borrowSalesmanVo);
+        borrowSalesmanDao.insertBorrowSalesman(borrowSalesman);
+//        }
         UserCarVo userCarVo = orderCreateReq.getUserCar();
         UserCar userCar = null;
-        if (userCarVo != null) {
-            userCar = userCarDao.selByPlateNO(userInfo.getUuid(), userCarVo.getPlateNumber());
-            if (userCar == null) {
-                userCar = convertUserCarVo(userCarVo, userInfo.getUuid());
-                userCarDao.insertUserCar(userCar);
-            }
+        if (orderCreateReq.getBussType() == BussTypeEnum.CARD.getCode()) {
+            userCar = convertUserCarVo(userCarVo, userInfo.getUuid());
+            userCarDao.insertUserCar(userCar);
         }
         BorrowOrder borrowOrder = new BorrowOrder();
         borrowOrder.setUuid(UUIDProvider.uuid());
@@ -141,7 +138,6 @@ public class OrderServcieImpl implements OrderServcie {
         boOrderAudits.stream().forEach(boOrderAudit -> {
             boOrderAuditDao.insertOrderAudit(boOrderAudit);
         });
-
         BoOrderItem boOrderItem = new BoOrderItem();
         boOrderItem.setUuid(UUIDProvider.uuid());
         boOrderItem.setOrderId(borrowOrder.getOrderId());
@@ -161,11 +157,10 @@ public class OrderServcieImpl implements OrderServcie {
                 boOrderItemTemp.setItemValue(v);
                 boOrderItemTemp.setItemDesc(s);
                 boOrderItemDao.insertItem(boOrderItemTemp);
-
             });
         }
         UserHouseInfoVo houseInfoVo = orderCreateReq.getUserHouseInfo();
-        if (houseInfoVo != null) {
+        if (orderCreateReq.getBussType() == BussTypeEnum.HOUSE.getCode() ) {
             BoOrderItem boOrderName = new BoOrderItem();
             boOrderItem.setUuid(UUIDProvider.uuid());
             boOrderItem.setOrderId(borrowOrder.getOrderId());
@@ -683,12 +678,7 @@ public class OrderServcieImpl implements OrderServcie {
         userNew.setWorkNature(userInfoVo.getWorkNature());
         userNew.setUserEarns(userInfoVo.getUserEarns());
         userNew.setSex(userInfoVo.getSex());
-//        `user_earns` varchar(50) NOT NULL DEFAULT '' COMMENT '收入',
-//                `sex` int(11) NOT NULL DEFAULT '1' COMMENT '性别 1男 2女',
-//                `marriage_status` int(3) NOT NULL DEFAULT '3' COMMENT '1 未婚 2已婚 3其他',
-//                `children_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '子女情况',
-//                `liabilities_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '负债情况',
-//                `guarantee_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '担保措施',
+
         userNew.setMarriageStatus(userInfoVo.getMarriage());
         userNew.setChildrenDesc(userInfoVo.getChildren());
         userNew.setLiabilitiesDesc(userInfoVo.getUserDebts());
