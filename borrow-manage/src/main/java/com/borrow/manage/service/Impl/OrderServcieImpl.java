@@ -213,7 +213,7 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseDate.setItemKey(BoOrderHouseItem.HOUSE_DATE.getItemKey());
             boHouseDate.setItemValue(houseInfoVo.getHouseDate());
             boHouseDate.setItemDesc(BoOrderHouseItem.HOUSE_DATE.getItemDesc());
-            boOrderItemDao.insertItem(boHouseAddress);
+            boOrderItemDao.insertItem(boHouseDate);
 
             BoOrderItem boHousePrice = new BoOrderItem();
             boHousePrice.setUuid(UUIDProvider.uuid());
@@ -260,7 +260,6 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseGuaranteePicUrl.setItemKey(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
             boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseGuaranteePicUrl());
             boHouseGuaranteePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHouseGuaranteePicUrl);
 
             if (!StringUtils.isEmpty(boHouseGuaranteePicUrl.getItemValue())) {
                 boOrderItemDao.insertItem(boHouseGuaranteePicUrl);
@@ -273,7 +272,6 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseLetterCommitmentPicUrl.setItemKey(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey());
             boHouseLetterCommitmentPicUrl.setItemValue(houseInfoVo.getHouseLetterCommitmentPicUrl());
             boHouseLetterCommitmentPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
 
             if (!StringUtils.isEmpty(boHouseLetterCommitmentPicUrl.getItemValue())) {
                 boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
@@ -538,6 +536,7 @@ public class OrderServcieImpl implements OrderServcie {
             loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEAREA, itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
             loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSETYPE, itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
             loanHuoseInfo.put(PlatformConstant.FundsParam.REGISTTIME, itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEADDRESS, itemkeys.get(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey()));
             loanHuoseInfo.put(PlatformConstant.FundsParam.ESTIMATEVALUE, itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
         }
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO, loanHuoseInfo);
