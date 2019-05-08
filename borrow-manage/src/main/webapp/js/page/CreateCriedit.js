@@ -112,6 +112,11 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 auditkeys[key] = "";
             }
         };
+        var  province  = formData.province;
+        var  city  = formData.city;
+        var  area  = formData.area;
+        var address = formData.houseAddress;
+        var houseAddress = province +" "+ city + " "+ area+ " "+address;
         var SubmitData={
             "bussType":bussType,
             "userInfo": {
@@ -156,7 +161,7 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "houseNum": formData.houseNum,
                 "houseArea": formData.houseArea,
                 "houseAttr": formData.houseAttr,
-                "houseAddress": formData.houseAddress,
+                "houseAddress": houseAddress,
                 "houseDate": formData.houseDate,
                 "housePrice": formData.housePrice,
                 "houseidcardPicUrl": fileNames.houseidcardPicUrl,
@@ -178,7 +183,7 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
             fail: function(re) {
                 layer.error(re.errorMessage);
                 layer.hideLoad();
-            } 
+            }
         }
         layer.showLoad();
         ma.ajax(addUser);

@@ -229,14 +229,19 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseidcardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey());
             boHouseidcardPicUrl.setItemValue(houseInfoVo.getHouseidcardPicUrl());
             boHouseidcardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHouseidcardPicUrl);
+            if (!StringUtils.isEmpty(boHouseidcardPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseidcardPicUrl);
+            }
             BoOrderItem boHousePicUrl = new BoOrderItem();
             boHousePicUrl.setUuid(UUIDProvider.uuid());
             boHousePicUrl.setOrderId(borrowOrder.getOrderId());
             boHousePicUrl.setItemKey(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey());
             boHousePicUrl.setItemValue(houseInfoVo.getHousePicUrl());
             boHousePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHousePicUrl);
+
+            if (!StringUtils.isEmpty(boHousePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHousePicUrl);
+            }
 
             BoOrderItem boHouseAuthorityCardPicUrl = new BoOrderItem();
             boHouseAuthorityCardPicUrl.setUuid(UUIDProvider.uuid());
@@ -244,7 +249,10 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseAuthorityCardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey());
             boHouseAuthorityCardPicUrl.setItemValue(houseInfoVo.getHouseAuthorityCardPicUrl());
             boHouseAuthorityCardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHousePicUrl);
+            if (!StringUtils.isEmpty(boHouseAuthorityCardPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseAuthorityCardPicUrl);
+            }
+
 
             BoOrderItem boHouseGuaranteePicUrl = new BoOrderItem();
             boHouseGuaranteePicUrl.setUuid(UUIDProvider.uuid());
@@ -252,7 +260,12 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseGuaranteePicUrl.setItemKey(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
             boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseGuaranteePicUrl());
             boHouseGuaranteePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHousePicUrl);
+            boOrderItemDao.insertItem(boHouseGuaranteePicUrl);
+
+            if (!StringUtils.isEmpty(boHouseGuaranteePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseGuaranteePicUrl);
+            }
+
 
             BoOrderItem boHouseLetterCommitmentPicUrl = new BoOrderItem();
             boHouseLetterCommitmentPicUrl.setUuid(UUIDProvider.uuid());
@@ -262,13 +275,19 @@ public class OrderServcieImpl implements OrderServcie {
             boHouseLetterCommitmentPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemDesc());
             boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
 
+            if (!StringUtils.isEmpty(boHouseLetterCommitmentPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
+            }
+
             BoOrderItem boHouseAuthOtherPicurl = new BoOrderItem();
             boHouseAuthOtherPicurl.setUuid(UUIDProvider.uuid());
             boHouseAuthOtherPicurl.setOrderId(borrowOrder.getOrderId());
             boHouseAuthOtherPicurl.setItemKey(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey());
             boHouseAuthOtherPicurl.setItemValue(houseInfoVo.getHouseAuthOtherPicurl());
             boHouseAuthOtherPicurl.setItemDesc(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemDesc());
-            boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
+            if (!StringUtils.isEmpty(boHouseAuthOtherPicurl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
+            }
 
         }
 
