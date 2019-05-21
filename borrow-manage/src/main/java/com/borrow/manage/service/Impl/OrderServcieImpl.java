@@ -476,7 +476,7 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.LOANER_ID, userInfo.getIdcard());
         thirdParamMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo.getUserName());
         thirdParamMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo.getMobile());
-        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getIndustry());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getWorkNature());
         thirdParamMap.put(PlatformConstant.FundsParam.JOB_DESC, userInfo.getWorkNature());
         thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC, userInfo.getUserEarns());
         thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION, userInfo.getCreditDec());
