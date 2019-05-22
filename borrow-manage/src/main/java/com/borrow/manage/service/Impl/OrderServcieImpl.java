@@ -517,7 +517,7 @@ public class OrderServcieImpl implements OrderServcie {
         XMap borrowerInfoMap = new XMap();
         borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo.getUserName());
         borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo.getMobile());
-        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getIndustry());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getWorkNature());
         borrowerInfoMap.put(PlatformConstant.FundsParam.JOB_DESC, userInfo.getWorkNature());
         borrowerInfoMap.put(PlatformConstant.FundsParam.INCOMING_DESC, userInfo.getUserEarns());
         borrowerInfoMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION, userInfo.getCreditDec());
