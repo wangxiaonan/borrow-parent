@@ -102,6 +102,21 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
         }
     });
 
+    //自定义数字校验规则
+    form.verify({
+        myrequirednum: function (val,item) {
+            debugger;
+            var visible = $(item).parents('.layui-form-item').find('.layui-form-label');
+            if($(visible).is(':visible')){
+                var patrn = /^-?[1-9]\d*$/;　　//正整数
+                if(!patrn.test(val)){
+                    return '只能填写整数';
+                }
+            }
+        }
+    });
+
+
     form.on('submit(orderAdd)', function(data) {
         var formData=data.field;
         var auditkeys = {};

@@ -16,13 +16,14 @@ public enum  OrderAuditEnum {
     AUTH_CARPHOTO("人车合照","AUTH_CARPHOTO","7"),
     ADDRESS_LICENSE("住址证明","ADDRESS_LICENSE","8"),
     CAR_SKIN("车辆外观照片","CAR_SKIN","9"),
-    CAR_MILEAGE("车辆外观照片","CAR_MILEAGE","10"),
+    CAR_MILEAGE("车辆行驶里程照片","CAR_MILEAGE","10"),
     CAR_MOTOR("车辆发动机照片","CAR_MOTOR","11"),
     CAR_NUMBER("铭牌照片","CAR_NUMBER","12"),
+    LETTER_COMMITMENT("信批承诺函","LETTER_COMMITMENT","13"),
     AUTH_OTHER("其它审核资料","AUTH_OTHER","14"),
-    AUTH_MORTGAGE("抵押手续办理","MORTGAGE","15"),
-    LETTER_COMMITMENT("信批承诺函","LETTER_COMMITMENT","16"),
-
+    CREDIT_REPORTING("征信记录","CREDIT_REPORTING","15"),
+    HOUSE_PIC("房产证","HOUSE_PIC","16"),
+    AUTHORITY_CARD("他项权证","AUTHORITY_CARD","17"),
 
     ;
 

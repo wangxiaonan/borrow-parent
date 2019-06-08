@@ -38,13 +38,13 @@
         <div class="layui-form-item">
             <label class="layui-form-label">客户姓名</label>
             <div class="layui-input-inline">
-                <input type="text" name="userName" required placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                <input type="text" name="userName" required lay-verify="myrequired" placeholder="请输入姓名" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">身份证号</label>
             <div class="layui-input-inline">
-                <input type="text" name="idcard" required l placeholder="请输入身份证号" autocomplete="off"
+                <input type="text" name="idcard" required lay-verify="required|identity" placeholder="请输入身份证号" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -130,7 +130,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">借款金额</label>
             <div class="layui-input-inline">
-                <input type="text" id="boPrice" name="boPrice" required lay-verify="myrequired" placeholder="请输入借款金额"
+                <input type="text" id="boPrice" name="boPrice" required lay-verify="myrequirednum" placeholder="请输入借款金额"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -187,7 +187,7 @@
         <div class="layui-form-item form-house">
             <label class="layui-form-label">房产面积</label>
             <div class="layui-input-inline">
-                <input type="text" name="houseArea" required lay-verify="myrequired" placeholder="请输入房产面积"
+                <input type="text" name="houseArea" required lay-verify="myrequirednum" placeholder="请输入房产面积"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -227,7 +227,7 @@
         <div class="layui-form-item form-house">
             <label class="layui-form-label">评估价格</label>
             <div class="layui-input-inline">
-                <input type="text" name="housePrice" required lay-verify="myrequired" placeholder="请输入评估价格"
+                <input type="text" name="housePrice" required lay-verify="myrequirednum" placeholder="请输入评估价格"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -263,7 +263,7 @@
         <div class="layui-form-item form-car">
             <label class="layui-form-label">评估价格</label>
             <div class="layui-input-inline">
-                <input type="text" name="assessmentPrice" required lay-verify="myrequired" placeholder="请输入评估价格"
+                <input type="text" name="assessmentPrice" required lay-verify="myrequirednum" placeholder="请输入评估价格"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -277,7 +277,7 @@
         <div class="layui-form-item form-car">
             <label class="layui-form-label">行驶公里(公里)</label>
             <div class="layui-input-inline">
-                <input type="text" name="mileageDesc" required lay-verify="myrequired" placeholder="行驶公里"
+                <input type="text" name="mileageDesc" required lay-verify="myrequirednum" placeholder="行驶公里"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -297,6 +297,11 @@
                 <input type="checkbox" lay-filter="auditkeys" name='auditkeys[CAR_MOTOR]' value="CAR_MOTOR" lay-skin="primary" title="车辆发动机照片">
                 <input type="checkbox" lay-filter="auditkeys" name='auditkeys[CAR_NUMBER]' value="CAR_NUMBER" lay-skin="primary" title="铭牌照片">
                 <input type="checkbox" lay-filter="auditkeys" name='auditkeys[APPLY_TABLE]' value="APPLY_TABLE" lay-skin="primary" title="申请表">
+
+                <input type="checkbox" lay-filter="auditkeys" name='auditkeys[CREDIT_REPORTING]' value="CREDIT_REPORTING" lay-skin="primary" title="征信记录">
+                <input type="checkbox" lay-filter="auditkeys" name='auditkeys[HOUSE_PIC]' value="HOUSE_PIC" lay-skin="primary" title="房产证">
+                <input type="checkbox" lay-filter="auditkeys" name='auditkeys[AUTHORITY_CARD]' value="AUTHORITY_CARD" lay-skin="primary" title="他项权证">
+
                 <input type="checkbox" lay-filter="auditkeys" name='auditkeys[AUTH_OTHER]' value="AUTH_OTHER" lay-skin="primary" title="其它审核资料">
             </div>
         </div>
