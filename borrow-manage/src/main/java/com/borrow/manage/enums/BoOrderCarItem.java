@@ -7,6 +7,8 @@ package com.borrow.manage.enums;
  */
 public enum BoOrderCarItem {
 
+
+    //图片
     AUTH_IDARD("AUTH_IDCARD","二代身份证"),
     AUTH_VEHICLE_LICENSE("VEHICLE_LICENSE","行驶证"),
     POLLING_LICENSE("POLLING_LICENSE","登记证"),

@@ -115,7 +115,7 @@ public class OrderServcieImpl implements OrderServcie {
         BorrowOrder borrowOrder = new BorrowOrder();
         borrowOrder.setUuid(UUIDProvider.uuid());
         borrowOrder.setOrderId(idProvider.genId());
-        borrowOrder.setBuesType(1);
+        borrowOrder.setBuesType(orderCreateReq.getBussType());
         borrowOrder.setUserUid(userInfo.getUuid());
         borrowOrder.setProductUid(borrowProduct.getUuid());
         borrowOrder.setProductName(borrowProduct.getpName());
@@ -645,43 +645,93 @@ public class OrderServcieImpl implements OrderServcie {
 
     @Override
     public ResponseResult orderDetailSel(OrderDetailReq orderDetailReq) {
+        OrderDetailRes detailRes = new OrderDetailRes();
+
         BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(Long.parseLong(orderDetailReq.getOrderId()));
         if (borrowOrder == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
         String userUid = borrowOrder.getUserUid();
         UserInfo userInfo = userInfoDao.selInfoByUid(userUid);
-        UserCar userCar = userCarDao.selByPlateNO(userUid, borrowOrder.getPlateNumber());
         if (userInfo == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
+
+        UserInfoVo userInfoVo = new UserInfoVo();
+        BeanUtils.copyProperties(userInfo,userInfoVo);
+        detailRes.setUserInfo(userInfoVo);
         List<BoOrderAudit> auditList = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
-        Map<String, String> auditkeys = new LinkedHashMap<>();
+        List<String> auditkeys = new ArrayList<>();
         auditList.stream().forEach(boOrderAudit -> {
-            auditkeys.put(boOrderAudit.getAuditKey(), boOrderAudit.getAuditFileUrl());
+            auditkeys.add(boOrderAudit.getAuditKey());
         });
-        OrderDetailRes detailRes = new OrderDetailRes();
-        userInfo.getChildrenDesc();
-        userInfo.getWorkNature();
-        userInfo.getUserEarns();
-        userInfo.getLiabilitiesDesc();
-        userInfo.getGuaranteeDesc();
-        List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(Long.parseLong(orderDetailReq.getOrderId()));
-        detailRes.setBoOrderItems(boOrderItems);
-        detailRes.setBoPaySource(borrowOrder.getBoPaySource());
-        BeanUtils.copyProperties(userInfo, detailRes);
-        if (userCar != null) {
-            BeanUtils.copyProperties(userCar, detailRes);
-        }
-
-
-//        $('#carModel').html(res.data.carModel);
-//        $('#carColor').html(res.data.carColor);
-//        $('#signTime').html(res.data.signTime);
-//        $('#assessmentPrice').html(res.data.assessmentPrice);
-//        $('#plateNumber').html(res.data.plateNumber);
-//        $('#mileageDesc').html(res.data.mileageDesc);
         detailRes.setAuditkeys(auditkeys);
+
+        List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(Long.parseLong(orderDetailReq.getOrderId()));
+        if (borrowOrder.getBuesType().equals(BussTypeEnum.CARD.getCode())) {
+            UserCar userCar = userCarDao.selByPlateNO(userUid, borrowOrder.getPlateNumber());
+            UserCarItemVo userCarItemVo = new UserCarItemVo();
+            BeanUtils.copyProperties(userCar,userCarItemVo);
+            boOrderItems.stream().forEach(boOrderItem -> {
+                if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_IDARD.getItemKey())) {
+                    userCarItemVo.setAuthIdcardUrl(boOrderItem.getItemValue());
+                }else if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_VEHICLE_LICENSE.getItemKey())) {
+                    userCarItemVo.setVehicleLicenseUrl(boOrderItem.getItemValue());
+                }else if (boOrderItem.getItemKey().equals(BoOrderCarItem.POLLING_LICENSE.getItemKey())) {
+                    userCarItemVo.setPollingLicenseUrl(boOrderItem.getItemValue());
+
+                }else if (boOrderItem.getItemKey().equals(BoOrderCarItem.CAR_MILEAGE.getItemKey())) {
+                    userCarItemVo.setCarSkinUrl(boOrderItem.getItemValue());
+
+                }else if (boOrderItem.getItemKey().equals(BoOrderCarItem.INSURANCE_POLICY.getItemKey())) {
+                    userCarItemVo.setInsurancePolicyUrl(boOrderItem.getItemValue());
+
+                }else if (boOrderItem.getItemKey().equals(BoOrderCarItem.LETTER_COMMITMENT.getItemKey())) {
+                    userCarItemVo.setLetterCommitmentUrl(boOrderItem.getItemValue());
+                }else if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_OTHER.getItemKey())) {
+                    userCarItemVo.setAuthOtherUrl(boOrderItem.getItemValue());
+                }
+            });
+            detailRes.setUserCarItemVo(userCarItemVo);
+
+        }else if (borrowOrder.getBuesType().equals(BussTypeEnum.HOUSE.getCode())) {
+            UserHouseInfoVo userHouseInfoVo = new UserHouseInfoVo();
+            Map<String, String> itemkeys = new HashMap();
+            boOrderItems.stream().forEach(boOrderItem -> {
+                itemkeys.put(boOrderItem.getItemKey(), boOrderItem.getItemValue());
+            });
+            userHouseInfoVo.setHouseName(itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
+            userHouseInfoVo.setHousePart(BoOrderHouseItem.HOUSE_PART.getItemKey());
+            userHouseInfoVo.setHouseNum(itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
+            userHouseInfoVo.setHouseArea(itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
+            userHouseInfoVo.setHouseAttr(itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
+            userHouseInfoVo.setHouseDate(itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
+            userHouseInfoVo.setHouseAddress(itemkeys.get(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey()));
+            userHouseInfoVo.setHousePrice(itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
+
+            boOrderItems.stream().forEach(boOrderItem -> {
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey())) {
+                    userHouseInfoVo.setHouseidcardPicUrl(boOrderItem.getItemValue());
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey())) {
+                    userHouseInfoVo.setHousePicUrl(boOrderItem.getItemValue());
+
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey())) {
+                    userHouseInfoVo.setHouseAuthorityCardPicUrl(boOrderItem.getItemValue());
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey())) {
+                    userHouseInfoVo.setHouseGuaranteePicUrl(boOrderItem.getItemValue());
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey())) {
+                    userHouseInfoVo.setHouseLetterCommitmentPicUrl(boOrderItem.getItemValue());
+                }
+                if (boOrderItem.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey())) {
+                    userHouseInfoVo.setHouseAuthOtherPicurl(boOrderItem.getItemValue());
+                }
+            });
+            detailRes.setUserHouseInfo(userHouseInfoVo);
+        }
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), detailRes);
     }
 
