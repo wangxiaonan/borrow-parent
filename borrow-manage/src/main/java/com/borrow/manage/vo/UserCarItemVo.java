@@ -15,11 +15,10 @@ public class UserCarItemVo {
     private String carModel;
     private String carColor;
 
-    private Date signTime;
+    private String signTimeStr;
     private BigDecimal assessmentPrice;
 
     private String mileageDesc;
-    private String boSource;
 
     // 写一下image url
 
@@ -30,6 +29,14 @@ public class UserCarItemVo {
     private String insurancePolicyUrl;
     private String letterCommitmentUrl;
     private String authOtherUrl;
+
+    public String getSignTimeStr() {
+        return signTimeStr;
+    }
+
+    public void setSignTimeStr(String signTimeStr) {
+        this.signTimeStr = signTimeStr;
+    }
 
     public String getCarName() {
         return carName;
@@ -71,13 +78,7 @@ public class UserCarItemVo {
         this.carColor = carColor;
     }
 
-    public Date getSignTime() {
-        return signTime;
-    }
 
-    public void setSignTime(Date signTime) {
-        this.signTime = signTime;
-    }
 
     public BigDecimal getAssessmentPrice() {
         return assessmentPrice;
@@ -93,14 +94,6 @@ public class UserCarItemVo {
 
     public void setMileageDesc(String mileageDesc) {
         this.mileageDesc = mileageDesc;
-    }
-
-    public String getBoSource() {
-        return boSource;
-    }
-
-    public void setBoSource(String boSource) {
-        this.boSource = boSource;
     }
 
     public String getAuthIdcardUrl() {

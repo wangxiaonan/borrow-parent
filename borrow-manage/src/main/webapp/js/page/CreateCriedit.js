@@ -138,7 +138,7 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
                 "userEarns": formData.userEarns,
                 "idcard": formData.idcard,
                 "mobile": formData.mobile,
-                "industry": formData.sex,
+                "sex": formData.sex,
                 "userName": formData.userName,
                 "marriage": formData.marriage,
                 "children": formData.children,

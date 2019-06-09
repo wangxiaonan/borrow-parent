@@ -4,8 +4,18 @@
  *userlist && pass modify  page
  *
  **/
+$.cxSelect.defaults.url ='../../js/lib/cxSelect/cityData.min.json';
+var cxSelectApi;
+$('#selectAdd').cxSelect({
+    selects: ['province', 'city', 'area'],
+    nodata: 'none',
+    required:false
+}, function(api) {
+    cxSelectApi = api;
+});
+
 var fn = {};
-layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
+layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () {
     var layer = layui.layer,
         grid = layui.grid,
         gridTable,
@@ -14,6 +24,25 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
         laydate = layui.laydate,
         form = layui.form();
 
+    // 公共的图片
+    var tempImg = null;
+    var tempImgkey = null;
+    var tempClose = null;  //图片关闭按钮显示
+    var fileNames = {};
+    var bigPic = null;
+    var bussType = 1;   //默认车贷
+
+    form.on('select(province)', function(data){
+        $(".area").val("").siblings().find(".layui-unselect").val("").parent().siblings().html("");
+        cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
+        form.render('select');
+    });
+    //第二个选中的是初始化数据
+    form.on('select(city)', function(data){
+        cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
+
+        form.render('select');
+    });
     function createTable(data) {
         gridTable = grid.createNew({
             elem: 'creditTable',
@@ -117,51 +146,228 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
                     top.layer.success("获取失败");
                     return;
                 }
+                bussType = res.data.bussType;
+                //动态切换
+                changeInputType(bussType);
+                $('#userNameDetail').val(res.data.userInfo.userName);
+                $('#idcardDetail').val(res.data.userInfo.idcard);
+                $('#mobileDetail').val(res.data.userInfo.mobile);
+                $("input[name='sexDetail'][value='"+res.data.userInfo.sex+"']").attr("checked",true);
+                $("input[name='marriageDetail'][value='"+res.data.userInfo.marriage+"']").attr("checked",true);
+
+                $('#childrenDetail').val(res.data.userInfo.children);
+                $('#workNatureDetail').val(res.data.userInfo.workNature);
+                $('#userEarnsDetail').val(res.data.userInfo.userEarns);
+                $('#userDebtsDetail').val(res.data.userInfo.userDebts);
+                $('#userAssureDetail').val(res.data.userInfo.userAssure);
+                $('#boPaySourceDetail').val(res.data.boPaySource);
+                $('#salesNameDetail').val(res.data.borrowSalesman.salesName);
+                $('#salesMobileDetail').val(res.data.borrowSalesman.salesMobile);
+                $('#boPriceDetail').val(res.data.boPrice);
+                $('#productNameDetail').val(res.data.productName);
+                $('#boSourceDetail').val(res.data.boSource);
+                form.render('radio');
+                if (2 == bussType)  {
+                    $('#houseNameDetail').val(res.data.userHouseInfo.houseName);
+                    $('#housePartDetail').val(res.data.userHouseInfo.housePart);
+                    $('#houseNumDetail').val(res.data.userHouseInfo.houseNum);
+                    $('#houseAreaDetail').val(res.data.userHouseInfo.houseArea);
+                    $('#houseAttrDetail').val(res.data.userHouseInfo.houseAttr);
+
+                    var address = res.data.userHouseInfo.houseAddress.split(" ");
+                    debugger;
+                    $("#province").find("option[value='"+address[0] +"']").prop("selected",true);
+                    cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
+
+                    $("#city").find("option[value='"+address[1] +"']").prop("selected",true);
+                    cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
+
+                    $("#area").find("option[value='"+address[2] +"']").prop("selected",true);
+                    $('#houseAddress').val(address[3]);
+                    form.render();
 
 
-                // <td id="childrenDesc"></td>
-                //         <td id="workNature"></td>
-                //         <td id="userEarns"></td>
-                //         <td id="liabilitiesDesc"></td>
-                //         <td id="guaranteeDesc"></td>
-                //         <td id="boPaySource"></td>
-                //         <td id="BO_SOURCE"></td>
-                // <td id="carModel"></td>
-                //         <td id="carColor"></td>
-                //         <td id="signTime"></td>
-                //         <td id="assessmentPrice"></td>
-                //         <td id="plateNumber"></td>
-                //         <td id="mileageDesc"></td>
-                $('#childrenDesc').html(res.data.childrenDesc);
-                $('#workNature').html(res.data.workNature);
-                $('#userEarns').html(res.data.userEarns);
-                $('#liabilitiesDesc').html(res.data.liabilitiesDesc);
-                $('#guaranteeDesc').html(res.data.guaranteeDesc);
-                $('#boPaySource').html(res.data.boPaySource);
+                    $('#houseAddressDetail').val(res.data.userHouseInfo.houseAddress);
+                    $('#houseDateDetail').val(res.data.userHouseInfo.houseDate);
+                    $('#housePriceDetail').val(res.data.userHouseInfo.housePrice);
 
-                $('#carModel').html(res.data.carModel);
-                $('#carColor').html(res.data.carColor);
-                $('#signTime').html(res.data.signTimeDesc);
-                $('#assessmentPrice').html(res.data.assessmentPrice);
-                $('#plateNumber').html(res.data.plateNumber);
-                $('#mileageDesc').html(res.data.mileageDesc);
+                    if(!$.isEmptyObject(res.data.userHouseInfo.houseidcardPicUrl)) {
+                        $("#houseidcardPicUrl").attr({"src":res.data.userHouseInfo.houseidcardPicUrl});
+                        $("#houseidcardPicUrl").show();
+                        tempClose = $("#houseidcardPicUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[houseidcardPicUrl] = res.data.userHouseInfo.houseidcardPicUrl;
+                        //预览大图
+                        $("#houseidcardPicUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
 
-                createSpan(res.data.auditkeys);
-                var images = "";
+                    if(!$.isEmptyObject(res.data.userHouseInfo.housePicUrl)) {
+                        $("#housePicUrl").attr({"src":res.data.userHouseInfo.housePicUrl});
+                        $("#housePicUrl").show();
+                        tempClose = $("#housePicUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[housePicUrl] = res.data.userHouseInfo.housePicUrl;
+                        //预览大图
+                        $("#housePicUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+                    if(!$.isEmptyObject(res.data.userHouseInfo.houseAuthorityCardPicUrl)) {
+                        $("#houseAuthorityCardPicUrl").attr({"src":res.data.userHouseInfo.houseAuthorityCardPicUrl});
+                        $("#houseAuthorityCardPicUrl").show();
+                        tempClose = $("#houseAuthorityCardPicUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[housePicUrl] = res.data.userHouseInfo.houseAuthorityCardPicUrl;
+                        //预览大图
+                        $("#houseAuthorityCardPicUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
 
-                let datum = res.data["boOrderItems"];
-                if (datum && datum.length > 0) {
-                    for (let temp of datum) {
-                        if (temp["itemKey"] != "BO_SOURCE") {
-                            images += "<image src = " + temp["itemValue"] + "></image><br>";
-                        }
+
+                    if(!$.isEmptyObject(res.data.userHouseInfo.houseGuaranteePicUrl)) {
+                        $("#houseGuaranteePicUrl").attr({"src":res.data.userHouseInfo.houseGuaranteePicUrl});
+                        $("#houseGuaranteePicUrl").show();
+                        tempClose = $("#houseGuaranteePicUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[housePicUrl] = res.data.userHouseInfo.houseGuaranteePicUrl;
+                        //预览大图
+                        $("#houseGuaranteePicUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+
+                    }
+                    if(!$.isEmptyObject(res.data.userHouseInfo.houseLetterCommitmentPicUrl)) {
+                        $("#houseLetterCommitmentPicUrl").attr({"src":res.data.userHouseInfo.houseLetterCommitmentPicUrl});
+                        $("#houseLetterCommitmentPicUrl").show();
+                        tempClose = $("#houseLetterCommitmentPicUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[housePicUrl] = res.data.userHouseInfo.houseLetterCommitmentPicUrl;
+                        //预览大图
+                        $("#houseLetterCommitmentPicUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+                    if(!$.isEmptyObject(res.data.userHouseInfo.houseAuthOtherPicurl)) {
+                        $("#houseAuthOtherPicurl").attr({"src":res.data.userHouseInfo.houseAuthOtherPicurl});
+                        $("#houseAuthOtherPicurl").show();
+                        tempClose = $("#houseAuthOtherPicurl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[housePicUrl] = res.data.userHouseInfo.houseAuthOtherPicurl;
+                        //预览大图
+                        $("#houseAuthOtherPicurl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+
+                }else if (1 == bussType) {
+                    $('#carModelDetail').val(res.data.userCarItemVo.carModel);
+                    $("#carColorDetail").find("option[value='"+res.data.userCarItemVo.carColor +"']").prop("selected",true);
+                    form.render();
+                    $('#carDateDetail').val(res.data.userCarItemVo.signTimeStr);
+                    $('#assessmentPriceDetail').val(res.data.userCarItemVo.assessmentPrice);
+                    $('#plateNumberDetail').val(res.data.userCarItemVo.plateNumber);
+                    $('#mileageDescDetail').val(res.data.userCarItemVo.mileageDesc);
+
+                    debugger;
+
+                    if(!$.isEmptyObject(res.data.userCarItemVo.authIdcardUrl)) {
+                        $("#authIdcardUrl").attr({"src":res.data.userCarItemVo.authIdcardUrl});
+                        $("#authIdcardUrl").show();
+                        tempClose = $("#authIdcardUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[authIdcardUrl] = res.data.userCarItemVo.authIdcardUrl;
+                        //预览大图
+                        $("#authIdcardUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+                    if(!$.isEmptyObject(res.data.userCarItemVo.vehicleLicenseUrl)) {
+                        $("#vehicleLicenseUrl").attr({"src":res.data.userCarItemVo.vehicleLicenseUrl});
+                        $("#vehicleLicenseUrl").show();
+                        tempClose = $("#vehicleLicenseUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[vehicleLicenseUrl] = res.data.userCarItemVo.vehicleLicenseUrl;
+                        //预览大图
+                        $("#vehicleLicenseUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+                    if(!$.isEmptyObject(res.data.userCarItemVo.pollingLicenseUrl)) {
+                        $("#pollingLicenseUrl").attr({"src":res.data.userCarItemVo.pollingLicenseUrl});
+                        $("#pollingLicenseUrl").show();
+                        tempClose = $("#pollingLicenseUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[pollingLicenseUrl] = res.data.userCarItemVo.pollingLicenseUrl;
+                        //预览大图
+                        $("#pollingLicenseUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+                    if(!$.isEmptyObject(res.data.userCarItemVo.carSkinUrl)) {
+                        $("#carSkinUrl").attr({"src":res.data.userCarItemVo.carSkinUrl});
+                        $("#carSkinUrl").show();
+                        tempClose = $("#carSkinUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[carSkinUrl] = res.data.userCarItemVo.carSkinUrl;
+                        //预览大图
+                        $("#carSkinUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+                    if(!$.isEmptyObject(res.data.userCarItemVo.insurancePolicyUrl)) {
+                        $("#insurancePolicyUrl").attr({"src":res.data.userCarItemVo.insurancePolicyUrl});
+                        $("#insurancePolicyUrl").show();
+                        tempClose = $("#insurancePolicyUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[insurancePolicyUrl] = res.data.userCarItemVo.insurancePolicyUrl;
+                        //预览大图
+                        $("#insurancePolicyUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+
+                    if(!$.isEmptyObject(res.data.userCarItemVo.letterCommitmentUrl)) {
+                        $("#letterCommitmentUrl").attr({"src":res.data.userCarItemVo.letterCommitmentUrl});
+                        $("#letterCommitmentUrl").show();
+                        tempClose = $("#letterCommitmentUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[letterCommitmentUrl] = res.data.userCarItemVo.letterCommitmentUrl;
+                        //预览大图
+                        $("#letterCommitmentUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
+                    }
+
+                    if(!$.isEmptyObject(res.data.userCarItemVo.authOtherUrl)) {
+                        $("#authOtherUrl").attr({"src":res.data.userCarItemVo.authOtherUrl});
+                        $("#authOtherUrl").show();
+                        tempClose = $("#authOtherUrl").parents('.layui-input-block').find('.close');
+                        $(tempClose).show();
+                        fileNames[authOtherUrl] = res.data.userCarItemVo.authOtherUrl;
+                        //预览大图
+                        $("#authOtherUrl").click(function () {
+                            bigPic = $(this).attr('src');
+                            viewBigPic(bigPic);
+                        });
                     }
 
                 }
-
-                $("#images").html(images);
-
-
+                createSpan(res.data.auditkeys);
 
             }
         }
@@ -169,33 +375,37 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
     }
 
     function createSpan(arr) {
-        $("#images").html("");
-
         var auditkeysArr = [
             "AUTH_IDCARD",
+            "AUTH_CARPHOTO",
             "VEHICLE_LICENSE",
             "POLLING_LICENSE",
             "INSURANCE_POLICY",
+            "LETTER_COMMITMENT",
             "VIOLATION_RECORD",
-            "APPLY_TABLE",
-            "AUTH_CARPHOTO",
             "ADDRESS_LICENSE",
             "CAR_SKIN",
             "CAR_MILEAGE",
             "CAR_MOTOR",
             "CAR_NUMBER",
-            "AUTH_OTHER",
-            "LETTER_COMMITMENT",]
-        for (j in auditkeysArr) {
-            if (arr[auditkeysArr[j]] != undefined) {
-                $('#' + auditkeysArr[j]).prop("checked", true);
-                // images += "<label>" + $('#' + auditkeysArr[j]).attr("title") + "</label>" +
-                //     "<image src = " + arr[auditkeysArr[j]] + "></image>";
+            "APPLY_TABLE",
+            "CREDIT_REPORTING",
+            "HOUSE_PIC",
+            "AUTHORITY_CARD",
+            "AUTH_OTHER"
+            ]
+        for(j in auditkeysArr){
+            var flag =false;
+            for(var i=0; i<arr.length;i++){
+                if(arr[i] == auditkeysArr[j]){
+                    flag = true;
+                }
             }
-            // if (flag) {
-            // }else {
-            //     $('#'+auditkeysArr[j]).prop("checked", false);
-            // }
+            if (flag) {
+                $('#'+auditkeysArr[j]).prop("checked", true);
+            }else {
+                $('#'+auditkeysArr[j]).prop("checked", false);
+            }
             form.render("checkbox");
         }
 
@@ -220,6 +430,7 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
     }
 
     fn.detail = function () {
+
         var row = gridTable.getRow();
         getDetailData(row);
 
@@ -228,7 +439,10 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
             area: ['100%', '100%'],
             content: $("#dialog1")
         })
+
     }
+
+
     fn.confirm = function () {
         var orderId = gridTable.getRow().orderId;
         layer.confirm({
@@ -255,6 +469,75 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate'], function () {
             }
         })
     };
+
+    layui.upload({
+        url:ma.host+"/uploadFile",
+        ext: 'jpg|png|gif',
+        name:"file",
+        before:function(input){
+            debugger;
+            tempImg = $(input).parents('.layui-input-block').find('img');
+            tempImgkey = $(input).data("key");
+            tempClose = $(input).parents('.layui-input-block').find('.close');
+            $(tempClose).show();
+
+        },
+        success:function (res) {
+            $(tempImg).attr({"src":res.data});
+            fileNames[tempImgkey] = res.data;
+            console.log(fileNames);
+
+            //预览大图
+            $(tempImg).click(function () {
+                bigPic = $(this).attr('src');
+                viewBigPic(bigPic);
+            });
+
+            // $('#uploadIdcard').text();
+
+            // var url = $('#uploadIdcard').text();
+            // aler(url)
+            top.layer.success("上传成功");
+            // console.log(res);
+            // $(tempImg).attr('src',res.src);
+            $(tempImg).show();  //上传成功要显示
+
+        }
+    });
+
+    //预览大图
+    function viewBigPic(imgsrc){
+        if(imgsrc){
+            $('#bigPic').show();
+            $('#bigPic img').attr('src',imgsrc);
+        }
+    }
+
+    //关闭预览大图
+    $('#bigPic .bg').click(function () {
+        $('#bigPic').hide();
+    });
+
+    //图片删除
+    $('.close').click(function () {
+        var key = $(this).parents('.layui-input-block').find('input').data('key');
+        delete fileNames[key];
+        $(this).hide();
+        $(this).parents('.layui-input-block').find('img').attr('src','');
+        $(this).parents('.layui-input-block').find('img').hide();
+    });
+
+    //动态表单类型切换
+    function changeInputType(type) {
+        if(type == 1){
+            $('.form-house').hide();
+            $('.form-car').show();
+        }else {
+            $('.form-car').hide();
+            $('.form-house').show();
+        }
+    }
+
 
     function createPlanTable(data) {
         grid.createNew({

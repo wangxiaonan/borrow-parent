@@ -9,6 +9,8 @@ public interface BorrowSalesmanDao {
 
     BorrowSalesman selByMobile(String mobile);
 
+    BorrowSalesman selByUid(String uuid);
+
     void insertBorrowSalesman(BorrowSalesman borrowSalesman);
 
 }

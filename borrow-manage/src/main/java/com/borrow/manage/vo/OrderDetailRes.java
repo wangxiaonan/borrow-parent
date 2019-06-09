@@ -12,6 +12,13 @@ import java.util.*;
 public class OrderDetailRes {
 
     private int bussType;
+    private String productName;
+    private String productCode;
+    //借款金额
+    private String boPrice;
+    //借款用途
+    private String boPaySource;
+    private String boSource;
 
     private UserInfoVo userInfo;
 
@@ -19,11 +26,17 @@ public class OrderDetailRes {
 
     private BorrowSalesmanVo borrowSalesman;
 
-    private BorrowOrderVo borrowOrder;
-
     private List<String> auditkeys = new ArrayList<>();
 
     private UserHouseInfoVo userHouseInfo;
+
+    public String getBoSource() {
+        return boSource;
+    }
+
+    public void setBoSource(String boSource) {
+        this.boSource = boSource;
+    }
 
     public int getBussType() {
         return bussType;
@@ -41,6 +54,37 @@ public class OrderDetailRes {
         this.userInfo = userInfo;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getBoPrice() {
+        return boPrice;
+    }
+
+    public void setBoPrice(String boPrice) {
+        this.boPrice = boPrice;
+    }
+
+    public String getBoPaySource() {
+        return boPaySource;
+    }
+
+    public void setBoPaySource(String boPaySource) {
+        this.boPaySource = boPaySource;
+    }
 
     public BorrowSalesmanVo getBorrowSalesman() {
         return borrowSalesman;
@@ -48,14 +92,6 @@ public class OrderDetailRes {
 
     public void setBorrowSalesman(BorrowSalesmanVo borrowSalesman) {
         this.borrowSalesman = borrowSalesman;
-    }
-
-    public BorrowOrderVo getBorrowOrder() {
-        return borrowOrder;
-    }
-
-    public void setBorrowOrder(BorrowOrderVo borrowOrder) {
-        this.borrowOrder = borrowOrder;
     }
 
     public UserCarItemVo getUserCarItemVo() {

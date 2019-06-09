@@ -32,6 +32,14 @@ public class BorrowSalesmanDaoImpl implements BorrowSalesmanDao {
     }
 
     @Override
+    public BorrowSalesman selByUid(String uuid) {
+        BorrowSalesmanExample example = new BorrowSalesmanExample();
+        example.createCriteria().andUuidEqualTo(uuid);
+        List<BorrowSalesman> salesmen =  borrowSalesmanMapper.selectByExample(example);
+        return salesmen.isEmpty()? null:salesmen.get(0);
+    }
+
+    @Override
     public void insertBorrowSalesman(BorrowSalesman borrowSalesman) {
 
         borrowSalesmanMapper.insertSelective(borrowSalesman);

@@ -17,6 +17,7 @@ import com.borrow.manage.utils.Utility;
 import com.borrow.manage.utils.id.IdProvider;
 import com.borrow.manage.vo.*;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -651,6 +652,11 @@ public class OrderServcieImpl implements OrderServcie {
         if (borrowOrder == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
+        detailRes.setBussType(borrowOrder.getBuesType());
+        detailRes.setBoPaySource(borrowOrder.getBoPaySource());
+        detailRes.setBoPrice(borrowOrder.getBoPrice().toString());
+        detailRes.setProductName(borrowOrder.getProductName());
+        detailRes.setProductCode(borrowOrder.getpCode());
         String userUid = borrowOrder.getUserUid();
         UserInfo userInfo = userInfoDao.selInfoByUid(userUid);
         if (userInfo == null) {
@@ -659,6 +665,10 @@ public class OrderServcieImpl implements OrderServcie {
 
         UserInfoVo userInfoVo = new UserInfoVo();
         BeanUtils.copyProperties(userInfo,userInfoVo);
+        userInfoVo.setMarriage(userInfo.getMarriageStatus());
+        userInfoVo.setChildren(userInfo.getChildrenDesc());
+        userInfoVo.setUserDebts(userInfo.getLiabilitiesDesc());
+        userInfoVo.setUserAssure(userInfo.getGuaranteeDesc());
         detailRes.setUserInfo(userInfoVo);
         List<BoOrderAudit> auditList = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
         List<String> auditkeys = new ArrayList<>();
@@ -667,11 +677,23 @@ public class OrderServcieImpl implements OrderServcie {
         });
         detailRes.setAuditkeys(auditkeys);
 
+        BorrowSalesman salesman = borrowSalesmanDao.selByUid(borrowOrder.getSalesmanUid());
+        BorrowSalesmanVo borrowSalesmanVo = new BorrowSalesmanVo();
+        BeanUtils.copyProperties(salesman,borrowSalesmanVo);
+        detailRes.setBorrowSalesman(borrowSalesmanVo);
+
         List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(Long.parseLong(orderDetailReq.getOrderId()));
+        Map<String, String> itemkeys = new HashMap();
+        boOrderItems.stream().forEach(boOrderItem -> {
+            itemkeys.put(boOrderItem.getItemKey(), boOrderItem.getItemValue());
+        });
+        detailRes.setBoSource(itemkeys.get(BoOrderItemEnum.BO_SOURCE.getItemKey()));
+
         if (borrowOrder.getBuesType().equals(BussTypeEnum.CARD.getCode())) {
             UserCar userCar = userCarDao.selByPlateNO(userUid, borrowOrder.getPlateNumber());
             UserCarItemVo userCarItemVo = new UserCarItemVo();
             BeanUtils.copyProperties(userCar,userCarItemVo);
+            userCarItemVo.setSignTimeStr(DateFormatUtils.format(userCar.getSignTime(),DateFormatUtils.ISO_DATE_FORMAT.getPattern()));
             boOrderItems.stream().forEach(boOrderItem -> {
                 if (boOrderItem.getItemKey().equals(BoOrderCarItem.AUTH_IDARD.getItemKey())) {
                     userCarItemVo.setAuthIdcardUrl(boOrderItem.getItemValue());
@@ -696,12 +718,9 @@ public class OrderServcieImpl implements OrderServcie {
 
         }else if (borrowOrder.getBuesType().equals(BussTypeEnum.HOUSE.getCode())) {
             UserHouseInfoVo userHouseInfoVo = new UserHouseInfoVo();
-            Map<String, String> itemkeys = new HashMap();
-            boOrderItems.stream().forEach(boOrderItem -> {
-                itemkeys.put(boOrderItem.getItemKey(), boOrderItem.getItemValue());
-            });
+
             userHouseInfoVo.setHouseName(itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
-            userHouseInfoVo.setHousePart(BoOrderHouseItem.HOUSE_PART.getItemKey());
+            userHouseInfoVo.setHousePart(itemkeys.get(BoOrderHouseItem.HOUSE_PART.getItemKey()));
             userHouseInfoVo.setHouseNum(itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
             userHouseInfoVo.setHouseArea(itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
             userHouseInfoVo.setHouseAttr(itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
