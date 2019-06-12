@@ -49,6 +49,13 @@ public class OrderApi {
         logger.info("<====addOrder():res={}",res);
         return res;
     }
+    @RequestMapping(value = "/borrow/order/update", method = RequestMethod.POST)
+    public ResponseResult updateOrder(@RequestBody OrderUpdateReq orderUpdateReq) {
+        System.out.println(orderUpdateReq);
+
+        return ResponseResult.success("success",null);
+    }
+
     @RequestMapping(value = "/borrow/order/sel", method = RequestMethod.POST)
     public ResponseResult selOrderList(@RequestBody OrderListReq orderListReq) {
         logger.info("====>selOrderList():req={}", orderListReq);

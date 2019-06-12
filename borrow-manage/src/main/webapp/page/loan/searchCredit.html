@@ -192,7 +192,7 @@
 <div id='dialog1' class="hide">
 
     <form class="layui-form">
-
+        <input type="hidden" id="bussTypeDetail" name="bussTypeDetail">
         <div class="layui-form-item">
             <label class="layui-form-label">客户姓名</label>
             <div class="layui-input-inline">
@@ -434,24 +434,24 @@
         <div class="layui-form-item">
             <label class="layui-form-label">审核通过包括</label>
             <div class="layui-input-block" id='cardBox'>
-                <input type="checkbox" id="AUTH_IDCARD" name='AUTH_IDCARD' value="AUTH_IDCARD" lay-skin="primary" title="身份证">
-                <input type="checkbox" id="AUTH_CARPHOTO" name='AUTH_CARPHOTO' value="AUTH_CARPHOTO" lay-skin="primary" title="人车合照">
-                <input type="checkbox" id="VEHICLE_LICENSE" name='VEHICLE_LICENSE' value="VEHICLE_LICENSE" lay-skin="primary" title="行驶证">
-                <input type="checkbox" id="POLLING_LICENSE" name='POLLING_LICENSE' value="POLLING_LICENSE" lay-skin="primary" title="登记证">
-                <input type="checkbox" id="INSURANCE_POLICY" name='INSURANCE_POLICY' value="INSURANCE_POLICY" lay-skin="primary" title="保单">
-                <input type="checkbox" id="LETTER_COMMITMENT" name='LETTER_COMMITMENT' value="LETTER_COMMITMENT" lay-skin="primary" title="信批承诺函">
-                <input type="checkbox" id="VIOLATION_RECORD" name='VIOLATION_RECORD' value="VIOLATION_RECORD" lay-skin="primary" title="违章信息">
-                <input type="checkbox" id="ADDRESS_LICENSE" name='ADDRESS_LICENSE' value="ADDRESS_LICENSE" lay-skin="primary" title="住址证明">
-                <input type="checkbox" id="CAR_SKIN" name='CAR_SKIN' value="CAR_SKIN" lay-skin="primary" title="车辆外观照片">
-                <input type="checkbox" id="CAR_MILEAGE" name='CAR_MILEAGE' value="CAR_MILEAGE" lay-skin="primary" title="车辆行驶里程照片">
-                <input type="checkbox" id="CAR_MOTOR" name='CAR_MOTOR' value="CAR_MOTOR" lay-skin="primary" title="车辆发动机照片">
-                <input type="checkbox" id="CAR_NUMBER" name='CAR_NUMBER' value="CAR_NUMBER" lay-skin="primary" title="铭牌照片">
-                <input type="checkbox" id="APPLY_TABLE" name='APPLY_TABLE' value="APPLY_TABLE" lay-skin="primary" title="申请表">
+                <input type="checkbox" id="AUTH_IDCARD"lay-filter="auditkeys" name='auditkeys[AUTH_IDCARD]' value="AUTH_IDCARD" lay-skin="primary" title="身份证">
+                <input type="checkbox" id="AUTH_CARPHOTO"lay-filter="auditkeys" name='auditkeys[AUTH_CARPHOTO]' value="AUTH_CARPHOTO" lay-skin="primary" title="人车合照">
+                <input type="checkbox" id="VEHICLE_LICENSE" lay-filter="auditkeys" name='auditkeys[VEHICLE_LICENSE]' value="VEHICLE_LICENSE" lay-skin="primary" title="行驶证">
+                <input type="checkbox" id="POLLING_LICENSE" lay-filter="auditkeys" name='auditkeys[POLLING_LICENSE]' value="POLLING_LICENSE" lay-skin="primary" title="登记证">
+                <input type="checkbox" id="INSURANCE_POLICY" lay-filter="auditkeys" name='auditkeys[INSURANCE_POLICY]' value="INSURANCE_POLICY" lay-skin="primary" title="保单">
+                <input type="checkbox" id="LETTER_COMMITMENT" lay-filter="auditkeys" name='auditkeys[LETTER_COMMITMENT]' value="LETTER_COMMITMENT" lay-skin="primary" title="信批承诺函">
+                <input type="checkbox" id="VIOLATION_RECORD" lay-filter="auditkeys" name='auditkeys[VIOLATION_RECORD]' value="VIOLATION_RECORD" lay-skin="primary" title="违章信息">
+                <input type="checkbox" id="ADDRESS_LICENSE" lay-filter="auditkeys" name='auditkeys[ADDRESS_LICENSE]' value="ADDRESS_LICENSE" lay-skin="primary" title="住址证明">
+                <input type="checkbox" id="CAR_SKIN"lay-filter="auditkeys"  name='auditkeys[CAR_SKIN]' value="CAR_SKIN" lay-skin="primary" title="车辆外观照片">
+                <input type="checkbox" id="CAR_MILEAGE" lay-filter="auditkeys" name='auditkeys[CAR_MILEAGE]' value="CAR_MILEAGE" lay-skin="primary" title="车辆行驶里程照片">
+                <input type="checkbox" id="CAR_MOTOR" lay-filter="auditkeys" name='auditkeys[CAR_MOTOR]' value="CAR_MOTOR" lay-skin="primary" title="车辆发动机照片">
+                <input type="checkbox" id="CAR_NUMBER" lay-filter="auditkeys" name='auditkeys[CAR_NUMBER]' value="CAR_NUMBER" lay-skin="primary" title="铭牌照片">
+                <input type="checkbox" id="APPLY_TABLE" lay-filter="auditkeys" name='auditkeys[APPLY_TABLE]' value="APPLY_TABLE" lay-skin="primary" title="申请表">
 
-                <input type="checkbox" id="CREDIT_REPORTING" name='CREDIT_REPORTING' value="CREDIT_REPORTING" lay-skin="primary" title="征信记录">
-                <input type="checkbox" id="HOUSE_PIC" name='HOUSE_PIC' value="HOUSE_PIC" lay-skin="primary" title="房产证">
-                <input type="checkbox" id="AUTHORITY_CARD" name='AUTHORITY_CARD' value="AUTHORITY_CARD" lay-skin="primary" title="他项权证">
-                <input type="checkbox" id="AUTH_OTHER" name='AUTH_OTHER' value="AUTH_OTHER" lay-skin="primary" title="其它审核资料">
+                <input type="checkbox" id="CREDIT_REPORTING" name='auditkeys[CREDIT_REPORTING]' value="CREDIT_REPORTING" lay-skin="primary" title="征信记录">
+                <input type="checkbox" id="HOUSE_PIC" name='auditkeys[HOUSE_PIC]' value="HOUSE_PIC" lay-skin="primary" title="房产证">
+                <input type="checkbox" id="AUTHORITY_CARD" name='auditkeys[AUTHORITY_CARD]' value="AUTHORITY_CARD" lay-skin="primary" title="他项权证">
+                <input type="checkbox" id="AUTH_OTHER" name='auditkeys[AUTH_OTHER]' value="AUTH_OTHER" lay-skin="primary" title="其它审核资料">
             </div>
         </div>
         <div class="layui-form-item form-car">
@@ -524,6 +524,11 @@
                 <span class="close" title="删除" style="position: absolute;left: 110px;font-size: 26px;cursor: pointer;display: none;">&times;</span>
                 <img id = "houseAuthOtherPicurl" name = "houseAuthOtherPicurl" hidden class="layui-form-label">
                 <input type="file" name="upload-images" class="layui-upload-file" data-key="houseAuthOtherPicurl" lay-title="上传其他补充材料">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn hide" lay-submit lay-filter="orderUpdate" id="orderUpdateSubmit">修改详情</button>
             </div>
         </div>
     </form>

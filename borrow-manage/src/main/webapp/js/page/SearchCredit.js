@@ -136,6 +136,92 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
             laydate(end);
         }
     }
+    form.on('submit(orderUpdate)', function(data) {
+        var formData=data.field;
+        var auditkeys = [];
+        for(i in formData){
+            if(i.indexOf('auditkeys')>-1){
+                auditkeys.push(formData[i])
+            }
+        };
+        var  province  = formData.province;
+        var  city  = formData.city;
+        var  area  = formData.area;
+        var address = formData.houseAddress;
+        var houseAddressDetail = province +" "+ city + " "+ area+ " "+address;
+        var SubmitData={
+            "bussType":formData.bussTypeDetail,
+            "boPaySource":formData.boPaySourceDetail,
+            "boSource":formData.boSourceDetail,
+            "auditkeys" : auditkeys,
+            "userInfo": {
+                "userEarns": formData.userEarnsDetail,
+                "idcard": formData.idcardDetail,
+                "mobile": formData.mobileDetail,
+                "sex": formData.sexDetail,
+                "userName": formData.userNameDetail,
+                "marriage": formData.marriageDetail,
+                "children": formData.childrenDetail,
+                "workNature": formData.workNatureDetail,
+                "userDebts": formData.userDebtsDetail,
+                "userAssure": formData.userAssureDetail,
+            },
+            "userCarItemVo": {
+                "plateNumber": formData.plateNumberDetail,
+                "signTimeStr": formData.carDateDetail,
+                "carModel": formData.carModelDetail,
+                "carColor": formData.carColorDetail,
+                "assessmentPrice": formData.assessmentPriceDetail,
+                "mileageDesc": formData.mileageDescDetail,
+                "authIdcardUrl": fileNames.authIdcardUrl,
+                "vehicleLicenseUrl": fileNames.vehicleLicenseUrl,
+                "pollingLicenseUrl": fileNames.pollingLicenseUrl,
+                "carSkinUrl": fileNames.carSkinUrl,
+                "insurancePolicyUrl": fileNames.insurancePolicyUrl,
+                "letterCommitmentUrl": fileNames.letterCommitmentUrl,
+                "authOtherUrl": fileNames.authOtherUrl
+            },
+            "borrowSalesman": {
+                "salesName": formData.salesNameDetail,
+                "salesMobile": formData.salesMobileDetail
+            },
+            "orderAudit": {
+                "auditkeys": auditkeys
+            },
+            "userHouseInfo" : {
+                "houseName": formData.houseNameDetail,
+                "housePart": formData.housePartDetail,
+                "houseNum": formData.houseNumDetail,
+                "houseArea": formData.houseAreaDetail,
+                "houseAttr": formData.houseAttrDetail,
+                "houseAddress": houseAddressDetail,
+                "houseDate": formData.houseDateDetail,
+                "housePrice": formData.housePriceDetail,
+                "houseidcardPicUrl": fileNames.houseidcardPicUrl,
+                "housePicUrl": fileNames.housePicUrl,
+                "houseAuthorityCardPicUrl": fileNames.houseAuthorityCardPicUrl,
+                "houseGuaranteePicUrl": fileNames.houseGuaranteePicUrl,
+                "houseLetterCommitmentPicUrl": fileNames.houseLetterCommitmentPicUrl,
+                "houseAuthOtherPicurl": fileNames.houseAuthOtherPicurl
+            }
+        }
+        var updateUser = {
+            url: ma.host+"/borrow/order/update",
+            data: SubmitData,
+            done: function(res) {
+                top.layer.success("修改成功");
+                layer.closeAll();
+                self.location.reload();
+            },
+            fail: function(re) {
+                layer.error(re.errorMessage);
+                layer.hideLoad();
+            }
+        }
+        layer.showLoad();
+        ma.ajax(updateUser);
+        return false;
+    });
 
     function getDetailData(param) {
         var getDetail = {
@@ -147,6 +233,8 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                     return;
                 }
                 bussType = res.data.bussType;
+                $('#bussTypeDetail').val(bussType);
+
                 //动态切换
                 changeInputType(bussType);
                 $('#userNameDetail').val(res.data.userInfo.userName);
