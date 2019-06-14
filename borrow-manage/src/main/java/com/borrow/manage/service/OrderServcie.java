@@ -12,6 +12,9 @@ public interface OrderServcie {
 
      ResponseResult orderAdd(OrderCreateReq orderCreateReq);
 
+     ResponseResult orderUpdate(OrderUpdateReq orderUpdateReq);
+
+
      ResponseResult orderSelList(OrderListReq orderListReq);
 
      void orderSelListExport(HttpServletResponse response,OrderListReq orderListReq);

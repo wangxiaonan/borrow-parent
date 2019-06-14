@@ -35,4 +35,11 @@ public class BoOrderAuditDaoImpl implements BoOrderAuditDao {
         return boOrderAuditMapper.selectByExample(auditExample);
     }
 
+    @Override
+    public void delByOrderId(Long orderId) {
+        BoOrderAuditExample auditExample = new BoOrderAuditExample();
+        auditExample.createCriteria().andOrderIdEqualTo(orderId);
+        boOrderAuditMapper.deleteByExample(auditExample);
+    }
+
 }

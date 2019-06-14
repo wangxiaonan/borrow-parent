@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class OrderUpdateReq extends BaseReq{
 
+    private long orderId;
     private int bussType;
     //借款用途
     private String boPaySource;
@@ -22,6 +23,14 @@ public class OrderUpdateReq extends BaseReq{
     private List<String> auditkeys = new ArrayList<>();
 
     private UserHouseInfoVo userHouseInfo;
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
 
     public int getBussType() {
         return bussType;

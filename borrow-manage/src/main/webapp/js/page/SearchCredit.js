@@ -149,7 +149,11 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
         var  area  = formData.area;
         var address = formData.houseAddress;
         var houseAddressDetail = province +" "+ city + " "+ area+ " "+address;
+
+
         var SubmitData={
+
+            "orderId":formData.orderIdDetail,
             "bussType":formData.bussTypeDetail,
             "boPaySource":formData.boPaySourceDetail,
             "boSource":formData.boSourceDetail,
@@ -173,13 +177,13 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                 "carColor": formData.carColorDetail,
                 "assessmentPrice": formData.assessmentPriceDetail,
                 "mileageDesc": formData.mileageDescDetail,
-                "authIdcardUrl": fileNames.authIdcardUrl,
-                "vehicleLicenseUrl": fileNames.vehicleLicenseUrl,
-                "pollingLicenseUrl": fileNames.pollingLicenseUrl,
-                "carSkinUrl": fileNames.carSkinUrl,
-                "insurancePolicyUrl": fileNames.insurancePolicyUrl,
-                "letterCommitmentUrl": fileNames.letterCommitmentUrl,
-                "authOtherUrl": fileNames.authOtherUrl
+                "authIdcardUrl": $("#authIdcardUrl")[0].src,
+                "vehicleLicenseUrl": $("#vehicleLicenseUrl")[0].src,
+                "pollingLicenseUrl": $("#pollingLicenseUrl")[0].src,
+                "carSkinUrl": $("#carSkinUrl")[0].src,
+                "insurancePolicyUrl": $("#insurancePolicyUrl")[0].src,
+                "letterCommitmentUrl": $("#letterCommitmentUrl")[0].src,
+                "authOtherUrl": $("#authOtherUrl")[0].src
             },
             "borrowSalesman": {
                 "salesName": formData.salesNameDetail,
@@ -197,12 +201,12 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                 "houseAddress": houseAddressDetail,
                 "houseDate": formData.houseDateDetail,
                 "housePrice": formData.housePriceDetail,
-                "houseidcardPicUrl": fileNames.houseidcardPicUrl,
-                "housePicUrl": fileNames.housePicUrl,
-                "houseAuthorityCardPicUrl": fileNames.houseAuthorityCardPicUrl,
-                "houseGuaranteePicUrl": fileNames.houseGuaranteePicUrl,
-                "houseLetterCommitmentPicUrl": fileNames.houseLetterCommitmentPicUrl,
-                "houseAuthOtherPicurl": fileNames.houseAuthOtherPicurl
+                "houseidcardPicUrl": $("#houseidcardPicUrl")[0].src,
+                "housePicUrl": $("#housePicUrl")[0].src,
+                "houseAuthorityCardPicUrl": $("#houseAuthorityCardPicUrl")[0].src,
+                "houseGuaranteePicUrl": $("#houseGuaranteePicUrl")[0].src,
+                "houseLetterCommitmentPicUrl": $("#houseLetterCommitmentPicUrl")[0].src,
+                "houseAuthOtherPicurl": $("#houseAuthOtherPicurl")[0].src
             }
         }
         var updateUser = {
@@ -222,6 +226,14 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
         ma.ajax(updateUser);
         return false;
     });
+    //图片删除
+    // $('.close').click(function () {
+    //     var key = $(this).parents('.layui-input-block').find('input').data('key');
+    //     delete fileNames[key];
+    //     // $(this).hide();
+    //     $(this).parents('.layui-input-block').find('img').attr('src','');
+    //     // $(this).parents('.layui-input-block').find('img').hide();
+    // });
 
     function getDetailData(param) {
         var getDetail = {
@@ -233,6 +245,8 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                     return;
                 }
                 bussType = res.data.bussType;
+
+                $('#orderIdDetail').val(param.orderId);
                 $('#bussTypeDetail').val(bussType);
 
                 //动态切换
@@ -263,7 +277,6 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                     $('#houseAttrDetail').val(res.data.userHouseInfo.houseAttr);
 
                     var address = res.data.userHouseInfo.houseAddress.split(" ");
-                    debugger;
                     $("#province").find("option[value='"+address[0] +"']").prop("selected",true);
                     cxSelectApi.setOptions({selects: ['province', 'city', 'area']});
 
@@ -290,6 +303,10 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#houseidcardPicUrl").removeAttr("src");
+                        });
+
                     }
 
                     if(!$.isEmptyObject(res.data.userHouseInfo.housePicUrl)) {
@@ -303,6 +320,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#housePicUrl").removeAttr("src");
+                        });
                     }
                     if(!$.isEmptyObject(res.data.userHouseInfo.houseAuthorityCardPicUrl)) {
                         $("#houseAuthorityCardPicUrl").attr({"src":res.data.userHouseInfo.houseAuthorityCardPicUrl});
@@ -314,6 +334,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                         $("#houseAuthorityCardPicUrl").click(function () {
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
+                        });
+                        $(tempClose).click(function () {
+                            $("#houseAuthorityCardPicUrl").removeAttr("src");
                         });
                     }
 
@@ -329,6 +352,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#houseGuaranteePicUrl").removeAttr("src");
+                        });
 
                     }
                     if(!$.isEmptyObject(res.data.userHouseInfo.houseLetterCommitmentPicUrl)) {
@@ -342,6 +368,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#houseLetterCommitmentPicUrl").removeAttr("src");
+                        });
                     }
                     if(!$.isEmptyObject(res.data.userHouseInfo.houseAuthOtherPicurl)) {
                         $("#houseAuthOtherPicurl").attr({"src":res.data.userHouseInfo.houseAuthOtherPicurl});
@@ -354,6 +383,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#houseAuthOtherPicurl").removeAttr("src");
+                        });
                     }
 
                 }else if (1 == bussType) {
@@ -365,8 +397,6 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                     $('#plateNumberDetail').val(res.data.userCarItemVo.plateNumber);
                     $('#mileageDescDetail').val(res.data.userCarItemVo.mileageDesc);
 
-                    debugger;
-
                     if(!$.isEmptyObject(res.data.userCarItemVo.authIdcardUrl)) {
                         $("#authIdcardUrl").attr({"src":res.data.userCarItemVo.authIdcardUrl});
                         $("#authIdcardUrl").show();
@@ -377,6 +407,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                         $("#authIdcardUrl").click(function () {
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
+                        });
+                        $(tempClose).click(function () {
+                            $("#authIdcardUrl").removeAttr("src");
                         });
                     }
                     if(!$.isEmptyObject(res.data.userCarItemVo.vehicleLicenseUrl)) {
@@ -390,6 +423,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#vehicleLicenseUrl").removeAttr("src");
+                        });
                     }
                     if(!$.isEmptyObject(res.data.userCarItemVo.pollingLicenseUrl)) {
                         $("#pollingLicenseUrl").attr({"src":res.data.userCarItemVo.pollingLicenseUrl});
@@ -401,6 +437,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                         $("#pollingLicenseUrl").click(function () {
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
+                        });
+                        $(tempClose).click(function () {
+                            $("#pollingLicenseUrl").removeAttr("src");
                         });
                     }
                     if(!$.isEmptyObject(res.data.userCarItemVo.carSkinUrl)) {
@@ -414,6 +453,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#carSkinUrl").removeAttr("src");
+                        });
                     }
                     if(!$.isEmptyObject(res.data.userCarItemVo.insurancePolicyUrl)) {
                         $("#insurancePolicyUrl").attr({"src":res.data.userCarItemVo.insurancePolicyUrl});
@@ -425,6 +467,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                         $("#insurancePolicyUrl").click(function () {
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
+                        });
+                        $(tempClose).click(function () {
+                            $("#insurancePolicyUrl").removeAttr("src");
                         });
                     }
 
@@ -439,6 +484,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
                         });
+                        $(tempClose).click(function () {
+                            $("#letterCommitmentUrl").removeAttr("src");
+                        });
                     }
 
                     if(!$.isEmptyObject(res.data.userCarItemVo.authOtherUrl)) {
@@ -451,6 +499,9 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                         $("#authOtherUrl").click(function () {
                             bigPic = $(this).attr('src');
                             viewBigPic(bigPic);
+                        });
+                        $(tempClose).click(function () {
+                            $("#authOtherUrl").removeAttr("src");
                         });
                     }
 
@@ -563,7 +614,6 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
         ext: 'jpg|png|gif',
         name:"file",
         before:function(input){
-            debugger;
             tempImg = $(input).parents('.layui-input-block').find('img');
             tempImgkey = $(input).data("key");
             tempClose = $(input).parents('.layui-input-block').find('.close');
@@ -610,8 +660,7 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
     $('.close').click(function () {
         var key = $(this).parents('.layui-input-block').find('input').data('key');
         delete fileNames[key];
-        $(this).hide();
-        $(this).parents('.layui-input-block').find('img').attr('src','');
+        $(this).parents('.layui-input-block').find('img').removeAttr('src');
         $(this).parents('.layui-input-block').find('img').hide();
     });
 

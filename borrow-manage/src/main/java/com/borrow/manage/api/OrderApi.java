@@ -51,8 +51,7 @@ public class OrderApi {
     }
     @RequestMapping(value = "/borrow/order/update", method = RequestMethod.POST)
     public ResponseResult updateOrder(@RequestBody OrderUpdateReq orderUpdateReq) {
-        System.out.println(orderUpdateReq);
-
+        orderServcie.orderUpdate(orderUpdateReq);
         return ResponseResult.success("success",null);
     }
 

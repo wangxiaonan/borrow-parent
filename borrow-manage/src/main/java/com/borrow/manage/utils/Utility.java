@@ -34,6 +34,16 @@ public class Utility {
         return c.getTime();
 
     }
+    public static  Date  getDate(String datestr) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+             date = simpleDateFormat.parse(datestr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     public static  int getOverdueDay(Date brTime) {
 
         Calendar caNow = Calendar.getInstance();

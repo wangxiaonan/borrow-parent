@@ -44,4 +44,13 @@ public class BorrowSalesmanDaoImpl implements BorrowSalesmanDao {
 
         borrowSalesmanMapper.insertSelective(borrowSalesman);
     }
+
+    @Override
+    public void updateBorrowSalesman(String salesmanUid, BorrowSalesman borrowSalesman) {
+        BorrowSalesmanExample example = new BorrowSalesmanExample();
+        example.createCriteria().andUuidEqualTo(salesmanUid);
+        borrowSalesmanMapper.updateByExampleSelective(borrowSalesman,example);
+    }
+
+
 }

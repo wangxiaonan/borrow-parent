@@ -57,4 +57,11 @@ public class UserInfoDaoImpl implements UserInfoDao {
         return userInfos.isEmpty()?null:userInfos.get(0);
     }
 
+    @Override
+    public void updateUserInfo(String userUid, UserInfo userInfo) {
+        UserInfoExample example = new UserInfoExample();
+        example.createCriteria().andUuidEqualTo(userUid);
+        userInfoMapper.updateByExampleSelective(userInfo,example);
+    }
+
 }

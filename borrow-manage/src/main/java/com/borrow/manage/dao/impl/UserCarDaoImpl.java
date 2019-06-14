@@ -38,4 +38,21 @@ public class UserCarDaoImpl implements UserCarDao {
 
         return userCars.isEmpty()? null:userCars.get(0);
     }
+
+    @Override
+    public UserCar selByUserUid(String userUid) {
+        UserCarExample userCarExample = new UserCarExample();
+        userCarExample.createCriteria().andUserUidEqualTo(userUid);
+
+        List<UserCar> userCars =  userCarMapper.selectByExample(userCarExample);
+        return userCars.isEmpty()? null:userCars.get(0);
+    }
+
+    @Override
+    public void updateByUserUid(UserCar userCar,String userUid) {
+        UserCarExample userCarExample = new UserCarExample();
+        userCarExample.createCriteria().andUserUidEqualTo(userUid);
+
+        userCarMapper.updateByExampleSelective(userCar,userCarExample);
+    }
 }

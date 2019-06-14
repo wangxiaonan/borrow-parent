@@ -13,6 +13,8 @@ public interface BorrowSalesmanDao {
 
     void insertBorrowSalesman(BorrowSalesman borrowSalesman);
 
+    void updateBorrowSalesman(String salesmanUid,BorrowSalesman borrowSalesman);
+
 }
 
 

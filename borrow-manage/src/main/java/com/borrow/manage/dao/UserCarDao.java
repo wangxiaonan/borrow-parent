@@ -12,5 +12,9 @@ public interface UserCarDao {
 
     UserCar selByPlateNO(String userUid,String plateNumber);
 
+    UserCar selByUserUid(String userUid);
+
+    void updateByUserUid(UserCar userCar,String userUid);
+
 
 }

@@ -18,6 +18,7 @@ import com.borrow.manage.utils.id.IdProvider;
 import com.borrow.manage.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -291,6 +294,243 @@ public class OrderServcieImpl implements OrderServcie {
         }
 
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult orderUpdate(OrderUpdateReq orderUpdateReq) {
+        BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(orderUpdateReq.getOrderId());
+        if (borrowOrder == null) {
+            throw new BorrowException(ExceptionCode.PARAM_ERROR);
+        }
+        if (borrowOrder.getBoIsState() != 1) {
+            throw new BorrowException(ExceptionCode.BO_IS_RAISE);
+        }
+        BorrowOrder order = new BorrowOrder();
+        order.setBoPaySource(orderUpdateReq.getBoPaySource());
+        borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),order);
+
+        BoOrderItem boOrderItem = new BoOrderItem();
+        boOrderItem.setItemValue(orderUpdateReq.getBoPaySource());
+        boOrderItemDao.updateItemValue(borrowOrder.getOrderId(),BoOrderItemEnum.BO_SOURCE.getItemKey(),boOrderItem);
+
+        UserInfo userInfo = convertUserInfoVo(orderUpdateReq.getUserInfo());
+        userInfo.setUuid(null);
+        userInfoDao.updateUserInfo(borrowOrder.getUserUid(),userInfo);
+        BorrowSalesman borrowSalesman = new BorrowSalesman();
+        borrowSalesman.setSalesName(orderUpdateReq.getBorrowSalesman().getSalesName());
+        borrowSalesman.setSalesMobile(orderUpdateReq.getBorrowSalesman().getSalesMobile());
+        borrowSalesmanDao.updateBorrowSalesman(borrowOrder.getSalesmanUid(),borrowSalesman);
+
+        boOrderAuditDao.delByOrderId(borrowOrder.getOrderId());
+        List<String> auditkeys = orderUpdateReq.getAuditkeys();
+        List<BoOrderAudit> boOrderAudits = convertAuditKey(auditkeys, borrowOrder.getOrderId());
+        boOrderAudits.stream().forEach(orderAudit -> {
+            boOrderAuditDao.insertOrderAudit(orderAudit);
+        });
+        if (orderUpdateReq.getBussType() == BussTypeEnum.CARD.getCode()) {
+            //TODO 车贷信息
+            UserCarItemVo userCarItemVo = orderUpdateReq.getUserCarItemVo();
+            UserCar userCar = new UserCar();
+            BeanUtils.copyProperties(userCarItemVo, userCar);
+            userCar.setSignTime(Utility.getDate(userCarItemVo.getSignTimeStr()));
+            userCarDao.updateByUserUid(userCar, borrowOrder.getUserUid());
+
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.AUTH_IDARD.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.AUTH_VEHICLE_LICENSE.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.POLLING_LICENSE.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.CAR_MILEAGE.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.INSURANCE_POLICY.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.LETTER_COMMITMENT.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderCarItem.AUTH_OTHER.getItemKey());
+
+            BoOrderItem authidardPicUrl = new BoOrderItem();
+            authidardPicUrl.setUuid(UUIDProvider.uuid());
+            authidardPicUrl.setOrderId(borrowOrder.getOrderId());
+            authidardPicUrl.setItemKey(BoOrderCarItem.AUTH_IDARD.getItemKey());
+            authidardPicUrl.setItemValue(userCarItemVo.getAuthIdcardUrl());
+            authidardPicUrl.setItemDesc(BoOrderCarItem.AUTH_IDARD.getItemDesc());
+            if (!StringUtils.isEmpty(authidardPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(authidardPicUrl);
+            }
+            BoOrderItem authVehicleLicensePicUrl = new BoOrderItem();
+            authVehicleLicensePicUrl.setUuid(UUIDProvider.uuid());
+            authVehicleLicensePicUrl.setOrderId(borrowOrder.getOrderId());
+            authVehicleLicensePicUrl.setItemKey(BoOrderCarItem.AUTH_VEHICLE_LICENSE.getItemKey());
+            authVehicleLicensePicUrl.setItemValue(userCarItemVo.getVehicleLicenseUrl());
+            authVehicleLicensePicUrl.setItemDesc(BoOrderCarItem.AUTH_VEHICLE_LICENSE.getItemDesc());
+            if (!StringUtils.isEmpty(authVehicleLicensePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(authVehicleLicensePicUrl);
+            }
+            BoOrderItem pollingLicensePicUrl = new BoOrderItem();
+            pollingLicensePicUrl.setUuid(UUIDProvider.uuid());
+            pollingLicensePicUrl.setOrderId(borrowOrder.getOrderId());
+            pollingLicensePicUrl.setItemKey(BoOrderCarItem.POLLING_LICENSE.getItemKey());
+            pollingLicensePicUrl.setItemValue(userCarItemVo.getPollingLicenseUrl());
+            pollingLicensePicUrl.setItemDesc(BoOrderCarItem.POLLING_LICENSE.getItemDesc());
+            if (!StringUtils.isEmpty(pollingLicensePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(pollingLicensePicUrl);
+            }
+            BoOrderItem carMileagePicUrl = new BoOrderItem();
+            carMileagePicUrl.setUuid(UUIDProvider.uuid());
+            carMileagePicUrl.setOrderId(borrowOrder.getOrderId());
+            carMileagePicUrl.setItemKey(BoOrderCarItem.CAR_MILEAGE.getItemKey());
+            carMileagePicUrl.setItemValue(userCarItemVo.getCarSkinUrl());
+            carMileagePicUrl.setItemDesc(BoOrderCarItem.CAR_MILEAGE.getItemDesc());
+            if (!StringUtils.isEmpty(carMileagePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(carMileagePicUrl);
+            }
+            BoOrderItem insurancePolicyPicUrl = new BoOrderItem();
+            insurancePolicyPicUrl.setUuid(UUIDProvider.uuid());
+            insurancePolicyPicUrl.setOrderId(borrowOrder.getOrderId());
+            insurancePolicyPicUrl.setItemKey(BoOrderCarItem.INSURANCE_POLICY.getItemKey());
+            insurancePolicyPicUrl.setItemValue(userCarItemVo.getInsurancePolicyUrl());
+            insurancePolicyPicUrl.setItemDesc(BoOrderCarItem.INSURANCE_POLICY.getItemDesc());
+            if (!StringUtils.isEmpty(insurancePolicyPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(insurancePolicyPicUrl);
+            }
+            BoOrderItem letterCommitmentPicUrl = new BoOrderItem();
+            letterCommitmentPicUrl.setUuid(UUIDProvider.uuid());
+            letterCommitmentPicUrl.setOrderId(borrowOrder.getOrderId());
+            letterCommitmentPicUrl.setItemKey(BoOrderCarItem.LETTER_COMMITMENT.getItemKey());
+            letterCommitmentPicUrl.setItemValue(userCarItemVo.getLetterCommitmentUrl());
+            letterCommitmentPicUrl.setItemDesc(BoOrderCarItem.LETTER_COMMITMENT.getItemDesc());
+            if (!StringUtils.isEmpty(letterCommitmentPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(letterCommitmentPicUrl);
+            }
+            BoOrderItem authOtherPicUrl = new BoOrderItem();
+            authOtherPicUrl.setUuid(UUIDProvider.uuid());
+            authOtherPicUrl.setOrderId(borrowOrder.getOrderId());
+            authOtherPicUrl.setItemKey(BoOrderCarItem.AUTH_OTHER.getItemKey());
+            authOtherPicUrl.setItemValue(userCarItemVo.getAuthOtherUrl());
+            authOtherPicUrl.setItemDesc(BoOrderCarItem.AUTH_OTHER.getItemDesc());
+            if (!StringUtils.isEmpty(authOtherPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(authOtherPicUrl);
+            }
+        }
+
+        if (orderUpdateReq.getBussType() == BussTypeEnum.HOUSE.getCode()) {
+            UserHouseInfoVo houseInfoVo = orderUpdateReq.getUserHouseInfo();
+            BoOrderItem boOrderName = new BoOrderItem();
+            boOrderName.setItemKey(BoOrderHouseItem.HOUSE_NAME.getItemKey());
+            boOrderName.setItemValue(houseInfoVo.getHouseName());
+            boOrderName.setItemDesc(BoOrderHouseItem.HOUSE_NAME.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_NAME.getItemKey(), boOrderName);
+
+            BoOrderItem boHousePart = new BoOrderItem();
+            boHousePart.setItemKey(BoOrderHouseItem.HOUSE_PART.getItemKey());
+            boHousePart.setItemValue(houseInfoVo.getHousePart());
+            boHousePart.setItemDesc(BoOrderHouseItem.HOUSE_PART.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_PART.getItemKey(), boHousePart);
+
+            BoOrderItem boHouseNum = new BoOrderItem();
+            boHouseNum.setItemKey(BoOrderHouseItem.HOUSE_NUM.getItemKey());
+            boHouseNum.setItemValue(houseInfoVo.getHouseNum());
+            boHouseNum.setItemDesc(BoOrderHouseItem.HOUSE_NUM.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_NUM.getItemKey(), boHouseNum);
+            BoOrderItem boHouseArea = new BoOrderItem();
+            boHouseArea.setItemKey(BoOrderHouseItem.HOUSE_AREA.getItemKey());
+            boHouseArea.setItemValue(houseInfoVo.getHouseArea());
+            boHouseArea.setItemDesc(BoOrderHouseItem.HOUSE_AREA.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_AREA.getItemKey(), boHouseArea);
+
+            BoOrderItem boHouseAttr = new BoOrderItem();;
+            boHouseAttr.setItemKey(BoOrderHouseItem.HOUSE_ATTR.getItemKey());
+            boHouseAttr.setItemValue(houseInfoVo.getHouseAttr());
+            boHouseAttr.setItemDesc(BoOrderHouseItem.HOUSE_ATTR.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_ATTR.getItemKey(), boHouseAttr);
+
+            BoOrderItem boHouseAddress = new BoOrderItem();
+            boHouseAddress.setItemKey(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey());
+            boHouseAddress.setItemValue(houseInfoVo.getHouseAddress());
+            boHouseAddress.setItemDesc(BoOrderHouseItem.HOUSE_ADDRESS.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_ADDRESS.getItemKey(), boHouseAddress);
+
+            BoOrderItem boHouseDate = new BoOrderItem();
+            boHouseDate.setItemKey(BoOrderHouseItem.HOUSE_DATE.getItemKey());
+            boHouseDate.setItemValue(houseInfoVo.getHouseDate());
+            boHouseDate.setItemDesc(BoOrderHouseItem.HOUSE_DATE.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_DATE.getItemKey(), boHouseDate);
+
+            BoOrderItem boHousePrice = new BoOrderItem();
+            boHousePrice.setItemKey(BoOrderHouseItem.HOUSE_PRICE.getItemKey());
+            boHousePrice.setItemValue(houseInfoVo.getHousePrice());
+            boHousePrice.setItemDesc(BoOrderHouseItem.HOUSE_PRICE.getItemDesc());
+            boOrderItemDao.updateItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_PRICE.getItemKey(), boHousePrice);
+
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_PIC_URL.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey());
+            boOrderItemDao.deleteItemValue(borrowOrder.getOrderId(), BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey());
+
+            BoOrderItem boHouseidcardPicUrl = new BoOrderItem();
+            boHouseidcardPicUrl.setUuid(UUIDProvider.uuid());
+            boHouseidcardPicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseidcardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey());
+            boHouseidcardPicUrl.setItemValue(houseInfoVo.getHouseidcardPicUrl());
+            boHouseidcardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemDesc());
+            if (!StringUtils.isEmpty(boHouseidcardPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseidcardPicUrl);
+            }
+            BoOrderItem boHousePicUrl = new BoOrderItem();
+            boHousePicUrl.setUuid(UUIDProvider.uuid());
+            boHousePicUrl.setOrderId(borrowOrder.getOrderId());
+            boHousePicUrl.setItemKey(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey());
+            boHousePicUrl.setItemValue(houseInfoVo.getHousePicUrl());
+            boHousePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_PIC_URL.getItemDesc());
+
+            if (!StringUtils.isEmpty(boHousePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHousePicUrl);
+            }
+
+            BoOrderItem boHouseAuthorityCardPicUrl = new BoOrderItem();
+            boHouseAuthorityCardPicUrl.setUuid(UUIDProvider.uuid());
+            boHouseAuthorityCardPicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseAuthorityCardPicUrl.setItemKey(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey());
+            boHouseAuthorityCardPicUrl.setItemValue(houseInfoVo.getHouseAuthorityCardPicUrl());
+            boHouseAuthorityCardPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemDesc());
+            if (!StringUtils.isEmpty(boHouseAuthorityCardPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseAuthorityCardPicUrl);
+            }
+
+
+            BoOrderItem boHouseGuaranteePicUrl = new BoOrderItem();
+            boHouseGuaranteePicUrl.setUuid(UUIDProvider.uuid());
+            boHouseGuaranteePicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseGuaranteePicUrl.setItemKey(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey());
+            boHouseGuaranteePicUrl.setItemValue(houseInfoVo.getHouseGuaranteePicUrl());
+            boHouseGuaranteePicUrl.setItemDesc(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemDesc());
+
+            if (!StringUtils.isEmpty(boHouseGuaranteePicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseGuaranteePicUrl);
+            }
+
+
+            BoOrderItem boHouseLetterCommitmentPicUrl = new BoOrderItem();
+            boHouseLetterCommitmentPicUrl.setUuid(UUIDProvider.uuid());
+            boHouseLetterCommitmentPicUrl.setOrderId(borrowOrder.getOrderId());
+            boHouseLetterCommitmentPicUrl.setItemKey(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey());
+            boHouseLetterCommitmentPicUrl.setItemValue(houseInfoVo.getHouseLetterCommitmentPicUrl());
+            boHouseLetterCommitmentPicUrl.setItemDesc(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemDesc());
+
+            if (!StringUtils.isEmpty(boHouseLetterCommitmentPicUrl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseLetterCommitmentPicUrl);
+            }
+
+            BoOrderItem boHouseAuthOtherPicurl = new BoOrderItem();
+            boHouseAuthOtherPicurl.setUuid(UUIDProvider.uuid());
+            boHouseAuthOtherPicurl.setOrderId(borrowOrder.getOrderId());
+            boHouseAuthOtherPicurl.setItemKey(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey());
+            boHouseAuthOtherPicurl.setItemValue(houseInfoVo.getHouseAuthOtherPicurl());
+            boHouseAuthOtherPicurl.setItemDesc(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemDesc());
+            if (!StringUtils.isEmpty(boHouseAuthOtherPicurl.getItemValue())) {
+                boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
+            }
+
+        }
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
     }
 
     @Override
@@ -850,4 +1090,20 @@ public class OrderServcieImpl implements OrderServcie {
         });
         return boOrderAudits;
     }
+
+    private List<BoOrderAudit> convertAuditKey(List<String> AuditKey, long orderId) {
+        List<BoOrderAudit> boOrderAudits = new ArrayList<>();
+        AuditKey.stream().forEach(s -> {
+            BoOrderAudit boOrderAudit = new BoOrderAudit();
+            boOrderAudit.setUuid(UUIDProvider.uuid());
+            boOrderAudit.setOrderId(orderId);
+            boOrderAudit.setAuditTime(new Date());
+            boOrderAudit.setAuditKey(s);
+            boOrderAudit.setAuthName(OrderAuditEnum.getAuthNameByKey(s));
+            boOrderAudit.setAuditValue(OrderAuditEnum.getAuthCodeByKey(s));
+            boOrderAudits.add(boOrderAudit);
+        });
+        return boOrderAudits;
+    }
+
 }

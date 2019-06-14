@@ -30,5 +30,24 @@ public class BoOrderItemDaoImpl implements BoOrderItemDao {
         return boOrderItemMapper.selectByExample(example);
     }
 
+    @Override
+    public void updateItemValue(long orderId, String itermKey, BoOrderItem record) {
+        BoOrderItemExample example = new BoOrderItemExample();
+        example.createCriteria()
+                .andOrderIdEqualTo(orderId)
+                .andItemKeyEqualTo(itermKey);
+        boOrderItemMapper.updateByExampleSelective(record,example);
+
+    }
+
+    @Override
+    public void deleteItemValue(long orderId, String itermKey) {
+        BoOrderItemExample example = new BoOrderItemExample();
+        example.createCriteria()
+                .andOrderIdEqualTo(orderId)
+                .andItemKeyEqualTo(itermKey);
+        boOrderItemMapper.deleteByExample(example);
+    }
+
 
 }

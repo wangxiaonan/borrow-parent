@@ -15,5 +15,7 @@ public interface UserInfoDao {
 
   UserInfo selInfoByUid(String userUid);
 
+  void updateUserInfo(String userUid,UserInfo userInfo);
+
 
 }

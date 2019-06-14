@@ -14,4 +14,9 @@ public interface BoOrderItemDao {
 
 
     public List<BoOrderItem> selByorderId(long orderId);
+
+    public void updateItemValue(long orderId,String itermKey,BoOrderItem boOrderItem);
+
+    public void deleteItemValue(long orderId,String itermKey);
+
 }

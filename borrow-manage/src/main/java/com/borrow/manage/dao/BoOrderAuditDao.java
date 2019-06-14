@@ -12,4 +12,6 @@ public interface BoOrderAuditDao {
     void insertOrderAudit(BoOrderAudit boOrderAudit);
 
     List<BoOrderAudit> selByOrderId(Long orderId);
+
+    void delByOrderId(Long orderId);
 }
