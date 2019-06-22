@@ -25,7 +25,7 @@ public enum ExceptionCode {
     AMOUNT_FAIL_ZREO("2010007","金额为0"),
     UP_REPAY_CHECK("2010008","确认是否需要提前还款"),
     OVERDUE_NO_SURETY("2010009","确认逾期代偿订单"),
-    BO_IS_RAISE("2010010","已筹标"),
+    BO_IS_RAISE("2010010","此项目标的已经推送给理财端，无法直接修改，如仍需修改，请联系系统管理员"),
 
     // 3 远端服务调用异常 01 是理财
     USER_CHECK_IDENTITY_ERROR("3010001","理财服务—用户身份确认接口异常"),
