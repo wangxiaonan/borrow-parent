@@ -28,6 +28,8 @@ public class DataClientFactory {
     DataClient loanerEarlyRepayRequestClient;
     @Autowired
     DataClient loanerGenerateRepayRequestClient;
+    @Autowired
+    DataClient projectUpdateRequestDataClient;
 
     public DataClient  getDataClient(String urlType){
         DataClientEnum dataClientEnum = DataClientEnum.getEnum(urlType);
@@ -46,6 +48,8 @@ public class DataClientFactory {
                 return this.loanerEarlyRepayRequestClient;
             case LOANER_GENERATE_REPAY_REQUEST:
                 return this.loanerGenerateRepayRequestClient;
+            case PROJECT_UPDATE_REQUEST:
+                return this.projectUpdateRequestDataClient;
 
         }
         return null;

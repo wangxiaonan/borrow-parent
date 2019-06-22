@@ -303,9 +303,7 @@ public class OrderServcieImpl implements OrderServcie {
         if (borrowOrder == null) {
             throw new BorrowException(ExceptionCode.PARAM_ERROR);
         }
-        if (borrowOrder.getBoIsState() != 1) {
-            throw new BorrowException(ExceptionCode.BO_IS_RAISE);
-        }
+
         BorrowOrder order = new BorrowOrder();
         order.setBoPaySource(orderUpdateReq.getBoPaySource());
         borrowOrderDao.updateBorrowOrder(borrowOrder.getOrderId(),order);
@@ -528,7 +526,202 @@ public class OrderServcieImpl implements OrderServcie {
             if (!StringUtils.isEmpty(boHouseAuthOtherPicurl.getItemValue())) {
                 boOrderItemDao.insertItem(boHouseAuthOtherPicurl);
             }
+        }
+        if (borrowOrder.getBoIsState() == 1) {
+            return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
+        }
+        // 调用理财修改信息
+        XMap<String, Object> thirdParamMap = new XMap<String, Object>();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO, borrowOrder.getOrderId().toString());
 
+        BorrowProduct borrowProduct = borrowProductDao.selByPUid(borrowOrder.getProductUid());
+        thirdParamMap.put(PlatformConstant.FundsParam.PRODUCT_NAME, borrowProduct.getpName());
+        thirdParamMap.put(PlatformConstant.FundsParam.REPAY_MODE, String.valueOf(borrowOrder.getBoPaytype()));
+        thirdParamMap.put(PlatformConstant.FundsParam.CLOSE_PERIOD, borrowOrder.getBoExpect().toString());
+
+        List<BoProductRate> boProductRates = boProductRateDao.selProductRateByPUid(borrowProduct.getUuid());
+        Map<String, String> mapRate = new HashMap();
+        boProductRates.stream().forEach(boProductRate -> {
+            mapRate.put(boProductRate.getRateKey(), boProductRate.getRateValue());
+        });
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_RATE, mapRate.get(ProductRateEnum.EARLY_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_RATE, mapRate.get(ProductRateEnum.MONTH_SERVICE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.MONTH_ACCRUAL_RATE, mapRate.get(ProductRateEnum.MONTH_ACCRUAL_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GURANTEE_VIOLATE_RATE, mapRate.get(ProductRateEnum.GUARANTEE_VIOLATE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_RATE, mapRate.get(ProductRateEnum.SERVICE_VIOLATE_RATE.getRateKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_PAY_RATE, mapRate.get(ProductRateEnum.EARLY_PAY_RATE.getRateKey()));
+
+        String gpsCost = mapRate.get(ProductRateEnum.GPS_COST.getRateKey());
+        BigDecimal earlyServiceRate = BigDecimal.valueOf(Double.valueOf(thirdParamMap.getString(PlatformConstant.FundsParam.EARLY_SERVICE_RATE)));
+        BigDecimal earlyServiceCost = borrowOrder.getBoPrice().multiply(earlyServiceRate);
+
+        thirdParamMap.put(PlatformConstant.FundsParam.EARLY_SERVICE_FEE, earlyServiceCost.toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.GPS_COST, gpsCost);
+
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_TYPE, borrowOrder.getBuesType().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_AMT, borrowOrder.getBoPrice().toString());
+
+        UserInfo userInfo1 = userInfoDao.selInfoByUid(borrowOrder.getUserUid());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_ID, userInfo1.getIdcard());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo1.getUserName());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo1.getMobile());
+        thirdParamMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo1.getWorkNature());
+        thirdParamMap.put(PlatformConstant.FundsParam.JOB_DESC, userInfo1.getWorkNature());
+        thirdParamMap.put(PlatformConstant.FundsParam.INCOMING_DESC, userInfo1.getUserEarns());
+        thirdParamMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION, userInfo1.getCreditDec());
+
+        List<BoOrderItem> boOrderItems = boOrderItemDao.selByorderId(borrowOrder.getOrderId());
+        Map<String, String> itemkeys = new HashMap();
+        boOrderItems.stream().forEach(boOrder -> {
+            itemkeys.put(boOrder.getItemKey(), boOrder.getItemValue());
+        });
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_DESC, itemkeys.get(BoOrderItemEnum.BO_SOURCE.getItemKey()));
+        thirdParamMap.put(PlatformConstant.FundsParam.GUARANTEE_INFO_DESC, borrowOrder.getBoPaySource());
+
+        List<BoOrderAudit> boOrder = boOrderAuditDao.selByOrderId(borrowOrder.getOrderId());
+        Map auditsUrlkeys = new HashMap();
+        boOrder.stream().forEach(orderAudit -> {
+            auditsUrlkeys.put(orderAudit.getAuditKey(), orderAudit.getAuditFileUrl());
+        });
+        List<AuditStatusVo> mapList = new ArrayList<>();
+        boOrderAudits.stream().forEach(boOrderAudit -> {
+            AuditStatusVo statusVo = new AuditStatusVo();
+            statusVo.setId(OrderAuditEnum.getAuthCodeByKey(boOrderAudit.getAuditKey()));
+            statusVo.setAudit(OrderAuditEnum.getAuthNameByKey(boOrderAudit.getAuditKey()));
+            mapList.add(statusVo);
+        });
+        thirdParamMap.put(PlatformConstant.FundsParam.AUDIT, mapList);
+        XMap loanCarInfoMap = new XMap();
+        if (borrowProduct.getBussType()  == BussTypeEnum.CARD.getCode()) {
+            UserCar userCar = userCarDao.selByPlateNO(borrowOrder.getUserUid(), borrowOrder.getPlateNumber());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MODEL, userCar.getCarModel());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.COLOR, userCar.getCarColor());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.REGISTTIME, userCar.getSignTime());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.ESTIMATEVALUE, userCar.getAssessmentPrice());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_NUMBER, userCar.getPlateNumber());
+            loanCarInfoMap.put(PlatformConstant.FundsParam.CAR_MILEAGE, userCar.getMileageDesc());
+        }
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_CAR_INFO, loanCarInfoMap);
+        XMap borrowerInfoMap = new XMap();
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_NAME, userInfo.getUserName());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_PHONE, userInfo.getMobile());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.LOANER_INDUSTRY, userInfo.getWorkNature());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.JOB_DESC, userInfo.getWorkNature());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.INCOMING_DESC, userInfo.getUserEarns());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.CREDIT_INVESTIGATION, userInfo.getCreditDec());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.MARRIAGE_STATUS, userInfo.getMarriageStatus());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.CHILDREN_DESC, userInfo.getChildrenDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.DEBT_DESC, userInfo.getLiabilitiesDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.GURANTEE, userInfo.getGuaranteeDesc());
+        borrowerInfoMap.put(PlatformConstant.FundsParam.FIRSTREPAY, borrowOrder.getBoPaySource());
+        thirdParamMap.put(PlatformConstant.FundsParam.BORROWER_INFO, borrowerInfoMap);
+        //房产信息
+        XMap loanHuoseInfo = new XMap();
+        if (borrowProduct.getBussType()  == BussTypeEnum.HOUSE.getCode()) {
+            loanHuoseInfo.put(PlatformConstant.FundsParam.OWNER, itemkeys.get(BoOrderHouseItem.HOUSE_NAME.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.COOWNER, itemkeys.get(BoOrderHouseItem.HOUSE_PART.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSENO, itemkeys.get(BoOrderHouseItem.HOUSE_NUM.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEAREA, itemkeys.get(BoOrderHouseItem.HOUSE_AREA.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSETYPE, itemkeys.get(BoOrderHouseItem.HOUSE_ATTR.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.REGISTTIME, itemkeys.get(BoOrderHouseItem.HOUSE_DATE.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.HUOSEADDRESS, itemkeys.get(BoOrderHouseItem.HOUSE_ADDRESS.getItemKey()));
+            loanHuoseInfo.put(PlatformConstant.FundsParam.ESTIMATEVALUE, itemkeys.get(BoOrderHouseItem.HOUSE_PRICE.getItemKey()));
+        }
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_HUOSE_INFO, loanHuoseInfo);
+        //图片添加 车贷
+        List<LoanPicInfoVo> picInfoVos = new ArrayList<>();
+        if (borrowProduct.getBussType()  == BussTypeEnum.CARD.getCode()) {
+            boOrderItems.stream().forEach(boOrderItem1 -> {
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.AUTH_IDARD.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.AUTH_VEHICLE_LICENSE.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.POLLING_LICENSE.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.CAR_MILEAGE.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.INSURANCE_POLICY.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.LETTER_COMMITMENT.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderCarItem.AUTH_OTHER.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+            });
+        }
+        if (borrowProduct.getBussType()  == BussTypeEnum.HOUSE.getCode()) {
+            boOrderItems.stream().forEach(boOrderItem1 -> {
+                if (boOrderItem1.getItemKey().equals(BoOrderHouseItem.HOUSE_IDCARD_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderHouseItem.HOUSE_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTHORITY_CARD_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderHouseItem.HOUSE_GUARANTEE_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderHouseItem.HOUSE_LETTER_COMMITMENT_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+                if (boOrderItem1.getItemKey().equals(BoOrderHouseItem.HOUSE_AUTH_OTHER_PIC_URL.getItemKey())) {
+                    LoanPicInfoVo loanPicInfo = new LoanPicInfoVo();
+                    loanPicInfo.setName(boOrderItem1.getItemDesc());
+                    loanPicInfo.setUrl(boOrderItem1.getItemValue());
+                    picInfoVos.add(loanPicInfo);
+                }
+            });
+        }
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO, picInfoVos);
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.PROJECT_UPDATE_REQUEST.getUrlType());
+        //TODO 需改信息
+        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        if (!responseResult.isSucceed()) {
+            throw new BorrowException(ExceptionCode.PROJECT_UPDATE_REQUEST_ERROR);
         }
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(),null);
     }

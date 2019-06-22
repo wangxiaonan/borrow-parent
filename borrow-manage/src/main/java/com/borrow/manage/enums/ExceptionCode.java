@@ -37,6 +37,7 @@ public enum ExceptionCode {
     OVERDUE_REPAY_ERROR("3010007","理财服务—逾期还款异常"),
     LOANER_EARLY_REPAY_ERROR("3010008","理财服务—提前还款异常"),
     LOANER_GENERATE_REPAY_REQUEST_ERROR("3010009","理财服务—还款计划异常"),
+    PROJECT_UPDATE_REQUEST_ERROR("3010010","理财服务—理财数据修改异常"),
 
     // 4 数据库异常 01 订单
     ORDER_IS_NOT_EXIST_ERROR("4010001","订单不存在");

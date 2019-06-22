@@ -151,6 +151,8 @@ public  interface PlatformConstant {
         String LOANER_EARLY_REPAY_REQUEST = "loanerEarlyRepayRequest";
         //还款计划
         String LOANER_GENERATE_REPAY_REQUEST = "loanerGenerateRepayRequest";
+        //理财接口修改
+        String PROJECT_UPDATE_REQUEST= "projectUpdateRequest";
 
 
 
