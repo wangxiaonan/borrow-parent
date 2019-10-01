@@ -24,7 +24,7 @@ create table bo_overdue_reduce_record
   reduce_fine_amount   decimal(16, 2)                     null
   comment '减免罚息',
   borrow_id            varchar(64) default ''             not null
-  comment '''借款ID''',
+  comment '借款ID',
   repayment_id         varchar(64) default ''             not null
   comment '还款ID'
 )
