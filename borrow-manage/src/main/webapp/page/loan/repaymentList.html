@@ -93,18 +93,15 @@
         </div>
     </form>
     <!-- 页面中表格dom结构 -->
-
     <!--逾期减免-->
-    <div id='dialogoOverdueMitigate' class="hide">
+    <div id='dialogoOverdueReduce' class="hide">
         <table  class="layui-table text-center" lay-even>
             <thead>
             <tr>
-                <th>借款ID</th>
-                <th>客户姓名</th>
-                <th>车牌号</th>
-                <th>借款金额</th>
-                <th>借款产品名称</th>
-                <th>期数</th>
+                <th>本期累计违约金</th>
+                <th>本期累计减免</th>
+                <th>本期应还违约金</th>
+                <th>继续减免违约金</th>
             </tr>
             </thead>
             <tbody>
@@ -113,13 +110,11 @@
                 <td id="userName"></td>
                 <td id="plateNumber"></td>
                 <td id="boPrice"></td>
-                <td id="productName"></td>
-                <td id="boExpect"></td>
             </tr>
             </tbody>
         </table>
-        <div id="secoundDetail" style="width:100%;"></div>
-        <div id="secoundDetailPay" style="width:100%;"></div>
+        <div id="secoundOverdueReduce" style="width:100%;"></div>
+        <div id="secoundOverdueReduceRecord" style="width:100%;"></div>
 
     </div>
 
@@ -207,7 +202,7 @@
                     {{#}else{}}
                     {{#};}}
                     <span>
-                       <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.overdueMitigate()">逾期减免</a>
+                       <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.overdueReduce()">逾期减免</a>
                     </span>
                 </td>
             </tr>

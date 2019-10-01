@@ -41,12 +41,12 @@
         <!--<table tableName="user_info" domainObjectName="UserInfo"/>-->
         <!--<table tableName="user_car" domainObjectName="UserCar"/>-->
         <!--<table tableName="borrow_salesman" domainObjectName="BorrowSalesman"/>-->
-        <table tableName="borrow_repayment" domainObjectName="BorrowRepayment"/>
+        <!--<table tableName="borrow_repayment" domainObjectName="BorrowRepayment"/>-->
         <!--<table tableName="bo_order_cost" domainObjectName="BoOrderCost"/>-->
         <!--<table tableName="borrow_product" domainObjectName="BorrowProduct"/>-->
         <!--<table tableName="borrow_order" domainObjectName="BorrowOrder"/>-->
         <!--<table tableName="bo_product_rate" domainObjectName="BoProductRate"/>-->
-        <!--<table tableName="bo_overdue_reduce_record" domainObjectName="BoOverduerReduceRecord"/>-->
+        <table tableName="bo_overdue_reduce_record" domainObjectName="BoOverdueReduceRecord"/>
         <!--<table tableName="bo_order_pay_record" domainObjectName="BoOrderPayRecord"/>-->
 
         <!--<table tableName="task_lock" domainObjectName="TaskLock"/>-->

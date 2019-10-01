@@ -168,4 +168,26 @@ public class OrderRepayApi {
         return res;
     }
 
+
+    /**
+     * 违约金 罚息减免
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/order/overdue/reduce", method = RequestMethod.POST)
+    public ResponseResult overdueReduce(@RequestBody OverdueReduceReq req) {
+
+        logger.info("====>overdueReduce():req={}", req);
+        ResponseResult res = null;
+
+        if ( StringUtils.isEmpty(req.getRepayId())) {
+            res = ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(), ExceptionCode.PARAM_ERROR.getErrorMessage());
+        }
+        else {
+            res =  orderRepayServcie.overdueReduce(req);
+        }
+        logger.info("<====overdueReduce():res={}",res);
+        return res;
+    }
+
 }

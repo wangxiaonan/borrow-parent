@@ -33,5 +33,12 @@ public interface OrderRepayServcie {
 
     ResponseResult orderRepaySurety(OrderPayOverReq orderPayOverReq);
 
+    /**
+     * 逾期违约金 罚息减免
+     * @param overdueReduceReq
+     * @return
+     */
+    ResponseResult overdueReduce(OverdueReduceReq overdueReduceReq);
+
 
 }

@@ -611,4 +611,10 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         borrowRepaymentDao.updateBoRepayment(repayId, repay);
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), null);
     }
+
+    @Override
+    public ResponseResult overdueReduce(OverdueReduceReq overdueReduceReq) {
+
+        return null;
+    }
 }

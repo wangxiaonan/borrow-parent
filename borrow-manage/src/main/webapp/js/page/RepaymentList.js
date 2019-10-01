@@ -146,14 +146,13 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
             }
         })
     };
-
-    fn.overdue=function(){
+    fn.overdueReduce=function(){
         var row = gridTable.getRow();
-        // getDetailData(row);
+        getOverdueReduce(row);
         layer.dialog({
             title: '逾期减免',
             area: ['100%', '100%'],
-            content: $("#dialogoOverdueMitigate")
+            content: $("#dialogoOverdueReduce")
         })
     };
 
@@ -179,4 +178,23 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         }
         ma.ajax(produ);
     }
+
+    function getOverdueReduce(param){
+        var getDetail = {
+            url: ma.host+"/order/repay/detail",
+            data: {"orderId": param.orderId},
+            done: function(res) {
+                if(res.errorCode!=='0000000'){
+                    top.layer.success("获取失败");
+                    return;
+                };
+                $('#orderId').html(res.data.orderId);
+                $('#userName').html(res.data.userName);
+                $('#plateNumber').html(res.data.plateNumber);
+                $('#boPrice').html(res.data.boPrice);
+            }
+        }
+        ma.ajax(getDetail);
+    }
+
 });
