@@ -1872,6 +1872,126 @@ public class BorrowRepaymentExample {
             addCriterion("fine_amount not between", value1, value2, "fineAmount");
             return (Criteria) this;
         }
+
+        public Criteria andReducePunishAmountIsNull() {
+            addCriterion("reduce_punish_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountIsNotNull() {
+            addCriterion("reduce_punish_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountEqualTo(BigDecimal value) {
+            addCriterion("reduce_punish_amount =", value, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountNotEqualTo(BigDecimal value) {
+            addCriterion("reduce_punish_amount <>", value, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountGreaterThan(BigDecimal value) {
+            addCriterion("reduce_punish_amount >", value, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("reduce_punish_amount >=", value, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountLessThan(BigDecimal value) {
+            addCriterion("reduce_punish_amount <", value, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("reduce_punish_amount <=", value, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountIn(List<BigDecimal> values) {
+            addCriterion("reduce_punish_amount in", values, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountNotIn(List<BigDecimal> values) {
+            addCriterion("reduce_punish_amount not in", values, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("reduce_punish_amount between", value1, value2, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReducePunishAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("reduce_punish_amount not between", value1, value2, "reducePunishAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountIsNull() {
+            addCriterion("reduce_fine_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountIsNotNull() {
+            addCriterion("reduce_fine_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountEqualTo(BigDecimal value) {
+            addCriterion("reduce_fine_amount =", value, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountNotEqualTo(BigDecimal value) {
+            addCriterion("reduce_fine_amount <>", value, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountGreaterThan(BigDecimal value) {
+            addCriterion("reduce_fine_amount >", value, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("reduce_fine_amount >=", value, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountLessThan(BigDecimal value) {
+            addCriterion("reduce_fine_amount <", value, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("reduce_fine_amount <=", value, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountIn(List<BigDecimal> values) {
+            addCriterion("reduce_fine_amount in", values, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountNotIn(List<BigDecimal> values) {
+            addCriterion("reduce_fine_amount not in", values, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("reduce_fine_amount between", value1, value2, "reduceFineAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReduceFineAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("reduce_fine_amount not between", value1, value2, "reduceFineAmount");
+            return (Criteria) this;
+        }
     }
 
     /**
