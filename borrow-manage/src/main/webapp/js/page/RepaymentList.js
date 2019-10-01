@@ -147,6 +147,18 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         })
     };
 
+    fn.overdue=function(){
+        var row = gridTable.getRow();
+        // getDetailData(row);
+        layer.dialog({
+            title: '逾期减免',
+            area: ['100%', '100%'],
+            content: $("#dialogoOverdueMitigate")
+        })
+    };
+
+
+
     initProduct();
     function initProduct(){
         var produ = {

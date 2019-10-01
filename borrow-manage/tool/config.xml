@@ -46,7 +46,7 @@
         <!--<table tableName="borrow_product" domainObjectName="BorrowProduct"/>-->
         <!--<table tableName="borrow_order" domainObjectName="BorrowOrder"/>-->
         <!--<table tableName="bo_product_rate" domainObjectName="BoProductRate"/>-->
-        <table tableName="bo_order_audit" domainObjectName="BoOrderAudit"/>
+        <table tableName="bo_overdue_reduce_record" domainObjectName="BoOverduerReduceRecord"/>
         <!--<table tableName="bo_order_pay_record" domainObjectName="BoOrderPayRecord"/>-->
 
         <!--<table tableName="task_lock" domainObjectName="TaskLock"/>-->
