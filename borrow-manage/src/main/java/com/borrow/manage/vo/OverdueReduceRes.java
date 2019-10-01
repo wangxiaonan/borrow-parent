@@ -1,7 +1,5 @@
 package com.borrow.manage.vo;
 
-import com.borrow.manage.model.dto.BoOverduerReduceRecord;
-
 import java.util.ArrayList;
 import java.util.List;
 
