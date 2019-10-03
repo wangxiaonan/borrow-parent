@@ -19,12 +19,12 @@ create table bo_overdue_reduce_record
   comment '更新时间',
   remark               varchar(100) default ''            not null
   comment '备注',
-  reduce_punish_amount decimal(16, 2)                     null
+  reduce_punish_amount decimal(16, 2) default '0.00'      not null
   comment '减免违约金金额',
-  reduce_fine_amount   decimal(16, 2)                     null
+  reduce_fine_amount   decimal(16, 2) default '0.00'      not null
   comment '减免罚息',
   borrow_id            varchar(64) default ''             not null
-  comment '借款ID',
+  comment '''借款ID''',
   repayment_id         varchar(64) default ''             not null
   comment '还款ID'
 )
@@ -35,6 +35,8 @@ create index borrow_id_index
 
 create index repayment_id_index
   on bo_overdue_reduce_record (repayment_id);
+
+
 
 
 

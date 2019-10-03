@@ -1,5 +1,7 @@
 package com.borrow.manage.vo;
 
+import com.borrow.manage.model.dto.BoOverdueReduceRecord;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,21 +10,22 @@ import java.util.List;
  */
 public class OverdueReduceRes {
 
-
+    //总违约金
    private String totalPunishAmount;
+   //总罚息
    private String totalFineAmount;
 
-
-   private String punishAmount;
-
-   private String fineAmount;
-
-   private String actualpunishAmount;
-
+   //减免违约金
+   private String reducePunishAmount;
+   //减免罚息
+   private String reduceFineAmount;
+    //实际违约金
+   private String actualPunishAmount;
+   //实际罚息
    private String actualFineAmount;
 
-
-   private List<BoOverduerReduceRecord> overdueReduceRecords = new ArrayList<>();
+    //违约记录
+   private List<BoOverdueReduceRecord> overdueReduceRecords = new ArrayList<>();
 
     public String getTotalPunishAmount() {
         return totalPunishAmount;
@@ -40,30 +43,6 @@ public class OverdueReduceRes {
         this.totalFineAmount = totalFineAmount;
     }
 
-    public String getPunishAmount() {
-        return punishAmount;
-    }
-
-    public void setPunishAmount(String punishAmount) {
-        this.punishAmount = punishAmount;
-    }
-
-    public String getFineAmount() {
-        return fineAmount;
-    }
-
-    public void setFineAmount(String fineAmount) {
-        this.fineAmount = fineAmount;
-    }
-
-    public String getActualpunishAmount() {
-        return actualpunishAmount;
-    }
-
-    public void setActualpunishAmount(String actualpunishAmount) {
-        this.actualpunishAmount = actualpunishAmount;
-    }
-
     public String getActualFineAmount() {
         return actualFineAmount;
     }
@@ -72,4 +51,35 @@ public class OverdueReduceRes {
         this.actualFineAmount = actualFineAmount;
     }
 
+    public String getReducePunishAmount() {
+        return reducePunishAmount;
+    }
+
+    public void setReducePunishAmount(String reducePunishAmount) {
+        this.reducePunishAmount = reducePunishAmount;
+    }
+
+    public String getReduceFineAmount() {
+        return reduceFineAmount;
+    }
+
+    public void setReduceFineAmount(String reduceFineAmount) {
+        this.reduceFineAmount = reduceFineAmount;
+    }
+
+    public String getActualPunishAmount() {
+        return actualPunishAmount;
+    }
+
+    public void setActualPunishAmount(String actualPunishAmount) {
+        this.actualPunishAmount = actualPunishAmount;
+    }
+
+    public List<BoOverdueReduceRecord> getOverdueReduceRecords() {
+        return overdueReduceRecords;
+    }
+
+    public void setOverdueReduceRecords(List<BoOverdueReduceRecord> overdueReduceRecords) {
+        this.overdueReduceRecords = overdueReduceRecords;
+    }
 }

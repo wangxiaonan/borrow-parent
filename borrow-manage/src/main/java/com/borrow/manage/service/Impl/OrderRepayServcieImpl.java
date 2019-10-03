@@ -59,6 +59,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    BoOverdueReduceRecordDao boOverdueReduceRecordDao;
+
 
     @Override
     public ResponseResult orderRepaySelList(OrderRepayListReq orderRepayListReq) {
@@ -613,7 +616,27 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
     }
 
     @Override
-    public ResponseResult overdueReduce(OverdueReduceReq overdueReduceReq) {
+    public ResponseResult overdueReduce(OverdueReduceReq req) {
+        OverdueReduceRes reduceRes = new OverdueReduceRes();
+        long repayId = Long.valueOf(req.getRepayId());
+        BorrowRepayment repayment = borrowRepaymentDao.selByRepayId(repayId);
+        reduceRes.setTotalPunishAmount(repayment.getPunishAmount().toString());
+        reduceRes.setTotalFineAmount((repayment.getFineAmount().toString()));
+        reduceRes.setReducePunishAmount(repayment.getReducePunishAmount().toString());
+        reduceRes.setReduceFineAmount(repayment.getReduceFineAmount().toString());
+        reduceRes.setActualPunishAmount(repayment.getPunishAmount()
+                .subtract(repayment.getReducePunishAmount()).toString());
+        reduceRes.setActualFineAmount(repayment.getFineAmount()
+                .subtract(repayment.getReduceFineAmount()).toString());
+
+        List<BoOverdueReduceRecord> reduceRecords = boOverdueReduceRecordDao.selInfoByRepaymentId(req.getRepayId());
+        reduceRes.setOverdueReduceRecords(reduceRecords);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), reduceRes);
+    }
+
+    @Override
+    public ResponseResult overdueAddReduce(OverdueReduceAddReq reduceAddReq) {
+        BoOverdueReduceRecord reduceRecord = new BoOverdueReduceRecord();
 
         return null;
     }

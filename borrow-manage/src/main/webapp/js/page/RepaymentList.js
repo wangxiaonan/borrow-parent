@@ -156,7 +156,48 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         })
     };
 
+    fn.waitOverdueReduce=function(){
 
+
+        var actualPunishAmount = $('#actualPunishAmount').html();
+        var punishAmount = $('#punishAmount').val();
+        if (!(parseFloat("0") <= parseFloat(punishAmount) && parseFloat(punishAmount) <= parseFloat(actualPunishAmount))) {
+            layer.alert("违约金最小金额是0 最大金额不能超过 应还金额");
+            return;
+        }
+        var actualFineAmount = $('#actualFineAmount').html();
+        var fineAmount = $('#fineAmount').val();
+        if (!(parseFloat("0") <= parseFloat(fineAmount) && parseFloat(fineAmount) <= parseFloat(actualFineAmount))) {
+            layer.alert("罚息最小金额是0 最大金额不能超过 应还金额");
+            return;
+        }
+        layer.confirm({
+            content: "确定",
+            yes: function(index) {
+                var row = gridTable.getRow();
+                var addOverdueReduce = {
+                    url: ma.host+"/order/overdue/addReduce",
+                    data: {"orderId":row.orderId,"repayId":row.repayId,"punishAmount":punishAmount,"fineAmount":fineAmount },
+                    done: function(res) {
+                        top.layer.success("修改成功");
+                        layer.closeAll();
+                        self.location.reload();
+                    },
+                    fail: function(re) {
+                        layer.error(re.errorMessage);
+                        layer.hideLoad();
+                    }
+                }
+                ma.ajax(addOverdueReduce);
+            },
+            no: function() {
+            }
+        })
+    };
+
+    fn.cannelOverdueReduce=function(){
+        layer.closeAll();
+    };
 
     initProduct();
     function initProduct(){
@@ -178,23 +219,35 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         }
         ma.ajax(produ);
     }
-
     function getOverdueReduce(param){
-        var getDetail = {
-            url: ma.host+"/order/repay/detail",
-            data: {"orderId": param.orderId},
+        var getReduce = {
+            url: ma.host+"/order/overdue/reduce",
+            data: {"repayId":param.repayId },
             done: function(res) {
                 if(res.errorCode!=='0000000'){
                     top.layer.success("获取失败");
                     return;
                 };
-                $('#orderId').html(res.data.orderId);
-                $('#userName').html(res.data.userName);
-                $('#plateNumber').html(res.data.plateNumber);
-                $('#boPrice').html(res.data.boPrice);
+                $('#totalPunishAmount').html(res.data.totalPunishAmount);
+                $('#reducePunishAmount').html(res.data.reducePunishAmount);
+                $('#actualPunishAmount').html(res.data.actualPunishAmount);
+
+                $('#totalFineAmount').html(res.data.totalFineAmount);
+                $('#reduceFineAmount').html(res.data.reduceFineAmount);
+                $('#actualFineAmount').html(res.data.actualFineAmount);
+                createOverdueReduceTable(res.data.overdueReduceRecords,'secoundOverdueReduceRecord','secoundOverdueReduceRecordView');
             }
         }
-        ma.ajax(getDetail);
+        ma.ajax(getReduce);
     }
-
+    function createOverdueReduceTable(data,ele,view){
+        grid.createNew({
+            elem: ele,
+            view: view,
+            data:{"rows": data || [] },
+            method:"post",
+            pageSize: 100,
+            singleSelect: true
+        }).build();
+    }
 });

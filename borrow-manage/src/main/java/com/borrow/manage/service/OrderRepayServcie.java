@@ -40,5 +40,13 @@ public interface OrderRepayServcie {
      */
     ResponseResult overdueReduce(OverdueReduceReq overdueReduceReq);
 
+    /**
+     *
+     * @param reduceAddReq
+     * @return
+     */
+
+    ResponseResult overdueAddReduce(OverdueReduceAddReq reduceAddReq);
+
 
 }

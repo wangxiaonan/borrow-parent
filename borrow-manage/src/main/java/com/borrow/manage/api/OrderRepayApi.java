@@ -190,4 +190,22 @@ public class OrderRepayApi {
         return res;
     }
 
+    /**
+     * 违约金罚息减免加入
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/order/overdue/addReduce", method = RequestMethod.POST)
+    public ResponseResult overdueAddReduce(@RequestBody OverdueReduceAddReq req) {
+
+        logger.info("====>overdueAddReduce():req={}", req);
+        ResponseResult res = null;
+        res = ResponseResult.success("success",null);
+
+
+        logger.info("<====overdueAddReduce():res={}",res);
+        return res;
+    }
+
+
 }

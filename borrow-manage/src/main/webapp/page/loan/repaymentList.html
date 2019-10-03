@@ -106,20 +106,39 @@
             </thead>
             <tbody>
             <tr>
-                <td id="orderId"></td>
-                <td id="userName"></td>
-                <td id="plateNumber"></td>
-                <td id="boPrice"></td>
+                <td id="totalPunishAmount"></td>
+                <td id="reducePunishAmount"></td>
+                <td id="actualPunishAmount" name ="actualPunishAmount"></td>
+                <td><input type="text" id="punishAmount" name="punishAmount"  placeholder="请输入金额" autocomplete="off" class="layui-input"></td>
             </tr>
             </tbody>
         </table>
-        <div id="secoundOverdueReduce" style="width:100%;"></div>
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>本期累计罚息</th>
+                <th>本期累计减免</th>
+                <th>本期应还罚息</th>
+                <th>继续减免罚息</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="totalFineAmount"></td>
+                <td id="reduceFineAmount"></td>
+                <td id="actualFineAmount" name = "actualFineAmount"></td>
+                <td><input type="text" id="fineAmount" name="fineAmount"  placeholder="请输入金额" autocomplete="off" class="layui-input" ></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.waitOverdueReduce()">确认减免</a>
+                <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.cannelOverdueReduce()">取消</a>
+            </div>
+        </div>
         <div id="secoundOverdueReduceRecord" style="width:100%;"></div>
-
     </div>
-
-
-
 
     <script id="view" type="text/html">
         <table  class="layui-table text-center" lay-even>
@@ -213,6 +232,30 @@
     <div id="creditTable" style="width:100%;"></div>
     <div id='laypage'></div>
 </div>
+
+<script id="secoundOverdueReduceRecordView" type="text/html">
+    <table  class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>操作人</th>
+            <th>操作时间</th>
+            <th>减免违约金</th>
+            <th>减免罚息</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.rows,function(index,item){ }}
+        <tr>
+            <td>admin</td>
+            <td>{{item.createTime?ma.format(item.payTime,'yyyy-MM-dd HH:mm:ss'):''}}</td>
+            <td>{{item.reducePunishAmount}}</td>
+            <td>{{item.reduceFineAmount}}</td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+
 <script>
     layui.config({
         base: '../../js/page/'
