@@ -23,12 +23,24 @@ create table bo_overdue_reduce_record
   comment '减免违约金金额',
   reduce_fine_amount   decimal(16, 2) default '0.00'      not null
   comment '减免罚息',
+  repayment_id         varchar(64) default ''             not null
+  comment '还款ID',
   borrow_id            varchar(64) default ''             not null
   comment '''借款ID''',
-  repayment_id         varchar(64) default ''             not null
-  comment '还款ID'
+  operate_user_id      varchar(64) default ''             not null
+  comment '操作用户ID',
+  operate_user_name    varchar(64) default ''             not null
+  comment '操作用户名'
 )
   comment '减免记录';
+
+create index borrow_id_index
+  on bo_overdue_reduce_record (borrow_id);
+
+create index repayment_id_index
+  on bo_overdue_reduce_record (repayment_id);
+
+
 
 create index borrow_id_index
   on bo_overdue_reduce_record (borrow_id);

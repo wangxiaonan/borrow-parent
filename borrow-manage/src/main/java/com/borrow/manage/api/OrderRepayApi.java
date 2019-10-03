@@ -197,12 +197,8 @@ public class OrderRepayApi {
      */
     @RequestMapping(value = "/order/overdue/addReduce", method = RequestMethod.POST)
     public ResponseResult overdueAddReduce(@RequestBody OverdueReduceAddReq req) {
-
         logger.info("====>overdueAddReduce():req={}", req);
-        ResponseResult res = null;
-        res = ResponseResult.success("success",null);
-
-
+        ResponseResult res = orderRepayServcie.overdueAddReduce(req);
         logger.info("<====overdueAddReduce():res={}",res);
         return res;
     }

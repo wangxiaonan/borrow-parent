@@ -816,6 +816,76 @@ public class BoOverdueReduceRecordExample {
             return (Criteria) this;
         }
 
+        public Criteria andRepaymentIdIsNull() {
+            addCriterion("repayment_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdIsNotNull() {
+            addCriterion("repayment_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdEqualTo(String value) {
+            addCriterion("repayment_id =", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdNotEqualTo(String value) {
+            addCriterion("repayment_id <>", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdGreaterThan(String value) {
+            addCriterion("repayment_id >", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdGreaterThanOrEqualTo(String value) {
+            addCriterion("repayment_id >=", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdLessThan(String value) {
+            addCriterion("repayment_id <", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdLessThanOrEqualTo(String value) {
+            addCriterion("repayment_id <=", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdLike(String value) {
+            addCriterion("repayment_id like", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdNotLike(String value) {
+            addCriterion("repayment_id not like", value, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdIn(List<String> values) {
+            addCriterion("repayment_id in", values, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdNotIn(List<String> values) {
+            addCriterion("repayment_id not in", values, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdBetween(String value1, String value2) {
+            addCriterion("repayment_id between", value1, value2, "repaymentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRepaymentIdNotBetween(String value1, String value2) {
+            addCriterion("repayment_id not between", value1, value2, "repaymentId");
+            return (Criteria) this;
+        }
+
         public Criteria andBorrowIdIsNull() {
             addCriterion("borrow_id is null");
             return (Criteria) this;
@@ -886,73 +956,143 @@ public class BoOverdueReduceRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdIsNull() {
-            addCriterion("repayment_id is null");
+        public Criteria andOperateUserIdIsNull() {
+            addCriterion("operate_user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdIsNotNull() {
-            addCriterion("repayment_id is not null");
+        public Criteria andOperateUserIdIsNotNull() {
+            addCriterion("operate_user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdEqualTo(String value) {
-            addCriterion("repayment_id =", value, "repaymentId");
+        public Criteria andOperateUserIdEqualTo(String value) {
+            addCriterion("operate_user_id =", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdNotEqualTo(String value) {
-            addCriterion("repayment_id <>", value, "repaymentId");
+        public Criteria andOperateUserIdNotEqualTo(String value) {
+            addCriterion("operate_user_id <>", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdGreaterThan(String value) {
-            addCriterion("repayment_id >", value, "repaymentId");
+        public Criteria andOperateUserIdGreaterThan(String value) {
+            addCriterion("operate_user_id >", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdGreaterThanOrEqualTo(String value) {
-            addCriterion("repayment_id >=", value, "repaymentId");
+        public Criteria andOperateUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("operate_user_id >=", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdLessThan(String value) {
-            addCriterion("repayment_id <", value, "repaymentId");
+        public Criteria andOperateUserIdLessThan(String value) {
+            addCriterion("operate_user_id <", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdLessThanOrEqualTo(String value) {
-            addCriterion("repayment_id <=", value, "repaymentId");
+        public Criteria andOperateUserIdLessThanOrEqualTo(String value) {
+            addCriterion("operate_user_id <=", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdLike(String value) {
-            addCriterion("repayment_id like", value, "repaymentId");
+        public Criteria andOperateUserIdLike(String value) {
+            addCriterion("operate_user_id like", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdNotLike(String value) {
-            addCriterion("repayment_id not like", value, "repaymentId");
+        public Criteria andOperateUserIdNotLike(String value) {
+            addCriterion("operate_user_id not like", value, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdIn(List<String> values) {
-            addCriterion("repayment_id in", values, "repaymentId");
+        public Criteria andOperateUserIdIn(List<String> values) {
+            addCriterion("operate_user_id in", values, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdNotIn(List<String> values) {
-            addCriterion("repayment_id not in", values, "repaymentId");
+        public Criteria andOperateUserIdNotIn(List<String> values) {
+            addCriterion("operate_user_id not in", values, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdBetween(String value1, String value2) {
-            addCriterion("repayment_id between", value1, value2, "repaymentId");
+        public Criteria andOperateUserIdBetween(String value1, String value2) {
+            addCriterion("operate_user_id between", value1, value2, "operateUserId");
             return (Criteria) this;
         }
 
-        public Criteria andRepaymentIdNotBetween(String value1, String value2) {
-            addCriterion("repayment_id not between", value1, value2, "repaymentId");
+        public Criteria andOperateUserIdNotBetween(String value1, String value2) {
+            addCriterion("operate_user_id not between", value1, value2, "operateUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameIsNull() {
+            addCriterion("operate_user_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameIsNotNull() {
+            addCriterion("operate_user_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameEqualTo(String value) {
+            addCriterion("operate_user_name =", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameNotEqualTo(String value) {
+            addCriterion("operate_user_name <>", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameGreaterThan(String value) {
+            addCriterion("operate_user_name >", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameGreaterThanOrEqualTo(String value) {
+            addCriterion("operate_user_name >=", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameLessThan(String value) {
+            addCriterion("operate_user_name <", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameLessThanOrEqualTo(String value) {
+            addCriterion("operate_user_name <=", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameLike(String value) {
+            addCriterion("operate_user_name like", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameNotLike(String value) {
+            addCriterion("operate_user_name not like", value, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameIn(List<String> values) {
+            addCriterion("operate_user_name in", values, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameNotIn(List<String> values) {
+            addCriterion("operate_user_name not in", values, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameBetween(String value1, String value2) {
+            addCriterion("operate_user_name between", value1, value2, "operateUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateUserNameNotBetween(String value1, String value2) {
+            addCriterion("operate_user_name not between", value1, value2, "operateUserName");
             return (Criteria) this;
         }
     }

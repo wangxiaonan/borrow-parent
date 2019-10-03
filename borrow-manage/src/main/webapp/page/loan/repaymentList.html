@@ -220,9 +220,13 @@
                     </span>
                     {{#}else{}}
                     {{#};}}
+
+                    {{#if(item.repayStatus==1 && item.boRepayStatus == 2){ }}
                     <span>
                        <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.overdueReduce()">逾期减免</a>
                     </span>
+                    {{#}else{}}
+                    {{#};}}
                 </td>
             </tr>
             {{# }); }}
@@ -247,7 +251,7 @@
         {{# layui.each(d.rows,function(index,item){ }}
         <tr>
             <td>admin</td>
-            <td>{{item.createTime?ma.format(item.payTime,'yyyy-MM-dd HH:mm:ss'):''}}</td>
+            <td>{{item.createTime?ma.format(item.createTime,'yyyy-MM-dd HH:mm:ss'):''}}</td>
             <td>{{item.reducePunishAmount}}</td>
             <td>{{item.reduceFineAmount}}</td>
         </tr>

@@ -10,4 +10,6 @@ import java.util.List;
 public interface BoOverdueReduceRecordDao {
 
     List<BoOverdueReduceRecord> selInfoByRepaymentId(String repaymentId);
+
+    void insertOverdueReduceRecord(BoOverdueReduceRecord reduceRecord);
 }

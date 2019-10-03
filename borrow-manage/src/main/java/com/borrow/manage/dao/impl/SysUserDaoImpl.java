@@ -28,5 +28,13 @@ public class SysUserDaoImpl implements SysUserDao {
         return sysUsers.isEmpty()?null:sysUsers.get(0);
     }
 
+    @Override
+    public SysUser selByUserUid(String userUid) {
+        SysUserExample example = new SysUserExample();
+        example.createCriteria().andUuidEqualTo(userUid);
+        List<SysUser> sysUsers =  sysUserMapper.selectByExample(example);
+        return sysUsers.isEmpty()?null:sysUsers.get(0);
+    }
+
 
 }

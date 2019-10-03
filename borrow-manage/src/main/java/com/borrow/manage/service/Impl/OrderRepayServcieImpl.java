@@ -62,6 +62,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
     @Autowired
     BoOverdueReduceRecordDao boOverdueReduceRecordDao;
 
+    @Autowired
+    SysUserDao sysUserDao;
+
 
     @Override
     public ResponseResult orderRepaySelList(OrderRepayListReq orderRepayListReq) {
@@ -299,13 +302,13 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             if (repayment.getBoRepayStatus() == BoRepayStatusEnum.OVERDUE.getCode()
                     || repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode()) {
                 thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_FEE, repayment.getServiceFee().toString());
-                thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_FEE, repayment.getPunishAmount().toString());
-                thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST, repayment.getFineAmount().toString());
+                thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_FEE, repayment.getPunishAmount().subtract(repayment.getReducePunishAmount()).toString());
+                thirdParamMap.put(PlatformConstant.FundsParam.PENALTY_INTEREST, repayment.getFineAmount().subtract(repayment.getReduceFineAmount()).toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
                 thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_OVERDUE_REPAY_REQUEST.getUrlType());
             } else {
                 thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
-                thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_FEE, repayment.getPunishAmount().toString());
+                thirdParamMap.put(PlatformConstant.FundsParam.SERVICE_VIOLATE_FEE, repayment.getPunishAmount().subtract(repayment.getReducePunishAmount()).toString());
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
                 thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_TRANSFER_FUND.getUrlType());
             }
@@ -635,9 +638,36 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
     }
 
     @Override
+    @Transactional
     public ResponseResult overdueAddReduce(OverdueReduceAddReq reduceAddReq) {
-        BoOverdueReduceRecord reduceRecord = new BoOverdueReduceRecord();
+        SysUser sysUser = sysUserDao.selByUserUid(reduceAddReq.getSysUserUid());
+        BorrowRepayment repayment = borrowRepaymentDao.selByRepayId(Long.valueOf(reduceAddReq.getRepayId()));
 
-        return null;
+        BigDecimal reducePunishAmountReq = BigDecimal.valueOf(Double.valueOf(reduceAddReq.getPunishAmount()));
+        BigDecimal acPushishAmount= repayment.getPunishAmount().subtract(repayment.getReducePunishAmount());
+
+        if (reducePunishAmountReq.compareTo(BigDecimal.ZERO) <0 || reducePunishAmountReq.compareTo(acPushishAmount) > 0) {
+            return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
+        }
+        BigDecimal reduceFineAmountReq = BigDecimal.valueOf(Double.valueOf(reduceAddReq.getFineAmount()));
+        BigDecimal acFineAmount= repayment.getFineAmount().subtract(repayment.getReduceFineAmount());
+
+        if (reduceFineAmountReq.compareTo(BigDecimal.ZERO) <0 || reduceFineAmountReq.compareTo(acFineAmount) > 0) {
+            return ResponseResult.error(ExceptionCode.PARAM_ERROR.getErrorCode(),ExceptionCode.PARAM_ERROR.getErrorMessage());
+        }
+        BorrowRepayment repay = new BorrowRepayment();
+        repay.setReducePunishAmount(repayment.getReducePunishAmount().add(reducePunishAmountReq));
+        repay.setReduceFineAmount(repayment.getReduceFineAmount().add(reduceFineAmountReq));
+        borrowRepaymentDao.updateBoRepayment(repayment.getRepayId(),repay);
+        BoOverdueReduceRecord reduceRecord = new BoOverdueReduceRecord();
+        reduceRecord.setUuid(UUIDProvider.uuid());
+        reduceRecord.setBorrowId(repayment.getOrderId().toString());
+        reduceRecord.setRepaymentId(repayment.getRepayId().toString());
+        reduceRecord.setReducePunishAmount(reducePunishAmountReq);
+        reduceRecord.setReduceFineAmount(reduceFineAmountReq);
+        reduceRecord.setOperateUserId(sysUser.getUuid());
+        reduceRecord.setOperateUserName(sysUser.getLoginName());
+        boOverdueReduceRecordDao.insertOverdueReduceRecord(reduceRecord);
+        return ResponseResult.success();
     }
 }

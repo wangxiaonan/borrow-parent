@@ -70,6 +70,13 @@ public class ResponseResult<T> {
         return result;
     }
 
+    public static <T> ResponseResult<T> success() {
+        ResponseResult<T> result = new ResponseResult();
+        result.setErrorCode("0000000");
+        result.setErrorMessage("成功");
+        return result;
+    }
+
 
     public boolean isSucceed() {
         return "0000000".equals(this.errorCode);

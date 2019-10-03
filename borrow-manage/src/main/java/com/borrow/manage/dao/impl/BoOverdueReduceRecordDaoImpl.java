@@ -24,4 +24,9 @@ public class BoOverdueReduceRecordDaoImpl implements BoOverdueReduceRecordDao {
         example.createCriteria().andRepaymentIdEqualTo(repaymentId);
         return boOverdueReduceRecordMapper.selectByExample(example);
     }
+
+    @Override
+    public void insertOverdueReduceRecord(BoOverdueReduceRecord reduceRecord) {
+        boOverdueReduceRecordMapper.insertSelective(reduceRecord);
+    }
 }

@@ -9,4 +9,6 @@ public interface SysUserDao {
 
     SysUser selByLoginName(String loginName);
 
+    SysUser selByUserUid(String userUid);
+
 }
