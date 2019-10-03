@@ -8,6 +8,8 @@ import com.borrow.manage.model.dto.BorrowRepayment;
 import com.borrow.manage.model.dto.BorrowRepaymentExample;
 import com.borrow.manage.vo.OrderRepayListReq;
 import com.borrow.manage.vo.OrderRepayListRes;
+import com.borrow.manage.vo.RepayReduceListReq;
+import com.borrow.manage.vo.RepayReduceListRes;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +86,7 @@ public class BorrowRepaymentDaoImpl  implements BorrowRepaymentDao{
                 .andBrTimeLessThan(new Date());
         return borrowRepaymentMapper.selectByExample(orderExample);
     }
+
 
 
 }

@@ -4,6 +4,9 @@ import com.borrow.manage.dao.BoOverdueReduceRecordDao;
 import com.borrow.manage.dao.mapper.BoOverdueReduceRecordMapper;
 import com.borrow.manage.model.dto.BoOverdueReduceRecord;
 import com.borrow.manage.model.dto.BoOverdueReduceRecordExample;
+import com.borrow.manage.vo.RepayReduceListReq;
+import com.borrow.manage.vo.RepayReduceListRes;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,5 +31,11 @@ public class BoOverdueReduceRecordDaoImpl implements BoOverdueReduceRecordDao {
     @Override
     public void insertOverdueReduceRecord(BoOverdueReduceRecord reduceRecord) {
         boOverdueReduceRecordMapper.insertSelective(reduceRecord);
+    }
+
+    @Override
+    public List<RepayReduceListRes> selReduceListWhere(RepayReduceListReq reduceListReq) {
+        PageHelper.startPage(reduceListReq.getPageNo(), reduceListReq.getPageSize());
+        return boOverdueReduceRecordMapper.selReduceList(reduceListReq);
     }
 }

@@ -670,4 +670,11 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         boOverdueReduceRecordDao.insertOverdueReduceRecord(reduceRecord);
         return ResponseResult.success();
     }
+
+    @Override
+    public ResponseResult selReduceList(RepayReduceListReq reduceListReq) {
+        List<RepayReduceListRes> listRes = boOverdueReduceRecordDao.selReduceListWhere(reduceListReq);
+        PageBaseRes pageBaseRes = new PageBaseRes<RepayReduceListRes>(listRes);
+        return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), pageBaseRes);
+    }
 }

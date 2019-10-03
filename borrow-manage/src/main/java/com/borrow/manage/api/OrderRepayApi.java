@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wxn on 2018/9/18
@@ -203,5 +205,17 @@ public class OrderRepayApi {
         return res;
     }
 
+    /**
+     * 违约金减免查询
+     * @param reduceListReq
+     * @return
+     */
+    @RequestMapping(value = "/borrow/reduce/sel", method = RequestMethod.POST)
+    public ResponseResult selReduceList(@RequestBody RepayReduceListReq reduceListReq) {
+        logger.info("====>selReduceList():req={}", reduceListReq);
+        ResponseResult res = orderRepayServcie.selReduceList(reduceListReq);
+        logger.info("<====selReduceList():res={}",res);
+        return res;
+    }
 
 }

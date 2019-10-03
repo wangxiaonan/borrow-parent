@@ -3,6 +3,11 @@ package com.borrow.manage.dao.mapper;
 import com.borrow.manage.model.dto.BoOverdueReduceRecord;
 import com.borrow.manage.model.dto.BoOverdueReduceRecordExample;
 import java.util.List;
+
+import com.borrow.manage.vo.OrderRepayListReq;
+import com.borrow.manage.vo.OrderRepayListRes;
+import com.borrow.manage.vo.RepayReduceListReq;
+import com.borrow.manage.vo.RepayReduceListRes;
 import org.apache.ibatis.annotations.Param;
 
 public interface BoOverdueReduceRecordMapper {
@@ -93,4 +98,13 @@ public interface BoOverdueReduceRecordMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(BoOverdueReduceRecord record);
+
+    /**
+     * 减免记录查询
+     * @param repayReduceListReq
+     * @return
+     */
+    List<RepayReduceListRes> selReduceList(RepayReduceListReq repayReduceListReq);
+
+
 }

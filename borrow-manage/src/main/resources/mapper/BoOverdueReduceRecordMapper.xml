@@ -410,4 +410,49 @@
     operate_user_name = #{operateUserName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <!-- 逾期减免查询 -->
+
+  <select id="selReduceList" parameterType="com.borrow.manage.vo.RepayReduceListReq" resultType="com.borrow.manage.vo.RepayReduceListRes">
+    SELECT
+    borrow_order.order_id as orderId
+    ,borrow_repayment.repay_id as repayId
+    ,user_info.user_name as userName
+    ,user_info.mobile as userMobile
+    ,borrow_order.bo_price as boPrice
+    ,borrow_order.product_name as productName
+    ,borrow_order.bo_expect as boExpect
+    ,borrow_repayment.repay_expect as repayExpect
+    ,borrow_repayment.br_time as brTime
+    ,reduce_record.reduce_punish_amount as reducePunishAmount
+    ,reduce_record.reduce_fine_amount as reduceFineAmount
+    ,reduce_record.create_time as reduceCreateTime
+    from borrow_repayment
+    INNER JOIN borrow_order
+    ON borrow_repayment.order_id = borrow_order.order_id
+    INNER JOIN user_info
+    ON borrow_order.user_uid = user_info.uuid
+    INNER JOIN bo_overdue_reduce_record as reduce_record
+    on borrow_repayment.repay_id = reduce_record.repayment_id
+    WHERE
+    borrow_order.bo_is_finish = 1
+    <if test="userName != null and userName!='' " >
+      AND user_info.user_name LIKE CONCAT('%',#{userName},'%')
+    </if>
+    <if test="mobile != null and mobile!='' " >
+      AND user_info.mobile = #{mobile}
+    </if>
+
+    <if test="createTimeStart != null and createTimeStart!='' " >
+        AND DATE_FORMAT(reduce_record.create_time,'%Y-%m-%d') &gt;= #{createTimeStart}
+    </if>
+    <if test="createTimeEnd != null and createTimeEnd!='' " >
+        AND DATE_FORMAT(reduce_record.create_time,'%Y-%m-%d') &lt;= #{createTimeEnd}
+    </if>
+    order by  reduce_record.create_time desc
+  </select>
+
+
+
 </mapper>

@@ -49,4 +49,9 @@ public interface OrderRepayServcie {
     ResponseResult overdueAddReduce(OverdueReduceAddReq reduceAddReq);
 
 
+    ResponseResult selReduceList(RepayReduceListReq reduceListReq);
+
+
+
+
 }

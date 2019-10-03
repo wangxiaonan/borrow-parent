@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>逾期减免记录</title>
+    <link rel="stylesheet" href="../../js/lib/layui/css/layui.css">
+    <script src="../../js/lib/jquery.min.js"></script>
+    <script src="../../js/lib/layui/layui.js"></script>
+    <script src="../../js/local/common.js"></script>
+    <style type="text/css">
+        .submit-btn{
+            width: 40%;
+            background-color: #009688;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top:100px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .checkboxSpan span{
+            padding: 0 20px;
+        }
+        .repayNum{
+            height: 38px;
+            line-height: 38px;
+            line-height: 36px\9;
+            border: 1px solid #e6e6e6;
+            background-color: #fff;
+            border-radius: 2px;
+            padding-left:20px;
+        }
+        #dialog{
+            width: 600px;
+            text-align: center;
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 30px;
+        }
+        .inputBox{
+            margin-left:20px;
+        }
+        .inputBox p{
+            text-align:left;
+        }
+        .inputBox p:nth-child(2){
+            margin-top:10px;
+            padding-left:20px;
+        }
+        .inputBox p:nth-child(3){
+            margin-top:60px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-page">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="userName"  placeholder="请输入客户姓名" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">客户手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" placeholder="请输入客户手机号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">减免时间</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="createTimeStart" id="createTimeStart" placeholder="起始时间"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="createTimeEnd" id="createTimeEnd" placeholder="结束时间"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button uitype="reset" class="layui-btn lay-btn-normal" lay-submit lay-filter="searchCredit"
+                        id="searchCreditSubmit">查询
+                </button>
+            </div>
+        </div>
+    </form>
+    <!-- 表格dom结构 -->
+    <script id="view" type="text/html">
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>客户姓名</th>
+                <th>手机号</th>
+                <th>借款金额</th>
+                <th>产品名称</th>
+                <th>期数</th>
+                <th>所属期数</th>
+                <th>减免违约金</th>
+                <th>减免罚息</th>
+                <th>减免时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# layui.each(d.rows,function(index,item){ }}
+            <tr>
+                <td class="text-center">{{item.userName}}</td>
+                <td><a class="link">{{item.userMobile}}</a></td>
+                <td>{{item.boPrice}}</td>
+                <td><a class="link">{{item.productName}}</a></td>
+                <td>{{item.boExpect}}</td>
+                <td>{{item.repayExpect}}</td>
+                <td><a class="link">{{item.reducePunishAmount}}</a></td>
+                <td><a class="link">{{item.reduceFineAmount}}</a></td>
+                <td>{{item.reduceCreateTime?ma.format(item.reduceCreateTime,'yyyy-MM-dd HH:mm:ss'):''}}</td>
+            </tr>
+            {{# }); }}
+            </tbody>
+        </table>
+    </script>
+    <div id="creditTable" style="width:100%;"></div>
+    <div id='laypage'></div>
+</div>
+<script>
+    layui.config({
+        base: '../../js/page/'
+    }).use('OverdueReduce');
+</script>
+</body>
+</html>

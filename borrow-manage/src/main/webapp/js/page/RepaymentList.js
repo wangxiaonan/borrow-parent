@@ -33,10 +33,6 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         seachFun(formData);
         return false;
     })
-    //导出
-    form.on('submit(searchRepaymentCreditExport)', function (data) {
-        window.open(ma.host + '/borrow/repayment/sel/export?' + layui.parseQuery(data.field));
-    });
 
     function seachFun(param){
         var searchData = {
