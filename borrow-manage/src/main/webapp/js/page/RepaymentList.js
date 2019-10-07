@@ -157,12 +157,20 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
 
         var actualPunishAmount = $('#actualPunishAmount').html();
         var punishAmount = $('#punishAmount').val();
+        if(typeof punishAmount == "undefined" || punishAmount == null || punishAmount == ""){
+            layer.alert("请填写违约金字段");
+            return;
+        }
         if (!(parseFloat("0") <= parseFloat(punishAmount) && parseFloat(punishAmount) <= parseFloat(actualPunishAmount))) {
             layer.alert("违约金最小金额是0 最大金额不能超过 应还金额");
             return;
         }
         var actualFineAmount = $('#actualFineAmount').html();
         var fineAmount = $('#fineAmount').val();
+        if(typeof fineAmount == "undefined" || fineAmount == null || fineAmount == ""){
+            layer.alert("请填写罚息字段");
+            return;
+        }
         if (!(parseFloat("0") <= parseFloat(fineAmount) && parseFloat(fineAmount) <= parseFloat(actualFineAmount))) {
             layer.alert("罚息最小金额是0 最大金额不能超过 应还金额");
             return;
