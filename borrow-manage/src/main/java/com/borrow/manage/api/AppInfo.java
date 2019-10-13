@@ -49,7 +49,7 @@ public class AppInfo {
         }
 
         appver.put("uuid", UUID.randomUUID().toString());
-        overdueTask.overdueCal();
+//        overdueTask.overdueCal();
         return appver;
     }
 }
