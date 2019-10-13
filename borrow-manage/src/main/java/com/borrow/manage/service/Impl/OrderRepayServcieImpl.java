@@ -321,7 +321,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         BorrowRepayment borrowRepayment = new BorrowRepayment();
         borrowRepayment.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
         borrowRepayment.setRepayType(RepayTypeEnum.PAY_NORMA.getCode());
-        borrowRepayment.setRepayFinishAmount(repayment.getRepayAmount());
+        borrowRepayment.setRepayFinishAmount(repayment.getRepayAmount()
+                .add(repayment.getPunishAmount()).add(repayment.getFineAmount())
+                .subtract(repayment.getReducePunishAmount()).subtract(repayment.getReduceFineAmount()));
         borrowRepayment.setBrRepayTime(new Date());
         borrowRepaymentDao.updateBoRepayment(repayId, borrowRepayment);
         borrowOrderDao.upBoPayExpectCount(repayment.getOrderId());
@@ -331,7 +333,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         boOrderPayRecord.setOrderId(repayment.getOrderId());
         boOrderPayRecord.setOrderPayId(idProvider.genId());
         boOrderPayRecord.setPayTime(new Date());
-        boOrderPayRecord.setPayPrice(repayment.getRepayAmount());
+        boOrderPayRecord.setPayPrice(repayment.getRepayAmount()
+                .add(repayment.getPunishAmount()).add(repayment.getFineAmount())
+                .subtract(repayment.getReducePunishAmount()).subtract(repayment.getReduceFineAmount()));
         boOrderPayRecord.setPayType(RepayTypeEnum.PAY_NORMA.getCode());
         boOrderPayRecordDao.insertPayOrder(boOrderPayRecord);
         if (orderPayState == BoRepayStatusEnum.NORMAL.getCode()) {

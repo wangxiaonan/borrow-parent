@@ -2,6 +2,7 @@ package com.borrow.manage.api;
 
 import com.borrow.manage.dao.BorrowProductDao;
 import com.borrow.manage.dao.UserInfoDao;
+import com.borrow.manage.task.OverdueTask;
 import com.borrow.manage.utils.UUIDProvider;
 import com.borrow.manage.utils.id.IdProvider;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class AppInfo {
     @Autowired
     IdProvider idProvider;
 
+    @Autowired
+    OverdueTask overdueTask;
+
     @RequestMapping("/appver")
     public HashMap<String,String> appVersion(HttpServletRequest request) {
         System.out.println(idProvider.genId());
@@ -45,7 +49,7 @@ public class AppInfo {
         }
 
         appver.put("uuid", UUID.randomUUID().toString());
-
+        overdueTask.overdueCal();
         return appver;
     }
 }
