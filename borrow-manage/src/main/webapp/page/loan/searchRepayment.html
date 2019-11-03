@@ -240,8 +240,12 @@
     </table>
     <div id="secoundDetail" style="width:100%;"></div>
     <div id="secoundDetailPay" style="width:100%;"></div>
-
 </div>
+<div id='dialogoselReceivableList' class="hide">
+    <div id="secoundReceivableList" style="width:100%;"></div>
+</div>
+
+
 <script id="seccoundView" type="text/html">
     <table  class="layui-table text-center" lay-even>
         <thead>
@@ -255,6 +259,7 @@
             <th>违约金</th>
             <th>罚息</th>
             <th>还款状态</th>
+            <th>出借人明细</th>
         </tr>
         </thead>
         <tbody>
@@ -274,6 +279,10 @@
                 {{#}else{}}
                 <span>已还款</span>
                 {{#};}}
+            </td>
+
+            <td>
+                <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.selReceivable()">回款详情</a>
             </td>
         </tr>
         {{# }); }}
@@ -306,6 +315,33 @@
                 {{#};}}
             </td>
             <td>{{item.payTypeDesc}}</td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+
+<script id="secoundReceivableListView" type="text/html">
+    <table  class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>回款日期</th>
+            <th>出借人姓名</th>
+            <th>出借人手机账号</th>
+            <th>回款本金</th>
+            <th>回款利息</th>
+            <th>回款总额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.rows,function(index,item){ }}
+        <tr>
+            <td>{{item.repayDate}}</td>
+            <td>{{item.userName}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.corpus}}</td>
+            <td>{{item.interest}}</td>
+            <td>{{item.total}}</td>
         </tr>
         {{# }); }}
         </tbody>

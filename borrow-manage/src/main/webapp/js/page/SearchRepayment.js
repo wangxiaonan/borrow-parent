@@ -85,21 +85,24 @@ layui.use(["form", "grid", "layer",'laypage'], function() {
                 $('#boPrice').html(res.data.boPrice);
                 $('#productName').html(res.data.productName);
                 $('#boExpect').html(res.data.boExpect);
-                createDetailTable(res.data.repayDetails,'secoundDetail','seccoundView');
+                createDetailTable(res.data.repayDetails,'secoundDetail','seccoundView').build();
                 createDetailPayTable(res.data.orderPayRecords,'secoundDetailPay','secoundDetailPayView');
             }
         }
         ma.ajax(getDetail);
     }
+    var detailGridTable;
     function createDetailTable(data,ele,view){
-        grid.createNew({
+        detailGridTable = grid.createNew({
             elem: ele,
             view: view,
             data:{"rows": data || [] },
             method:"post",
             pageSize: 100,
             singleSelect: true
-        }).build();
+        })
+        return detailGridTable
+
     }
     function createDetailPayTable(data,ele,view){
         grid.createNew({
@@ -201,6 +204,42 @@ layui.use(["form", "grid", "layer",'laypage'], function() {
             }
         }
         ma.ajax(produ);
+    }
+
+    fn.selReceivable=function(){
+        var row = detailGridTable.getRow();
+        getReceivableList(row);
+        layer.dialog({
+            title: '出借人明细',
+            area: ['100%', '100%'],
+            content: $("#dialogoselReceivableList")
+        })
+    };
+
+    function getReceivableList(param) {
+        var getReceivable = {
+            url: ma.host + "/order/receivable/sel",
+            data: {"repayId": param.repayId},
+            done: function (res) {
+                if (res.errorCode !== '0000000') {
+                    top.layer.success("获取失败");
+                    return;
+                }
+                ;
+                createReceivableListTable(res.data, 'secoundReceivableList', 'secoundReceivableListView');
+            }
+        }
+        ma.ajax(getReceivable);
+    }
+    function createReceivableListTable(data,ele,view){
+        grid.createNew({
+            elem: ele,
+            view: view,
+            data:{"rows": data || [] },
+            method:"post",
+            pageSize: 100,
+            singleSelect: true
+        }).build();
     }
 
 });

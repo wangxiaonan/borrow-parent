@@ -1,8 +1,6 @@
 package com.borrow.manage.api;
 
-import com.alibaba.fastjson.JSON;
 import com.borrow.manage.enums.ExceptionCode;
-import com.borrow.manage.enums.UpRepayTEnum;
 import com.borrow.manage.service.OrderRepayServcie;
 import com.borrow.manage.vo.*;
 import org.apache.commons.lang.StringUtils;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wxn on 2018/9/18
