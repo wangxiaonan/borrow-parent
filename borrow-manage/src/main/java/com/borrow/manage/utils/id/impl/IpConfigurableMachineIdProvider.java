@@ -15,7 +15,7 @@ public class IpConfigurableMachineIdProvider implements MachineIdProvider {
     private static final Logger log = LoggerFactory
             .getLogger(IpConfigurableMachineIdProvider.class);
 
-    private long machineId;
+    private Long machineId;
 
     private Map<String, Long> ipsMap = new HashMap<String, Long>();
 
@@ -30,22 +30,22 @@ public class IpConfigurableMachineIdProvider implements MachineIdProvider {
 
     public void init() {
         String ip = IpUtils.getHostIp();
-
-        if (StringUtils.isEmpty(ip)) {
-            String msg = "Fail to get host IP address. Stop to initialize the IpConfigurableMachineIdProvider provider.";
-
-            log.error(msg);
-            throw new IllegalStateException(msg);
-        }
-
-        if (!ipsMap.containsKey(ip)) {
-            String msg = String
-                    .format("Fail to configure ID for host IP address %s. Stop to initialize the IpConfigurableMachineIdProvider provider.",
-                            ip);
-
-            log.error(msg);
-            throw new IllegalStateException(msg);
-        }
+//
+//        if (StringUtils.isEmpty(ip)) {
+//            String msg = "Fail to get host IP address. Stop to initialize the IpConfigurableMachineIdProvider provider.";
+//
+//            log.error(msg);
+//            throw new IllegalStateException(msg);
+//        }
+//
+//        if (!ipsMap.containsKey(ip)) {
+//            String msg = String
+//                    .format("Fail to configure ID for host IP address %s. Stop to initialize the IpConfigurableMachineIdProvider provider.",
+//                            ip);
+//
+//            log.error(msg);
+//            throw new IllegalStateException(msg);
+//        }
 
         machineId = ipsMap.get(ip);
 

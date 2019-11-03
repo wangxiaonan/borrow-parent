@@ -38,6 +38,8 @@ public enum ExceptionCode {
     LOANER_EARLY_REPAY_ERROR("3010008","理财服务—提前还款异常"),
     LOANER_GENERATE_REPAY_REQUEST_ERROR("3010009","理财服务—还款计划异常"),
     PROJECT_UPDATE_REQUEST_ERROR("3010010","理财服务—理财数据修改异常"),
+    REPAY_QUERY_HANDLER_REQUEST_ERROR("3010011","理财服务—理财回款计划查询异常"),
+    USER_ACCOUNT_QUERY_REQUEST_ERROR("3010012","理财服务—理财账户查询异常"),
 
     // 4 数据库异常 01 订单
     ORDER_IS_NOT_EXIST_ERROR("4010001","订单不存在");

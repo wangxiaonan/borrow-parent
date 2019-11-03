@@ -52,6 +52,12 @@ public interface OrderRepayServcie {
     ResponseResult selReduceList(RepayReduceListReq reduceListReq);
 
 
+    ResponseResult selReceivableList(RepayReceivableListReq req);
+
+
+    ResponseResult repayOverStatistical(RepayOverStatisticalReq req);
+
+
 
 
 }

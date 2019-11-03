@@ -133,6 +133,8 @@ public  interface PlatformConstant {
         String HUOSETYPE = "huoseType";
         String HUOSEADDRESS = "huoseAddress";
 
+        String AVAILABLE_AMOUNT = "availableAmount";
+
     }
 
 
@@ -153,6 +155,13 @@ public  interface PlatformConstant {
         String LOANER_GENERATE_REPAY_REQUEST = "loanerGenerateRepayRequest";
         //理财接口修改
         String PROJECT_UPDATE_REQUEST= "projectUpdateRequest";
+        // 回款计划查询
+        String REPAY_QUERY_HANDLER= "repayQueryHandler";
+
+        // 账户查询
+        String USER_ACCOUNT_QUERY_REQUEST= "userAccountQueryRequest";
+
+
 
 
 

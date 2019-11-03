@@ -13,7 +13,9 @@ public enum DataClientEnum {
     LOANER_OVERDUE_REPAY_REQUEST("LOANER_OVERDUE_REPAY_REQUEST","逾期还款"),
     LOANER_EARLY_REPAY_REQUEST("LOANER_EARLY_REPAY_REQUEST","提前还款"),
     LOANER_GENERATE_REPAY_REQUEST("LOANER_GENERATE_REPAY_REQUEST","还款计划"),
-    PROJECT_UPDATE_REQUEST("PROJECT_UPDATE_REQUEST","修改数据");
+    PROJECT_UPDATE_REQUEST("PROJECT_UPDATE_REQUEST","修改数据"),
+    REPAY_QUERY_HANDLER("repay_Query_Handler","回款计划查询"),
+    USER_ACCOUNT_QUERY_REQUEST("userAccountQueryRequest","账户查询");
 
     DataClientEnum(String urlType, String desc) {
         this.urlType = urlType;

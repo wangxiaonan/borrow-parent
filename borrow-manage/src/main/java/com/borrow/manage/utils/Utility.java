@@ -20,7 +20,7 @@ public class Utility {
     public static  Date getBrTime(int expect) {
 
         LocalDateTime lastDateTime =LocalDateTime.now();
-        int day = lastDateTime.getDayOfMonth();
+        int day = lastDateTime.getDayOfMonth()+1;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, expect);
@@ -85,7 +85,8 @@ public class Utility {
     }
 
     public static void main(String[] args) {
-        System.out.println(dateStrddHHmmss(new Date()));
+        System.out.println(Utility.getBrTime(1));
+//        System.out.println(dateStrddHHmmss(new Date()));
 //        System.out.println(PasswordHelper.encryptPassword("123456"));
 //        for (int i = 0; i< 7 ;i++) {
 //            System.out.println(UUIDProvider.uuid());

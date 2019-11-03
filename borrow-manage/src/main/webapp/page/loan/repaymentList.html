@@ -140,6 +140,83 @@
         <div id="secoundOverdueReduceRecord" style="width:100%;"></div>
     </div>
 
+
+    <div id='dialogoselReceivableList' class="hide">
+        <div id="secoundReceivableList" style="width:100%;"></div>
+    </div>
+
+    <!--逾期减免-->
+    <div id='dialogoRepayOverStatistical' class="hide">
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>存管账户可用余额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="availableAmountStatistical" name = "availableAmountStatistical"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>借还人应还总额</th>
+                <th>还款本金</th>
+                <th>还款利息</th>
+                <th>服务费</th>
+                <th>违约金</th>
+                <th>罚息</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="repayTotalAmountStatistical" name ="repayTotalAmountStatistical"></td>
+                <td id="capitalAmountStatistical" name ="capitalAmountStatistical"></td>
+                <td id="interestAmountStatistical" name ="interestAmountStatistical">44</td>
+                <td id="punishAmountStatistical" name ="punishAmountStatistical"></td>
+                <td id="serviceFeeStatistical" name ="serviceFeeStatistical"></td>
+                <td id="fineAmountStatistical" name ="fineAmountStatistical"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>累计减免罚息</th>
+                <th>累计减免违约金</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="reduceFineAmountStatistical" name="reduceFineAmountStatistical"></td>
+                <td id="reducePunishAmountStatistical"name ="reducePunishAmountStatistical"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table  class="layui-table text-center" lay-even>
+            <thead>
+            <tr>
+                <th>本期实际应还金额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="actualRepayTotalAmountStatistical" name ="actualRepayTotalAmountStatistical"></td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.confirm()">确认</a>
+                <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.cannelOverdueReduce()">取消</a>
+            </div>
+        </div>
+    </div>
+
     <script id="view" type="text/html">
         <table  class="layui-table text-center" lay-even>
             <thead>
@@ -212,7 +289,7 @@
                     {{#if(item.repayStatus==2){ }}
                     <span></span>
                     {{#}else{}}
-                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.confirm()">还款确认</a>
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.repayOverStatistical()">还款确认</a>
                     {{#};}}
                     {{#if(item.suretyStatus==1 &&item.repayStatus==1 && new Date().getTime() > item.brTimeDate ){ }}
                     <span>
@@ -227,6 +304,9 @@
                     </span>
                     {{#}else{}}
                     {{#};}}
+                    <span>
+                       <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.selReceivableList()">出借人明细</a>
+                    </span>
                 </td>
             </tr>
             {{# }); }}
@@ -259,6 +339,35 @@
         </tbody>
     </table>
 </script>
+
+
+<script id="secoundReceivableListView" type="text/html">
+    <table  class="layui-table text-center" lay-even>
+        <thead>
+        <tr>
+            <th>回款日期</th>
+            <th>出借人姓名</th>
+            <th>出借人手机账号</th>
+            <th>回款本金</th>
+            <th>回款利息</th>
+            <th>回款总额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.rows,function(index,item){ }}
+        <tr>
+            <td>{{item.repayDate}}</td>
+            <td>{{item.userName}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.corpus}}</td>
+            <td>{{item.interest}}</td>
+            <td>{{item.total}}</td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+
 
 <script>
     layui.config({

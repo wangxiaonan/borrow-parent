@@ -218,4 +218,36 @@ public class OrderRepayApi {
         return res;
     }
 
+    /**
+     * 出借人回款明细查询
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/order/receivable/sel", method = RequestMethod.POST)
+    public ResponseResult<RepayReceivableListRes> selReceivableList(@RequestBody RepayReceivableListReq req) {
+        logger.info("====>selReceivableList():req={}", req);
+        ResponseResult res = orderRepayServcie.selReceivableList(req);
+        logger.info("<====selReceivableList():res={}",res);
+        return res;
+    }
+
+
+    /**
+     * 提前还款数据统计
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/order/repay/overStatistical", method = RequestMethod.POST)
+    public ResponseResult<RepayOverStatisticalRes> repayOverStatistical(@RequestBody RepayOverStatisticalReq req) {
+        logger.info("====>repayOverStatistical():req={}", req);
+        ResponseResult res = orderRepayServcie.repayOverStatistical(req);
+        logger.info("<====repayOverStatistical():res={}",res);
+        return res;
+    }
+
+
+
+
+
+
 }

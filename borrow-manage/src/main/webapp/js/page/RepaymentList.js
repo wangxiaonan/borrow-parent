@@ -115,6 +115,22 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         }
         ma.ajax(searchData);
     }
+
+
+
+    //提前还款
+    fn.repayOverStatistical=function(){
+        var row = gridTable.getRow();
+        getRepayOverStatistical(row);
+        layer.dialog({
+            title: '确认还款',
+            area: ['100%', '100%'],
+            content: $("#dialogoRepayOverStatistical")
+        })
+    };
+
+
+
     fn.confirm=function(){
         var row = gridTable.getRow();
         layer.confirm({
@@ -151,6 +167,18 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
             content: $("#dialogoOverdueReduce")
         })
     };
+
+    fn.selReceivableList=function(){
+        var row = gridTable.getRow();
+        getReceivableList(row);
+        layer.dialog({
+            title: '出借人明细',
+            area: ['100%', '100%'],
+            content: $("#dialogoselReceivableList")
+        })
+    };
+
+
 
     fn.waitOverdueReduce=function(){
 
@@ -223,6 +251,7 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         }
         ma.ajax(produ);
     }
+
     function getOverdueReduce(param){
         var getReduce = {
             url: ma.host+"/order/overdue/reduce",
@@ -244,6 +273,50 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
         }
         ma.ajax(getReduce);
     }
+
+
+
+    function getRepayOverStatistical(param){
+        var getRepayOver = {
+            url: ma.host+"/order/repay/overStatistical",
+            data: {"repayId":param.repayId },
+            done: function(res) {
+                if(res.errorCode!=='0000000'){
+                    top.layer.success("获取失败");
+                    return;
+                };
+                $('#availableAmountStatistical').html(res.data.availableAmount);
+                $('#repayTotalAmountStatistical').html(res.data.repayTotalAmount);
+
+                $('#capitalAmountStatistical').html(res.data.capitalAmount);
+                $('#interestAmountStatistical').html(res.data.interestAmount);
+                $('#punishAmountStatistical').html(res.data.punishAmount);
+                $('#serviceFeeStatistical').html(res.data.serviceFee);
+                $('#fineAmountStatistical').html(res.data.fineAmount);
+                $('#reducePunishAmountStatistical').html(res.data.reducePunishAmount);
+                $('#reduceFineAmountStatistical').html(res.data.reduceFineAmount);
+                $('#actualRepayTotalAmountStatistical').html(res.data.actualRepayTotalAmount);
+            }
+        }
+        ma.ajax(getRepayOver);
+    }
+
+    function getReceivableList(param) {
+        var getReceivable = {
+            url: ma.host + "/order/receivable/sel",
+            data: {"repayId": param.repayId},
+            done: function (res) {
+                if (res.errorCode !== '0000000') {
+                    top.layer.success("获取失败");
+                    return;
+                }
+                ;
+                createReceivableListTable(res.data, 'secoundReceivableList', 'secoundReceivableListView');
+            }
+        }
+        ma.ajax(getReceivable);
+    }
+
     function createOverdueReduceTable(data,ele,view){
         grid.createNew({
             elem: ele,
@@ -254,4 +327,16 @@ layui.use(["form", "grid", "layer",'laypage','laydate'], function() {
             singleSelect: true
         }).build();
     }
+
+    function createReceivableListTable(data,ele,view){
+        grid.createNew({
+            elem: ele,
+            view: view,
+            data:{"rows": data || [] },
+            method:"post",
+            pageSize: 100,
+            singleSelect: true
+        }).build();
+    }
+
 });

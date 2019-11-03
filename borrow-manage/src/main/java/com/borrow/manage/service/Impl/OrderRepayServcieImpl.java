@@ -1,5 +1,6 @@
 package com.borrow.manage.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.borrow.manage.dao.*;
 import com.borrow.manage.enums.*;
 import com.borrow.manage.exception.BorrowException;
@@ -680,5 +681,66 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         List<RepayReduceListRes> listRes = boOverdueReduceRecordDao.selReduceListWhere(reduceListReq);
         PageBaseRes pageBaseRes = new PageBaseRes<RepayReduceListRes>(listRes);
         return ResponseResult.success(ExceptionCode.SUCCESS.getErrorMessage(), pageBaseRes);
+    }
+
+    @Override
+    public ResponseResult selReceivableList(RepayReceivableListReq req) {
+
+        BorrowRepayment repayment = borrowRepaymentDao.selByRepayId(Long.valueOf(req.getRepayId()));
+        //TODO 还款计划查询接口
+        XMap thirdParamMap = new XMap();
+        thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO, String.valueOf(repayment.getOrderId()));
+        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD,repayment.getRepayExpect().toString());
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.REPAY_QUERY_HANDLER.getUrlType());
+        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        if (!responseResult.isSucceed()) {
+            return responseResult;
+        }
+        XMap xMapRes = responseResult.getData();
+        String data = xMapRes.getString("data");
+        List p = JSON.parseObject(data, List.class);
+        return ResponseResult.success(null,p);
+    }
+
+    @Override
+    public ResponseResult repayOverStatistical(RepayOverStatisticalReq req) {
+        BorrowRepayment repayment = borrowRepaymentDao.selByRepayId(Long.valueOf(req.getRepayId()));
+        UserInfo userInfo = userInfoDao.selInfoByUid(repayment.getUserUid());
+        //TODO 可用余额接口
+        XMap thirdParamMap = new XMap();
+        thirdParamMap.put(PlatformConstant.FundsParam.IDCARD, userInfo.getIdcard());
+        thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.USER_ACCOUNT_QUERY_REQUEST.getUrlType());
+        ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+        if (!responseResult.isSucceed()) {
+            return responseResult;
+        }
+        XMap xMapRes = responseResult.getData();
+        String data = xMapRes.getString("data");
+        XMap p = JSON.parseObject(data, XMap.class);
+        String availableAmount = p.getString(PlatformConstant.FundsParam.AVAILABLE_AMOUNT);
+        RepayOverStatisticalRes statisticalRes = new RepayOverStatisticalRes();
+        statisticalRes.setAvailableAmount(availableAmount);
+        statisticalRes.setRepayTotalAmount(repayment.getCapitalAmount()
+                .add(repayment.getInterestAmount())
+                .add(repayment.getPunishAmount())
+                .add(repayment.getServiceFee())
+                .add(repayment.getFineAmount()).toString());
+
+        statisticalRes.setCapitalAmount(repayment.getCapitalAmount().toString());
+        statisticalRes.setInterestAmount(repayment.getInterestAmount().toString());
+        statisticalRes.setPunishAmount(repayment.getPunishAmount().toString());
+        statisticalRes.setServiceFee(repayment.getServiceFee().toString());
+        statisticalRes.setFineAmount(repayment.getFineAmount().toString());
+        statisticalRes.setReducePunishAmount(repayment.getReducePunishAmount().toString());
+        statisticalRes.setReduceFineAmount(repayment.getReduceFineAmount().toString());
+        BigDecimal actualRepayTotalAmount = repayment.getCapitalAmount()
+                .add(repayment.getInterestAmount())
+                .add(repayment.getPunishAmount())
+                .add(repayment.getServiceFee())
+                .add(repayment.getFineAmount())
+                .subtract(repayment.getReducePunishAmount())
+                .subtract(repayment.getReduceFineAmount());
+        statisticalRes.setActualRepayTotalAmount(actualRepayTotalAmount.toString());
+        return ResponseResult.success(null,statisticalRes);
     }
 }

@@ -30,6 +30,10 @@ public class DataClientFactory {
     DataClient loanerGenerateRepayRequestClient;
     @Autowired
     DataClient projectUpdateRequestDataClient;
+    @Autowired
+    DataClient repayQueryHandlerRequestDataClient;
+    @Autowired
+    DataClient userAccountQueryRequestDataClient;
 
     public DataClient  getDataClient(String urlType){
         DataClientEnum dataClientEnum = DataClientEnum.getEnum(urlType);
@@ -50,7 +54,10 @@ public class DataClientFactory {
                 return this.loanerGenerateRepayRequestClient;
             case PROJECT_UPDATE_REQUEST:
                 return this.projectUpdateRequestDataClient;
-
+            case REPAY_QUERY_HANDLER:
+                return this.repayQueryHandlerRequestDataClient;
+            case USER_ACCOUNT_QUERY_REQUEST:
+                return this.userAccountQueryRequestDataClient;
         }
         return null;
     }
