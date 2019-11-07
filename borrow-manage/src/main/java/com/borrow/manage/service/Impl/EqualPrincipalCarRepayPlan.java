@@ -67,6 +67,9 @@ public class EqualPrincipalCarRepayPlan extends AbstractCarRepayPlan {
             carRepayPlanVo.setRepayExpect(String.valueOf(i));
             BigDecimal serviceFee = repayPlanCalReq.getBoPrice()
                     .multiply(BigDecimal.valueOf(Double.valueOf(monthServiceRate))).setScale(2, BigDecimal.ROUND_HALF_UP);
+            if (serviceFee.compareTo(mapInterest.get(i)) ==0 && serviceFee.compareTo(BigDecimal.ZERO) > 0) {
+                serviceFee = serviceFee.subtract(BigDecimal.valueOf(0.01));
+            }
             carRepayPlanVo.setServiceFee(serviceFee.toString());
             BigDecimal repayAmount = mapPrincipal.get(i).add(mapInterest.get(i)).add(serviceFee);
             carRepayPlanVo.setRepayAmount(repayAmount.toString());

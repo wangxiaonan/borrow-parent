@@ -74,9 +74,13 @@ public abstract class AbstractCarRepayPlan implements RepayPlan<BoCarRepayPlanRe
         BigDecimal capitalAmount = repayPlanCalReq.getBoPrice();
         CarRepayPlanVo lastCarRepayPlanVo = new CarRepayPlanVo();
         lastCarRepayPlanVo.setCapitalAmount(capitalAmount.toString());
-        lastCarRepayPlanVo.setInterestAmount(monthAccrualCost.toString());
         lastCarRepayPlanVo.setRepayExpect(String.valueOf(boExpect));
+        if (monthServiceCost.compareTo(monthAccrualCost) ==0 && monthServiceCost.compareTo(BigDecimal.ZERO) > 0) {
+            monthServiceCost = monthServiceCost.subtract(BigDecimal.valueOf(0.01));
+        }
         lastCarRepayPlanVo.setServiceFee(monthServiceCost.toString());
+        lastCarRepayPlanVo.setInterestAmount(monthAccrualCost.toString());
+
         BigDecimal repayAmount = capitalAmount.add(monthServiceCost).add(monthAccrualCost);
         if (repayAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw  new BorrowException(ExceptionCode.PARAM_ERROR);
