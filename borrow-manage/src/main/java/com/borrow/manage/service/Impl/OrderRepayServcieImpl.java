@@ -701,7 +701,7 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
                 repayExpect = "0";
             }
         }
-        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD,repayment.getRepayExpect().toString());
+        thirdParamMap.put(PlatformConstant.FundsParam.PERIOD,repayExpect);
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.REPAY_QUERY_HANDLER.getUrlType());
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
