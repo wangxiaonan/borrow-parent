@@ -687,9 +687,20 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
     public ResponseResult selReceivableList(RepayReceivableListReq req) {
 
         BorrowRepayment repayment = borrowRepaymentDao.selByRepayId(Long.valueOf(req.getRepayId()));
+        BorrowOrder borrowOrder = borrowOrderDao.selByOrderId(repayment.getOrderId());
+        BorrowProduct borrowProduct  = borrowProductDao.selByPUid(borrowOrder.getProductUid());
+
         //TODO 还款计划查询接口
         XMap thirdParamMap = new XMap();
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_NO, String.valueOf(repayment.getOrderId()));
+        String repayExpect = repayment.getRepayExpect().toString();
+        if (borrowProduct.getpPayType() == ProductPayTypeEnum.PAY_TYPE_ONE.getCode()) {
+            if (repayExpect.equals(borrowProduct.getpExpect().toString())) {
+                repayExpect = "1";
+            }else {
+                repayExpect = "0";
+            }
+        }
         thirdParamMap.put(PlatformConstant.FundsParam.PERIOD,repayment.getRepayExpect().toString());
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.REPAY_QUERY_HANDLER.getUrlType());
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
