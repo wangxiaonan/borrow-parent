@@ -62,7 +62,7 @@ public class OverdueTask{
                 return;
             }
             for (BorrowRepayment repayment: repaymentList) {
-                    if(repayment.getCapitalAmount().compareTo(BigDecimal.ZERO)  ==0) {
+                    if(repayment.getRepayAmount().compareTo(BigDecimal.ZERO)  ==0) {
                         BorrowRepayment rep = new BorrowRepayment();
                         rep.setRepayStatus(RepayStatusEnum.PAY_YES.getCode());
                         rep.setRepayFinishAmount(repayment.getRepayAmount());
