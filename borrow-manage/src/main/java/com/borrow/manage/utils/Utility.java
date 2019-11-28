@@ -18,20 +18,11 @@ import java.util.Date;
 public class Utility {
 
     public static  Date getBrTime(int expect) {
-
-        LocalDateTime lastDateTime =LocalDateTime.now();
-        int day = lastDateTime.getDayOfMonth()+1;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.MONTH, expect);
-        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-        String nextMonthDay = format.format(c.getTime());
-        int nextLastDay = Integer.valueOf(nextMonthDay.split("-")[2]);
-        if (day >nextLastDay ) {
-            day = nextLastDay;
-        }
-        c.set(Calendar.DAY_OF_MONTH,day);
-        return c.getTime();
+        LocalDate localDate = LocalDate.now();
+        localDate = localDate.plusDays(1);
+        localDate = localDate.plusMonths(expect);
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+        return Date.from(zonedDateTime.toInstant());
 
     }
     public static  Date  getDate(String datestr) {
@@ -85,7 +76,8 @@ public class Utility {
     }
 
     public static void main(String[] args) {
-        System.out.println(Utility.getBrTime(1));
+       Date date =  Utility.getBrTime(8);
+        System.out.println(dateStrddHHmmss(date));
 //        System.out.println(dateStrddHHmmss(new Date()));
 //        System.out.println(PasswordHelper.encryptPassword("123456"));
 //        for (int i = 0; i< 7 ;i++) {
