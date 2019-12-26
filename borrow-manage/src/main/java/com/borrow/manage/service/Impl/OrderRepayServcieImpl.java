@@ -504,7 +504,12 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_ID, String.valueOf(orderId));
         thirdParamMap.put(PlatformConstant.FundsParam.REPAY_DATE,Utility.dateStrddHHmmss(new Date()));
         thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_PERIODS, borrowOrder.getBoExpect());
+        String productUid = borrowOrder.getProductUid();
+        BorrowProduct product = borrowProductDao.selByPUid(productUid);
         thirdParamMap.put(PlatformConstant.FundsParam.MUST_PERIODS, borrowOrder.getBoPayExpect()+1);
+        if (product.getBussType() == ProductPayTypeEnum.PAY_TYPE_ONE.getCode()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.MUST_PERIODS, 1);
+        }
         thirdParamMap.put(PlatformConstant.FundsParam.ACTUAL_PERIODS, borrowOrder.getBoPayExpect());
         thirdParamMap.put(PlatformConstant.FundsParam.TOTAL_AMOUNT, repayCalRes.getPayTotalAmount());
 
@@ -514,6 +519,9 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
             repaymentsMap.put(PlatformConstant.FundsParam.REPAY_ID, repayment.getRepayId());
             repaymentsMap.put(PlatformConstant.FundsParam.REPAY_DATE,Utility.dateStrddHHmmss(repayment.getBrTime()));
             repaymentsMap.put(PlatformConstant.FundsParam.PERIOD,repayment.getRepayExpect());
+            if (product.getBussType() == ProductPayTypeEnum.PAY_TYPE_ONE.getCode()) {
+                repaymentsMap.put(PlatformConstant.FundsParam.PERIOD,1);
+            }
             repaymentsMap.put(PlatformConstant.FundsParam.ISCOMPENSATION
                     ,repayment.getSuretyStatus() == SuretyStatusEnum.SURETY_STATUS_YES.getCode() ? true : false);
             repaymentsMap.put(PlatformConstant.FundsParam.CORPUS,repayment.getCapitalAmount());
