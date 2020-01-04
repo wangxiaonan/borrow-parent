@@ -135,6 +135,11 @@ public  interface PlatformConstant {
 
         String AVAILABLE_AMOUNT = "availableAmount";
 
+        String SOURCE = "source";
+        String SOURCE_OLD = "old";
+        String SOURCE_NEW = "new";
+
+
     }
 
 

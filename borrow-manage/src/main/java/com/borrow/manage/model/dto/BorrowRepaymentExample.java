@@ -1992,6 +1992,66 @@ public class BorrowRepaymentExample {
             addCriterion("reduce_fine_amount not between", value1, value2, "reduceFineAmount");
             return (Criteria) this;
         }
+
+        public Criteria andPayChannelIsNull() {
+            addCriterion("pay_channel is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelIsNotNull() {
+            addCriterion("pay_channel is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelEqualTo(Integer value) {
+            addCriterion("pay_channel =", value, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelNotEqualTo(Integer value) {
+            addCriterion("pay_channel <>", value, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelGreaterThan(Integer value) {
+            addCriterion("pay_channel >", value, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("pay_channel >=", value, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelLessThan(Integer value) {
+            addCriterion("pay_channel <", value, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelLessThanOrEqualTo(Integer value) {
+            addCriterion("pay_channel <=", value, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelIn(List<Integer> values) {
+            addCriterion("pay_channel in", values, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelNotIn(List<Integer> values) {
+            addCriterion("pay_channel not in", values, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelBetween(Integer value1, Integer value2) {
+            addCriterion("pay_channel between", value1, value2, "payChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayChannelNotBetween(Integer value1, Integer value2) {
+            addCriterion("pay_channel not between", value1, value2, "payChannel");
+            return (Criteria) this;
+        }
     }
 
     /**

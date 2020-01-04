@@ -83,6 +83,11 @@ public class OrderServcieImpl implements OrderServcie {
         XMap xMap = new XMap();
         xMap.put(PlatformConstant.FundsParam.IDCARD, userInfoVo.getIdcard());
         xMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.USER_CHECK_DATA.getUrlType());
+        if (PayChannelEnum.JIN_CHENG.getCode() == orderCreateReq.getPayChannel()) {
+            xMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            xMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+        }
         ResponseResult<XMap> xMapResponseResult = remoteDataCollectorService.collect(xMap);
         if (!xMapResponseResult.isSucceed()) {
             return xMapResponseResult;
@@ -135,6 +140,7 @@ public class OrderServcieImpl implements OrderServcie {
         borrowOrder.setBoIsState(BoIsStateEnum.WAITING.getCode());
         borrowOrder.setBoPaySource(borrowOrderVo.getBoPaySource());
         borrowOrder.setBoPayState(BoRepayStatusEnum.NORMAL.getCode());
+        borrowOrder.setPayChannel(orderCreateReq.getPayChannel());
         borrowOrderDao.insertBorrowOrder(borrowOrder);
         OrderAuditVo orderAuditVo = orderCreateReq.getOrderAudit();
         //TODO 可以用批量插入
@@ -718,6 +724,11 @@ public class OrderServcieImpl implements OrderServcie {
         }
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO, picInfoVos);
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.PROJECT_UPDATE_REQUEST.getUrlType());
+        if (PayChannelEnum.JIN_CHENG.getCode() == borrowOrder.getPayChannel()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+        }
         //TODO 需改信息
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
@@ -1065,8 +1076,14 @@ public class OrderServcieImpl implements OrderServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.LOAN_PIC_INFO, picInfoVos);
 
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_MAKE_RAISE.getUrlType());
+        if (borrowOrder.getPayChannel() == PayChannelEnum.JIN_CHENG.getCode()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE,PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE,PlatformConstant.FundsParam.SOURCE_NEW);
+        }
         //TODO 筹标
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
+
         if (!responseResult.isSucceed()) {
             throw new BorrowException(ExceptionCode.ORDER_MAKE_RAISE_ERROR);
         }
@@ -1228,6 +1245,7 @@ public class OrderServcieImpl implements OrderServcie {
             repayment.setRepayStatus(RepayStatusEnum.PAY_NO.getCode());
             repayment.setBoRepayStatus(BoRepayStatusEnum.NORMAL.getCode());
             repayment.setSuretyStatus(SuretyStatusEnum.SURETY_STATUS_NO.getCode());
+            repayment.setPayChannel(borrowOrder.getPayChannel());
             borrowRepaymentDao.insertRepayment(repayment);
             result.add(repayment);
         });

@@ -5,6 +5,7 @@ import com.borrow.manage.dao.BorrowOrderDao;
 import com.borrow.manage.dao.BorrowRepaymentDao;
 import com.borrow.manage.enums.DataClientEnum;
 import com.borrow.manage.enums.ExceptionCode;
+import com.borrow.manage.enums.PayChannelEnum;
 import com.borrow.manage.enums.PlatformConstant;
 import com.borrow.manage.exception.BorrowException;
 import com.borrow.manage.exception.RemoteException;
@@ -85,6 +86,11 @@ public class OrderIdStatusNotifyImpl implements FundsNotifyService {
                 });
                 thirdParamMap.put(PlatformConstant.FundsParam.REPAYMENTS,list);
                 thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_GENERATE_REPAY_REQUEST.getUrlType());
+                if (PayChannelEnum.JIN_CHENG.getCode() == borrowOrder.getPayChannel()) {
+                    thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+                }else {
+                    thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+                }
                 remoteDataCollectorService.collect(thirdParamMap);
 
 

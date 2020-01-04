@@ -39,6 +39,7 @@
     <result column="bo_pay_expect" property="boPayExpect" jdbcType="INTEGER" />
     <result column="first_expect_time" property="firstExpectTime" jdbcType="TIMESTAMP" />
     <result column="last_expect_time" property="lastExpectTime" jdbcType="TIMESTAMP" />
+    <result column="pay_channel" property="payChannel" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -115,7 +116,7 @@
     bues_type, user_uid, product_uid, b_car_uid, product_name, p_code, plate_number,
     salesman_uid, sign_time, bo_price, bo_finish_price, bo_expect, bo_expect_unit, bo_paytype,
     bo_is_state, bo_is_finish, bo_finish_time, bo_pay_source, bo_pay_state, first_pay_time,
-    last_pay_time, bo_pay_expect, first_expect_time, last_expect_time
+    last_pay_time, bo_pay_expect, first_expect_time, last_expect_time, pay_channel
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.borrow.manage.model.dto.BorrowOrderExample" >
     <!--
@@ -178,8 +179,8 @@
     bo_expect_unit, bo_paytype, bo_is_state,
     bo_is_finish, bo_finish_time, bo_pay_source,
     bo_pay_state, first_pay_time, last_pay_time,
-    bo_pay_expect, first_expect_time, last_expect_time
-    )
+    bo_pay_expect, first_expect_time, last_expect_time,
+    pay_channel)
     values (#{id,jdbcType=BIGINT}, #{disabled,jdbcType=BIT}, #{uuid,jdbcType=VARCHAR},
     #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
     #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT},
@@ -190,8 +191,8 @@
     #{boExpectUnit,jdbcType=INTEGER}, #{boPaytype,jdbcType=INTEGER}, #{boIsState,jdbcType=INTEGER},
     #{boIsFinish,jdbcType=INTEGER}, #{boFinishTime,jdbcType=TIMESTAMP}, #{boPaySource,jdbcType=VARCHAR},
     #{boPayState,jdbcType=INTEGER}, #{firstPayTime,jdbcType=TIMESTAMP}, #{lastPayTime,jdbcType=TIMESTAMP},
-    #{boPayExpect,jdbcType=INTEGER}, #{firstExpectTime,jdbcType=TIMESTAMP}, #{lastExpectTime,jdbcType=TIMESTAMP}
-    )
+    #{boPayExpect,jdbcType=INTEGER}, #{firstExpectTime,jdbcType=TIMESTAMP}, #{lastExpectTime,jdbcType=TIMESTAMP},
+    #{payChannel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.borrow.manage.model.dto.BorrowOrder" >
     <!--
@@ -299,6 +300,9 @@
       <if test="lastExpectTime != null" >
         last_expect_time,
       </if>
+      <if test="payChannel != null" >
+        pay_channel,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -399,6 +403,9 @@
       </if>
       <if test="lastExpectTime != null" >
         #{lastExpectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payChannel != null" >
+        #{payChannel,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -518,6 +525,9 @@
       <if test="record.lastExpectTime != null" >
         last_expect_time = #{record.lastExpectTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.payChannel != null" >
+        pay_channel = #{record.payChannel,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -561,7 +571,8 @@
     last_pay_time = #{record.lastPayTime,jdbcType=TIMESTAMP},
     bo_pay_expect = #{record.boPayExpect,jdbcType=INTEGER},
     first_expect_time = #{record.firstExpectTime,jdbcType=TIMESTAMP},
-    last_expect_time = #{record.lastExpectTime,jdbcType=TIMESTAMP}
+    last_expect_time = #{record.lastExpectTime,jdbcType=TIMESTAMP},
+    pay_channel = #{record.payChannel,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -669,6 +680,9 @@
       <if test="lastExpectTime != null" >
         last_expect_time = #{lastExpectTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="payChannel != null" >
+        pay_channel = #{payChannel,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -709,9 +723,12 @@
     last_pay_time = #{lastPayTime,jdbcType=TIMESTAMP},
     bo_pay_expect = #{boPayExpect,jdbcType=INTEGER},
     first_expect_time = #{firstExpectTime,jdbcType=TIMESTAMP},
-    last_expect_time = #{lastExpectTime,jdbcType=TIMESTAMP}
+    last_expect_time = #{lastExpectTime,jdbcType=TIMESTAMP},
+    pay_channel = #{payChannel,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
 
   <!-- 根据条件查询订单-->
   <select id="selOrderList" parameterType="com.borrow.manage.vo.OrderListReq" resultType="com.borrow.manage.vo.OrderListRes">

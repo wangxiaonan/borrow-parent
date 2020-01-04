@@ -134,6 +134,7 @@ layui.use(["form", "layer", "element","laydate","upload"], function() {
         var houseAddress = province +" "+ city + " "+ area+ " "+address;
         var SubmitData={
             "bussType":bussType,
+            "payChannel":formData.payChannel,
             "userInfo": {
                 "userEarns": formData.userEarns,
                 "idcard": formData.idcard,

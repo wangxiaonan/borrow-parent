@@ -21,6 +21,16 @@ public class OrderCreateReq extends BaseReq{
 
     private UserHouseInfoVo userHouseInfo;
 
+    private int payChannel;
+
+    public int getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(int payChannel) {
+        this.payChannel = payChannel;
+    }
+
     public int getBussType() {
         return bussType;
     }

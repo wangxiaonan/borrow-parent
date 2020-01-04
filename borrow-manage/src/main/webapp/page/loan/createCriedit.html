@@ -55,6 +55,14 @@
                        autocomplete="off" class="layui-input">
             </div>
         </div>
+        <label class="layui-form-label">标的类型</label>
+        <div class="layui-input-inline">
+            <select id="payChannel" name="payChannel" required lay-verify="myrequired" lay-filter="inputType">
+                <option value="2">易联</option>
+                <option value="1">金城</option>
+            </select>
+        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-inline">

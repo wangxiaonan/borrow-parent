@@ -313,7 +313,11 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
                 thirdParamMap.put(PlatformConstant.FundsParam.OUTID, userInfo.getIdcard());
                 thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.ORDER_TRANSFER_FUND.getUrlType());
             }
-
+            if (PayChannelEnum.JIN_CHENG.getCode() == repayment.getPayChannel()) {
+                thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+            }else {
+                thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+            }
             ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
             if (!responseResult.isSucceed()) {
                 return responseResult;
@@ -546,6 +550,11 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         }
         thirdParamMap.put(PlatformConstant.FundsParam.REPAYMENTS,list);
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.LOANER_EARLY_REPAY_REQUEST.getUrlType());
+        if (PayChannelEnum.JIN_CHENG.getCode() == borrowOrder.getPayChannel()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+        }
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
             return responseResult;
@@ -620,6 +629,12 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         thirdParamMap.put(PlatformConstant.FundsParam.INTEREST, repayment.getInterestAmount().toString());
         thirdParamMap.put(PlatformConstant.FundsParam.MONTH_SERVICE_FEE, repayment.getServiceFee().toString());
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.COMPENSATORY_REPAY_REQUEST.getUrlType());
+        if (PayChannelEnum.JIN_CHENG.getCode() == repayment.getPayChannel()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+        }
+
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
             return responseResult;
@@ -711,6 +726,11 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         }
         thirdParamMap.put(PlatformConstant.FundsParam.PERIOD,repayExpect);
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.REPAY_QUERY_HANDLER.getUrlType());
+        if (PayChannelEnum.JIN_CHENG.getCode() == repayment.getPayChannel()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+        }
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
             return responseResult;
@@ -729,6 +749,11 @@ public class OrderRepayServcieImpl implements OrderRepayServcie {
         XMap thirdParamMap = new XMap();
         thirdParamMap.put(PlatformConstant.FundsParam.IDCARD, userInfo.getIdcard());
         thirdParamMap.put(DataClientEnum.URL_TYPE.getUrlType(), DataClientEnum.USER_ACCOUNT_QUERY_REQUEST.getUrlType());
+        if (PayChannelEnum.JIN_CHENG.getCode() == repayment.getPayChannel()) {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_OLD);
+        }else {
+            thirdParamMap.put(PlatformConstant.FundsParam.SOURCE, PlatformConstant.FundsParam.SOURCE_NEW);
+        }
         ResponseResult<XMap> responseResult = remoteDataCollectorService.collect(thirdParamMap);
         if (!responseResult.isSucceed()) {
             return responseResult;
