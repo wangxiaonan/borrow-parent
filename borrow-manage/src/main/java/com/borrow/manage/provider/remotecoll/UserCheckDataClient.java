@@ -34,15 +34,12 @@ public class UserCheckDataClient extends DataClient {
     RestHttpClientService commonRestTempate;
 
     @Override
-    public String getData(XMap map) {
+    public String getData(XMap param) {
         String jsonData = "";
         try {
-            HashMap param = new HashMap();
-            param.put(PlatformConstant.FundsParam.IDCARD,map.getString(PlatformConstant.FundsParam.IDCARD));
             param.put(PlatformConstant.FundsParam.REQ_NO, UUIDProvider.uuid());
             param.put(PlatformConstant.FundsParam.CONTROL,PlatformConstant.FundsMethod.LOAN_USER_QUERY_REQUEST);
             param.put(PlatformConstant.FundsParam.REQ_TIME, Utility.dateStr());
-
             String reqParam = JSON.toJSONString(param);
             logger.info("UserCheckData_req:url={},params={}",remoteConfig.fundsBaseUrl,reqParam);
             jsonData = doSendRequest(reqParam);
