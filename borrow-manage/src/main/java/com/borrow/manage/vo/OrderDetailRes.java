@@ -19,6 +19,15 @@ public class OrderDetailRes {
     //借款用途
     private String boPaySource;
     private String boSource;
+    private String payChannelDesc;
+
+    public String getPayChannelDesc() {
+        return payChannelDesc;
+    }
+
+    public void setPayChannelDesc(String payChannelDesc) {
+        this.payChannelDesc = payChannelDesc;
+    }
 
     private UserInfoVo userInfo;
 

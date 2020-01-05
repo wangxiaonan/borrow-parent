@@ -1107,6 +1107,7 @@ public class OrderServcieImpl implements OrderServcie {
         detailRes.setBoPrice(borrowOrder.getBoPrice().toString());
         detailRes.setProductName(borrowOrder.getProductName());
         detailRes.setProductCode(borrowOrder.getpCode());
+        detailRes.setPayChannelDesc(PayChannelEnum.getNameValue(borrowOrder.getPayChannel()));
         String userUid = borrowOrder.getUserUid();
         UserInfo userInfo = userInfoDao.selInfoByUid(userUid);
         if (userInfo == null) {

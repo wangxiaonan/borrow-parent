@@ -254,6 +254,7 @@ layui.use(["form", "grid", "layer", 'laypage', 'laydate',"upload"], function () 
                 $('#userNameDetail').val(res.data.userInfo.userName);
                 $('#idcardDetail').val(res.data.userInfo.idcard);
                 $('#mobileDetail').val(res.data.userInfo.mobile);
+                $('#payChannelDetail').val(res.data.payChannelDesc);
                 $("input[name='sexDetail'][value='"+res.data.userInfo.sex+"']").attr("checked",true);
                 $("input[name='marriageDetail'][value='"+res.data.userInfo.marriage+"']").attr("checked",true);
 
