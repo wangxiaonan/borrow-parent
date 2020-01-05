@@ -26,6 +26,16 @@ public class OrderRepayListRes  {
     private Date brTime;
     private long brTimeDate;
 
+    private String payChannel;
+
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
+    }
+
     public long getBrTimeDate() {
         return brTime.getTime();
     }

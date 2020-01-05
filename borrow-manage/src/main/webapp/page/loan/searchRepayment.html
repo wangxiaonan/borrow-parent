@@ -84,15 +84,14 @@
 
                 </select>
             </div>
-            <!--<label class="layui-form-label">当前还款状态</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<select name="boPayState" >-->
-                    <!--<option value=""></option>-->
-                    <!--<option value="1">正常</option>-->
-                    <!--<option value="2">逾期</option>-->
-
-                <!--</select>-->
-            <!--</div>-->
+            <label class="layui-form-label">标的类型</label>
+            <div class="layui-input-inline">
+                <select name="payChannel" id="payChannel">
+                    <option value=""></option>
+                    <option value="1">金城</option>
+                    <option value="2">易联</option>
+                </select>
+            </div>
             <div class="layui-inline">
                 <button uitype="reset" class="layui-btn lay-btn-normal" lay-submit lay-filter="searchCredit"  id="searchCreditSubmit">查询</button>
                 <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="searchRepayCreditExport" id="searchRepayCreditSubmit">导出</button>
@@ -116,6 +115,7 @@
                 <!--<th>当前还款状态</th>-->
                 <th>总还款状态</th>
                 <th>还款结清时间</th>
+                <th>标的类型</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -149,6 +149,15 @@
                     {{#};}}
                 </td>
                 <td><a class="link">{{item.lastPayTime?ma.format(item.lastPayTime,'yyyy-MM-dd HH:mm:ss'):''}}</a></td>
+                <td>
+                    {{#if(item.payChannel==1){ }}
+                    <span style="color:#FF5722">金城</span>
+                    {{#}else if(item.payChannel==2){}}
+                    <span>易联</span>
+                    {{# }else{ }}
+                    <span></span>
+                    {{#};}}
+                </td>
                 <td>
                     {{# if(item.boIsState==6){}}
                     <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>

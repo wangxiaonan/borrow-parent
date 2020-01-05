@@ -75,7 +75,15 @@
                        onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" autocomplete="off"
                        class="layui-input">
             </div>
-            <!--</div>-->
+
+            <label class="layui-form-label">标的类型</label>
+            <div class="layui-input-inline">
+                <select name="payChannel" id="payChannel">
+                    <option value=""></option>
+                    <option value="1">金城</option>
+                    <option value="2">易联</option>
+                </select>
+            </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">借款产品</label>
@@ -131,6 +139,7 @@
                 <th>期数</th>
                 <th>状态</th>
                 <th>放款时间</th>
+                <th>标的类型</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -168,6 +177,15 @@
                     {{#};}}
                 </td>
                 <td><a class="link">{{item.boFinishTime}}</a></td>
+                <td>
+                    {{#if(item.payChannel==1){ }}
+                    <span style="color:#FF5722">金城</span>
+                    {{#}else if(item.payChannel==2){}}
+                    <span>易联</span>
+                    {{# }else{ }}
+                    <span></span>
+                    {{#};}}
+                </td>
                 <td>
                     {{# if(item.boIsState==2 || item.boIsState==3){}}
                     <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:fn.detail()">详情</a>

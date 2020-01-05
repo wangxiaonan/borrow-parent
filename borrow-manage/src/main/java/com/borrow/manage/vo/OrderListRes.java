@@ -23,6 +23,15 @@ public class OrderListRes implements Serializable{
     private String boExpect;
     private String boIsState;
     private Date boFinishTime;
+    private String payChannel;
+
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
+    }
 
     public String getOrderId() {
         return orderId;

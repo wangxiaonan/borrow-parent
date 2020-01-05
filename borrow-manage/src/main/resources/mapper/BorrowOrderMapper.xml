@@ -746,6 +746,7 @@
     ,borrow_order.bo_is_state as boIsState
     ,borrow_order.bo_finish_time as boFinishTime
     ,borrow_order.create_time as createTime
+    ,borrow_order.pay_channel as payChannel
     from borrow_order
     LEFT JOIN user_info ON
     borrow_order.user_uid = user_info.uuid
@@ -780,6 +781,9 @@
     <if test="boFinishTimeEnd != null and boFinishTimeEnd!='' " >
       AND DATE_FORMAT(borrow_order.bo_finish_time,'%Y-%m-%d') &lt;= #{boFinishTimeEnd}
     </if>
+    <if test="payChannel != null and payChannel!='' " >
+      AND borrow_order.pay_channel = #{payChannel}
+    </if>
     ORDER BY borrow_order.id  DESC
   </select>
 
@@ -799,6 +803,7 @@
     ,borrow_order.first_expect_time as firstExpectTime
     ,borrow_order.last_expect_time as lastExpectTime
     ,borrow_order.last_pay_time as lastPayTime
+    ,borrow_order.pay_channel as payChannel
 
     from borrow_order
     LEFT JOIN user_info ON
@@ -819,6 +824,9 @@
     </if>
     <if test="boPayState != null and boPayState!='' " >
       AND borrow_order.bo_pay_state = #{boPayState}
+    </if>
+    <if test="payChannel != null and payChannel!='' " >
+      AND borrow_order.pay_channel = #{payChannel}
     </if>
     ORDER BY borrow_order.id  DESC
   </select>

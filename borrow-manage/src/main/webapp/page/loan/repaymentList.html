@@ -86,6 +86,16 @@
                     <option value="2">逾期</option>
                 </select>
             </div>
+
+            <label class="layui-form-label">标的类型</label>
+            <div class="layui-input-inline">
+                <select name="payChannel" id="payChannel">
+                    <option value=""></option>
+                    <option value="1">金城</option>
+                    <option value="2">易联</option>
+                </select>
+            </div>
+
             <div class="layui-inline">
                 <button uitype="reset" class="layui-btn lay-btn-normal" lay-submit lay-filter="searchCredit"  id="searchCreditSubmit">查询</button>
                 <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="searchRepaymentCreditExport">导出</button>
@@ -236,6 +246,7 @@
                 <th>已还款时间</th>
                 <th>担保垫付状态</th>
                 <th>垫付时间</th>
+                <th>标的类型</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -282,6 +293,15 @@
                     {{#if(item.suretyStatus==2){ }}
                     <span>{{item.suretyTime}}</span>
                     {{#}else{}}
+                    <span></span>
+                    {{#};}}
+                </td>
+                <td>
+                    {{#if(item.payChannel==1){ }}
+                    <span style="color:#FF5722">金城</span>
+                    {{#}else if(item.payChannel==2){}}
+                    <span>易联</span>
+                    {{# }else{ }}
                     <span></span>
                     {{#};}}
                 </td>

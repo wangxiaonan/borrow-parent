@@ -24,6 +24,15 @@ public class OrderPayListRes {
 
     private Date firstExpectTime;
     private Date lastExpectTime;
+    private String payChannel;
+
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
+    }
 
     public String getLastExpectTime() {
         return lastExpectTime ==null ? "":DateFormatUtils.format(lastExpectTime,"yyyy-MM-dd");

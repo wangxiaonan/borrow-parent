@@ -689,6 +689,8 @@
     ,borrow_repayment.br_repay_time as brRepayTime
     ,borrow_repayment.surety_status as suretyStatus
     ,borrow_repayment.surety_time as suretyTime
+    ,borrow_order.pay_channel as payChannel
+
     from borrow_repayment
     INNER JOIN borrow_order
     ON borrow_repayment.order_id = borrow_order.order_id
@@ -726,6 +728,9 @@
     </if>
     <if test="repayStatus != null and repayStatus!='' " >
       AND borrow_repayment.repay_status = #{repayStatus}
+    </if>
+    <if test="payChannel != null and payChannel!='' " >
+      AND borrow_order.pay_channel = #{payChannel}
     </if>
     ORDER BY borrow_repayment.br_time  ASC
   </select>

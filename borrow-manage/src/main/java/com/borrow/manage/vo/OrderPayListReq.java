@@ -11,7 +11,15 @@ public class OrderPayListReq extends PageBaseReq {
 
     private String pCode;
     private String boPayState;
+    private String payChannel;
 
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
+    }
 
     public String getUserName() {
         return userName;

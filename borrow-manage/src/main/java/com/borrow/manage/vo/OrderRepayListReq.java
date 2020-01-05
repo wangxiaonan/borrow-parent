@@ -23,6 +23,15 @@ public class OrderRepayListReq extends PageBaseReq  {
     private String brRepayTimeEnd;
 
     private String repayStatus;
+    private String payChannel;
+
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
+    }
 
     public String getBrRepayTimeStart() {
         return brRepayTimeStart;

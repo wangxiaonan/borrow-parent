@@ -19,6 +19,15 @@ public class OrderListReq extends PageBaseReq {
     private String boFinishTimeStart;
     private String boFinishTimeEnd;
 
+    private String payChannel;
+
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
+    }
 
     public String getCreateTimeStart() {
         return createTimeStart;
