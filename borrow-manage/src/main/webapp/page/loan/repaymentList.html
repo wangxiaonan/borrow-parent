@@ -92,7 +92,7 @@
                 <select name="payChannel" id="payChannel">
                     <option value=""></option>
                     <option value="1">金城</option>
-                    <option value="2">易联</option>
+                    <option value="2">非存管</option>
                 </select>
             </div>
 
@@ -300,7 +300,7 @@
                     {{#if(item.payChannel==1){ }}
                     <span style="color:#FF5722">金城</span>
                     {{#}else if(item.payChannel==2){}}
-                    <span>易联</span>
+                    <span>非存管</span>
                     {{# }else{ }}
                     <span></span>
                     {{#};}}
